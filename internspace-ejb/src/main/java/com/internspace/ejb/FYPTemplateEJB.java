@@ -1,4 +1,4 @@
-package com.internspace.services;
+package com.internspace.ejb;
 
 import java.util.List;
 
@@ -6,14 +6,13 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.internspace.services.abstraction.FYPTemplateServicesLocal;
-import com.internspace.services.abstraction.FYPTemplateServicesRemote;
-
+import com.internspace.ejb.abstraction.FYPTemplateEJBLocal;
+import com.internspace.ejb.abstraction.FYPTemplateEJBRemote;
 import com.internspace.entities.FYPTElement;
 import com.internspace.entities.FYPTemplate;
 
 @Stateless
-public class FYPTemplateServices implements FYPTemplateServicesLocal, FYPTemplateServicesRemote {
+public class FYPTemplateEJB implements FYPTemplateEJBLocal, FYPTemplateEJBRemote {
 
 	@PersistenceContext
 	EntityManager em;

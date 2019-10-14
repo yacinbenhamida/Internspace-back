@@ -1,4 +1,4 @@
-package com.internspace.services.abstraction;
+package com.internspace.ejb.abstraction;
 
 import javax.ejb.Local;
 
@@ -8,7 +8,7 @@ import com.internspace.entities.FYPTElement;
 import com.internspace.entities.FYPTemplate;
 
 @Local
-public interface FYPTemplateServicesLocal {
+public interface FYPTemplateEJBLocal {
 	void createNewTemplate(FYPTemplate newFypTemplate);
 	void createNewElement(FYPTElement newFyptElement, FYPTemplate toTemplate);
 	List<FYPTemplate> getAll();
