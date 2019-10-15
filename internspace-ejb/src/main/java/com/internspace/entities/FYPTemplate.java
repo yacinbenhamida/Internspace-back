@@ -3,6 +3,7 @@ package com.internspace.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,8 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
 import javax.persistence.CascadeType;
 
+@XmlRootElement
 @Entity
 @Table(name="fyp_template")
 public class FYPTemplate implements Serializable {
@@ -34,7 +37,8 @@ public class FYPTemplate implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="fypTemplate")
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="fypTemplate", fetch = FetchType.EAGER)
 	List<FYPTElement> fyptElements;
 
 	

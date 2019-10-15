@@ -36,6 +36,10 @@ public class FYPTemplateEJB implements FYPTemplateEJBLocal, FYPTemplateEJBRemote
 	public List<FYPTemplate> getAll() {
 		System.out.println("Finding all FYP Templates...");
 		List<FYPTemplate> fypTemplates = em.createQuery("from FYPTemplate", FYPTemplate.class).getResultList();
+		for(int i=0; i < fypTemplates.size(); i++)
+		{
+			System.out.println(fypTemplates.get(i).getTemplateName());
+		}
 		return fypTemplates;
 	}
 
