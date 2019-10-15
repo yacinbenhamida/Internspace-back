@@ -5,12 +5,16 @@ import java.io.Serializable;
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+// To ensure TPC (type-per-class)
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
 @Entity
 @Table(name="user")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -22,16 +26,16 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="user_id")
-	long id;
+	protected long id;
 	
 	@Column(name="first_name")
-	String firstName;
+	protected String firstName;
 	
 	@Column(name="last_name")
-	String lastName;
+	protected String lastName;
 	
 	@Column(name="email")
-	String email;
+	protected String email;
 
 	/*
 	 * Associations
