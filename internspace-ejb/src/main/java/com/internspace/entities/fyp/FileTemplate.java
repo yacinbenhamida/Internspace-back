@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.internspace.entities.users.InternshipsDirector;
+
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -48,7 +52,9 @@ public class FileTemplate implements Serializable {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="fypTemplate", fetch = FetchType.EAGER)
 	List<FileTemplateElement> fyptElements;
-
+	@Column(name="internship_director_id")
+	@ManyToOne
+	InternshipsDirector editor;
 	
 	/*
 	 * Getters & Setters
@@ -77,5 +83,23 @@ public class FileTemplate implements Serializable {
 	public void setFyptElements(List<FileTemplateElement> fyptElements) {
 		this.fyptElements = fyptElements;
 	}
+
+	public boolean isFyp() {
+		return isFyp;
+	}
+
+	public void setFyp(boolean isFyp) {
+		this.isFyp = isFyp;
+	}
+
+	public InternshipsDirector getEditor() {
+		return editor;
+	}
+
+	public void setEditor(InternshipsDirector editor) {
+		this.editor = editor;
+	}
+	
+	
 
 }

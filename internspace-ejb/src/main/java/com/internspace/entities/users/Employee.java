@@ -1,13 +1,17 @@
 package com.internspace.entities.users;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="employee")
-public class Employee extends User {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Employee extends User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	public enum Role{
