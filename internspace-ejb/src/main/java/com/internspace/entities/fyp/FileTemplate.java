@@ -1,4 +1,4 @@
-package com.internspace.entities;
+package com.internspace.entities.fyp;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,10 +14,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.FetchType;
 import javax.persistence.CascadeType;
 
+/*
+ * La fiche PFE (Titre, description, problématique, fonctionnalités, catégorie, mots clé, entreprise). 
+ * Exemple de catégorie : .NET, nodeJS, devops, JavaEE. 
+ * Une fiche PFE peut appartenir à plusieurs catégories. 
+ */
+
 @XmlRootElement
 @Entity
 @Table(name="fyp_template")
-public class FYPTemplate implements Serializable {
+public class FileTemplate implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -32,6 +38,8 @@ public class FYPTemplate implements Serializable {
 	
 	@Column(name="template_name")
 	String templateName = "template_" + id;
+	@Column(name="is_fyp")
+	boolean isFyp;	
 	
 	/*
 	 * Associations
@@ -39,7 +47,7 @@ public class FYPTemplate implements Serializable {
 	
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="fypTemplate", fetch = FetchType.EAGER)
-	List<FYPTElement> fyptElements;
+	List<FileTemplateElement> fyptElements;
 
 	
 	/*
@@ -62,11 +70,11 @@ public class FYPTemplate implements Serializable {
 		this.templateName = templateName;
 	}
 
-	public List<FYPTElement> getFyptElements() {
+	public List<FileTemplateElement> getFyptElements() {
 		return fyptElements;
 	}
 
-	public void setFyptElements(List<FYPTElement> fyptElements) {
+	public void setFyptElements(List<FileTemplateElement> fyptElements) {
 		this.fyptElements = fyptElements;
 	}
 

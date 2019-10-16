@@ -46,6 +46,12 @@
     </licenses>
 
     <dependencies>
+<!-- To work with JSON (string-to-JSON & JSON-to-string -->
+		<dependency>
+		   <groupId>org.json</groupId>
+		   <artifactId>json</artifactId>
+		   <version>20180813</version>
+		</dependency>
 
         <!-- Declare the APIs we depend on and need for compilation. All of 
             them are provided by JBoss WildFly -->

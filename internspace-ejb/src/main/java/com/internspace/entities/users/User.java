@@ -1,4 +1,4 @@
-package com.internspace.entities;
+package com.internspace.entities.users;
 
 import java.io.Serializable;
 

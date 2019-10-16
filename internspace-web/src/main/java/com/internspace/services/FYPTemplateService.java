@@ -13,30 +13,32 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 // import javax.ws.rs.POST;
 
-import com.internspace.ejb.abstraction.FYPTemplateEJBLocal;
-import com.internspace.entities.FYPTElement;
-import com.internspace.entities.FYPTemplate;
+import com.internspace.ejb.abstraction.FileTemplateEJBLocal;
+import com.internspace.entities.fyp.FileTemplate;
+import com.internspace.entities.fyp.FileTemplateElement;
 
 @Path("template")
 @Stateless
 public class FYPTemplateService {
 
 	@Inject
-	FYPTemplateEJBLocal service;
+	FileTemplateEJBLocal service;
 	
 	@Path("create/{TemplateName}")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public void createNewTemplate(@PathParam(value="TemplateName")String fypTemplateName) {
-		FYPTemplate newFypTemplate = new FYPTemplate();
-		newFypTemplate.setTemplateName(fypTemplateName);
+	public void createTemplate(@PathParam(value="TemplateName")String templateName) {
+		FileTemplate fileTemplate = new FileTemplate();
+		fileTemplate.setTemplateName(templateName);
 		
-		System.out.println("Adding: " + newFypTemplate);
+		System.out.println("Adding: " + fileTemplate);
 		
-		service.createNewTemplate(newFypTemplate);
+		service.createTemplate(fileTemplate);
+
 	}
 
-	public void createNewElement(FYPTElement newFyptElement, FYPTemplate toTemplate) {
-		service.createNewElement(newFyptElement, toTemplate);
+	public void createElement(FileTemplateElement element) {
+		service.createElement(element);
+
 	}
 
 	@Path("debug")
@@ -50,7 +52,7 @@ public class FYPTemplateService {
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll() {
-		List<FYPTemplate> fypTemplates = service.getAll();
+		List<FileTemplate> fypTemplates = service.getAllTemplates();
         if (!fypTemplates.isEmpty()) {
         	// TODO: UGLY, have to secure this...
             return Response.ok(fypTemplates).status(200)
