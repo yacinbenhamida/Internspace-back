@@ -10,6 +10,9 @@ import com.internspace.entities.fyp.FileTemplate;
 
 @Entity(name="INTERNSHIPS_DIRECTOR")
 public class InternshipsDirector extends Employee{
+
+	private static final long serialVersionUID = 1L;
+	
 	@OneToOne
 	Site site;
 	@OneToMany(mappedBy="editor")

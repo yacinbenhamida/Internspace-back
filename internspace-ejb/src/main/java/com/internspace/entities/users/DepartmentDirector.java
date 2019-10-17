@@ -2,7 +2,6 @@ package com.internspace.entities.users;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

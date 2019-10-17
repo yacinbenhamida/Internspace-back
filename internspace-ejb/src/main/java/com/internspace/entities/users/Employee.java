@@ -12,7 +12,6 @@ import com.internspace.entities.university.Site;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import com.internspace.entities.exchanges.Notification;
 
