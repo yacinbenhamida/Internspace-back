@@ -1,23 +1,18 @@
 package com.internspace.entities.university;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.internspace.entities.users.Employee;
-
 @Entity
-@Table(name="site")
-public class Site implements Serializable {
+@Table(name="universitary_year")
+public class UniversitaryYear implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,26 +22,15 @@ public class Site implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="site_id")
+	@Column(name="uy_id")
 	long id;
-	
-	String name;
 
-	/*
-	 * Associations
-	 */
-	
-	@OneToOne
-	Employee internshipDirector;
-	
-	@ManyToOne
-	Departement departement;
-	
-	@OneToMany(mappedBy = "site")
-	Set<Classroom> classrooms;
+	Date startDate;
+	Date endDate;
 	
 	/*
 	 * Getters & Setters
 	 */
 
 }
+

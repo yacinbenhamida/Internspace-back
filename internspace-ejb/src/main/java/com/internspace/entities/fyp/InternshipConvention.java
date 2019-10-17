@@ -4,25 +4,24 @@ import java.io.Serializable;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.internspace.entities.users.Company;
+
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
-/*
- * La fiche PFE (Titre, description, problématique, fonctionnalités, catégorie, mots clé, entreprise). 
- * Exemple de catégorie : .NET, nodeJS, devops, JavaEE. 
- * Une fiche PFE peut appartenir à plusieurs catégories. 
- */
 
 @XmlRootElement
 @Entity
-@Table(name="fyp_file")
-public class FYPFile implements Serializable {
+@Table(name="internship_convention")
+public class InternshipConvention implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -32,7 +31,7 @@ public class FYPFile implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="fyp_file_id")
+	@Column(name="ic_id")
 	long id;
 	
 	@Column(name="title")
@@ -57,6 +56,9 @@ public class FYPFile implements Serializable {
 
 	@OneToOne
 	Internship internship;
+	
+	@ManyToOne
+	Company company;
 	
 	/*
 	 * Getters & Setters

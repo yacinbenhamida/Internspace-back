@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -39,6 +40,9 @@ public class FYPSubject implements Serializable {
 
 	@ManyToMany(mappedBy = "subjects")
 	Set<FYPCategory> categories;
+	
+	@OneToMany(mappedBy = "subject")
+	Set<Internship> internships;
 
 	/*
 	 * Getters & Setters

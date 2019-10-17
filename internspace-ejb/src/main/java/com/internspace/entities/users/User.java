@@ -28,15 +28,12 @@ public class User implements Serializable {
 	@Column(name="user_id")
 	protected long id;
 	
-	@Column(name="first_name")
 	protected String firstName;
-	
-	@Column(name="last_name")
 	protected String lastName;
-	
-	@Column(name="email")
 	protected String email;
-
+	protected String username;
+	protected String password;
+	
 	/*
 	 * Associations
 	 */

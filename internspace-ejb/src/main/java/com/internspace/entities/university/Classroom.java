@@ -10,14 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.internspace.entities.users.Employee;
+import com.internspace.entities.users.Student;
 
 @Entity
-@Table(name="site")
-public class Site implements Serializable {
+@Table(name="classroom")
+public class Classroom implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,7 +26,7 @@ public class Site implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="site_id")
+	@Column(name="classroom_id")
 	long id;
 	
 	String name;
@@ -36,14 +35,11 @@ public class Site implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToOne
-	Employee internshipDirector;
-	
 	@ManyToOne
-	Departement departement;
+	Site site;
 	
-	@OneToMany(mappedBy = "site")
-	Set<Classroom> classrooms;
+	@OneToMany(mappedBy = "classroom")
+	Set<Student> students;
 	
 	/*
 	 * Getters & Setters
