@@ -52,7 +52,7 @@ public class FileTemplate implements Serializable {
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="fypTemplate", fetch = FetchType.EAGER)
 	List<FileTemplateElement> fyptElements;
-	@Column(name="internship_director_id")
+	
 	@ManyToOne
 	InternshipsDirector editor;
 	

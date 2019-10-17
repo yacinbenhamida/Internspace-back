@@ -31,10 +31,9 @@ public class FYPSheetHistory implements Serializable {
 	int oldState;
 	String oldTitle;
 	String oldDescription;
-	int oldIssue;
-	int oldKw;
-	int oldMailPro;
-	int oldMail;
+	String oldIssue;
+	String oldMailPro;
+	String oldMail;
 	@ManyToOne
 	FYPFile changedFile;
 	public FYPSheetHistory() {
@@ -97,36 +96,29 @@ public class FYPSheetHistory implements Serializable {
 	public void setOldDescription(String oldDescription) {
 		this.oldDescription = oldDescription;
 	}
+	
 
-	public int getOldIssue() {
+	public String getOldIssue() {
 		return oldIssue;
 	}
 
-	public void setOldIssue(int oldIssue) {
+	public void setOldIssue(String oldIssue) {
 		this.oldIssue = oldIssue;
 	}
 
-	public int getOldKw() {
-		return oldKw;
-	}
-
-	public void setOldKw(int oldKw) {
-		this.oldKw = oldKw;
-	}
-
-	public int getOldMailPro() {
+	public String getOldMailPro() {
 		return oldMailPro;
 	}
 
-	public void setOldMailPro(int oldMailPro) {
+	public void setOldMailPro(String oldMailPro) {
 		this.oldMailPro = oldMailPro;
 	}
 
-	public int getOldMail() {
+	public String getOldMail() {
 		return oldMail;
 	}
 
-	public void setOldMail(int oldMail) {
+	public void setOldMail(String oldMail) {
 		this.oldMail = oldMail;
 	}
 
