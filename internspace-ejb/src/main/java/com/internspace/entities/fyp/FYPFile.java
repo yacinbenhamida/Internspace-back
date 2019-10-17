@@ -1,6 +1,7 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -8,7 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -55,9 +56,8 @@ public class FYPFile implements Serializable {
 	@ManyToMany
 	Set<FYPKeyword> keywords;
 
-	@OneToOne
-	Internship internship;
-	
+	@OneToMany(mappedBy="internshipSheet")
+	List<FYPIntervention> interventions;
 	/*
 	 * Getters & Setters
 	 */
@@ -117,4 +117,13 @@ public class FYPFile implements Serializable {
 	public void setKeywords(Set<FYPKeyword> keywords) {
 		this.keywords = keywords;
 	}
+
+	public List<FYPIntervention> getInterventions() {
+		return interventions;
+	}
+
+	public void setInterventions(List<FYPIntervention> interventions) {
+		this.interventions = interventions;
+	}
+	
 }
