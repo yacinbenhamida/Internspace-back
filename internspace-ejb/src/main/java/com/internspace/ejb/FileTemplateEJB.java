@@ -19,8 +19,10 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	@Override
 	public void createTemplate(FileTemplate template) {
 		System.out.println("Adding: " + template);
+		// System.out.println("Template Elements count: " + template.getFyptElements().size());	
 		
 		em.persist(template);
+		//em.flush();
 	}
 	
 	@Override

@@ -19,8 +19,9 @@ public class Site implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	long id;
 	
+	// Explicitly check if this employee has InternshipDirector role.
 	@OneToOne
-	 InternshipsDirector internshipsDirector;
+	 Employee internshipsDirector;
 
 	public long getId() {
 		return id;
@@ -30,11 +31,11 @@ public class Site implements Serializable{
 		this.id = id;
 	}
 
-	public InternshipsDirector getInternshipsDirector() {
+	public Employee getInternshipsDirector() {
 		return internshipsDirector;
 	}
 
-	public void setInternshipsDirector(InternshipsDirector internshipsDirector) {
+	public void setInternshipsDirector(Employee internshipsDirector) {
 		this.internshipsDirector = internshipsDirector;
 	}
 	

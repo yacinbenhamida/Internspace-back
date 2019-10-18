@@ -1,11 +1,13 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.internspace.entities.users.InternshipsDirector;
+import com.internspace.entities.users.Employee;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -18,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.FetchType;
 import javax.persistence.CascadeType;
 
+import com.internspace.entities.fyp.FileTemplateElement.ElementType;
+
 /*
  * La fiche PFE (Titre, description, problématique, fonctionnalités, catégorie, mots clé, entreprise). 
  * Exemple de catégorie : .NET, nodeJS, devops, JavaEE. 
@@ -26,7 +30,7 @@ import javax.persistence.CascadeType;
 
 @XmlRootElement
 @Entity
-@Table(name="fyp_template")
+@Table(name="file_template")
 public class FileTemplate implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,24 +41,66 @@ public class FileTemplate implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="fypt_id")
+	@Column(name="file_template_id")
 	long id;
 	
 	@Column(name="template_name")
 	String templateName = "template_" + id;
 	@Column(name="is_fyp")
 	boolean isFyp;	
-	
+
 	/*
 	 * Associations
-	 */
+	 */	
 	
+	@OneToMany(mappedBy="fileTemplate", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	List<FileTemplateElement> templateElements = new ArrayList<FileTemplateElement>();
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="fypTemplate", fetch = FetchType.EAGER)
-	List<FileTemplateElement> fyptElements;
-	
+	// Explicitly check if this employee has InternshipsDirector role.
 	@ManyToOne
-	InternshipsDirector editor;
+	Employee editor;
+		
+	/*
+	 * Construction
+	 */
+	public FileTemplate()
+	{
+		
+	}
+	
+	public FileTemplate (String templateName, boolean isFyp)
+	{	
+		this.templateName = templateName;
+		this.isFyp = isFyp;
+		
+		EnumSet<ElementType> elemTypes = EnumSet.allOf(ElementType.class);
+		if (isFyp) // We're creating a final-year-project file template.
+		{
+			elemTypes = EnumSet.of(
+					ElementType.title,
+					ElementType.description,
+					ElementType.problematic,
+					ElementType.features,
+					ElementType.categories,
+					ElementType.keywords,
+					ElementType.company,
+					ElementType.supervisor,
+					ElementType.rapporteur
+					// ...
+					);	
+		} else {
+			elemTypes = EnumSet.of(
+					ElementType.dateInfo
+					// ...
+					);	
+		}
+		
+		for (ElementType elemType : elemTypes) {
+			FileTemplateElement fypTemplateElement = new FileTemplateElement(elemType.name(), elemType, this);
+			this.templateElements.add(fypTemplateElement);
+			System.out.print(elemType.name());
+		}	
+	}
 	
 	/*
 	 * Getters & Setters
@@ -77,11 +123,11 @@ public class FileTemplate implements Serializable {
 	}
 
 	public List<FileTemplateElement> getFyptElements() {
-		return fyptElements;
+		return templateElements;
 	}
 
 	public void setFyptElements(List<FileTemplateElement> fyptElements) {
-		this.fyptElements = fyptElements;
+		this.templateElements = fyptElements;
 	}
 
 	public boolean isFyp() {
@@ -92,14 +138,12 @@ public class FileTemplate implements Serializable {
 		this.isFyp = isFyp;
 	}
 
-	public InternshipsDirector getEditor() {
+	public Employee getEditor() {
 		return editor;
 	}
 
-	public void setEditor(InternshipsDirector editor) {
+	public void setEditor(Employee editor) {
 		this.editor = editor;
 	}
-	
-	
 
 }

@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-@Entity(name = "FYP_SHEET_HISTORY")
+@Entity(name = "fyp_sheet_history")
 public class FYPSheetHistory implements Serializable {
 	public enum TypeOfOperation{
 		majorOperation,
