@@ -5,8 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ejb.Stateless;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.Consumes;
@@ -26,16 +26,24 @@ public class FYPTemplateService {
 	@Inject
 	FileTemplateEJBLocal service;
 	
-	@Path("create/{TemplateName}")
+	/***
+	 * Creates a file template and generates adequate elements 
+	 * that are relevant to the template's type.
+	 * @param templateName
+	 */
+	@Path("create")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public void createTemplate(@PathParam(value="TemplateName")String templateName) {
-		FileTemplate fileTemplate = new FileTemplate();
+	public void createTemplate(
+			@QueryParam(value="TemplateName")String templateName,
+			@QueryParam(value="IsFyp")boolean isFyp)
+	{
+		System.out.print("IsFyp: " + isFyp);
+		
+		FileTemplate fileTemplate = new FileTemplate(templateName, isFyp);
 		fileTemplate.setTemplateName(templateName);
 		
-		System.out.println("Adding: " + fileTemplate);
 		
 		service.createTemplate(fileTemplate);
-
 	}
 
 	public void createElement(FileTemplateElement element) {
@@ -57,11 +65,21 @@ public class FYPTemplateService {
 		List<FileTemplate> fypTemplates = service.getAllTemplates();
         if (!fypTemplates.isEmpty()) {
         	// TODO: UGLY, have to secure this...
+        	
+        	for(FileTemplate template : fypTemplates)
+        	{
+        		for(FileTemplateElement element: template.getFyptElements())
+        		{
+        			// For cases where we create a template and select it right away...
+        			element.setFypTemplate(null);			
+        		}       			
+        	}
+        	
             return Response.ok(fypTemplates).status(200)
                     .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                    .header("Access-Control-Allow-Credentials", "true")
-                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                    //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    //.header("Access-Control-Allow-Credentials", "true")
+                    //.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                     .header("Access-Control-Max-Age", "1209600")
                     .build();
         } else {

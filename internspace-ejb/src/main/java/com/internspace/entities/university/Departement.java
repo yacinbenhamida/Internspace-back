@@ -12,9 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Null;
 
-import com.internspace.entities.users.DepartmentDirector;
+import com.internspace.entities.users.Employee;
 
 @Entity
 @Table(name="department")
@@ -51,7 +50,9 @@ public class Departement implements Serializable {
 	@OneToMany(mappedBy = "departement")
 	Set<Site> sites;
 	@OneToOne
-	DepartmentDirector director;
+	
+	// Explicitly check if this employee has DepartmentDirector role.
+	Employee director;
 	/*
 	 * Getters & Setters
 	 */
@@ -82,10 +83,10 @@ public class Departement implements Serializable {
 	public void setSites(Set<Site> sites) {
 		this.sites = sites;
 	}
-	public DepartmentDirector getDirector() {
+	public Employee getDirector() {
 		return director;
 	}
-	public void setDirector(DepartmentDirector director) {
+	public void setDirector(Employee director) {
 		this.director = director;
 	}
 	public int getNumberOfActionsAllowedForProtractors() {
