@@ -14,6 +14,7 @@ import javax.ws.rs.GET;
 // import javax.ws.rs.POST;
 
 import com.internspace.ejb.abstraction.FileTemplateEJBLocal;
+//import com.internspace.ejb.abstraction.FileTemplateEJBLocal;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.FileTemplateElement;
 
@@ -21,6 +22,7 @@ import com.internspace.entities.fyp.FileTemplateElement;
 @Stateless
 public class FYPTemplateService {
 
+	
 	@Inject
 	FileTemplateEJBLocal service;
 	

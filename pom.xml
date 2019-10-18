@@ -77,6 +77,8 @@
                 <version>${project.version}</version>
                 <type>ejb</type>
             </dependency>
+         
+            
             
             <!-- Define the version of the WAR so that we don't need to repeat 
                 ourselves in every module -->

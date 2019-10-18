@@ -1,6 +1,8 @@
 package com.internspace.entities.users;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -21,7 +23,7 @@ public class Student extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	int classYear;
+
 	
 	/*
 	 * Associations
@@ -35,9 +37,11 @@ public class Student extends User {
 	String password;
 	String username;
 	Date birthDate;
-	@OneToMany(mappedBy="student")
+	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	List<Notification> notifications;
-	
+	int classYear;
+	@Column(columnDefinition = "boolean default false")
+	Boolean isCreated ;
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}
