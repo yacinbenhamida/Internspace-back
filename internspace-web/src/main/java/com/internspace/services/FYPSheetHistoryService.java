@@ -49,5 +49,23 @@ public class FYPSheetHistoryService {
 		}
 		return Response.status(Response.Status.NOT_FOUND).build();
 	}
+	@POST
+	@Path("edit")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response editFYPSHistory(FYPSheetHistory history) {
+		FYPSheetHistory fyps  = service.editOperation(history);
+		if(fyps != null) {
+			return Response.status(Response.Status.OK).entity(history).build();
+		}
+		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+	}
 	
+
+	@GET
+	@Path("gethistory/{internshipSheetId}")
+	@javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
+	public Response getAllOfOneInternSheet(@PathParam("internshipSheetId") long internshipSheetId) {
+		return Response.status(Response.Status.OK).entity(service.getAllRecordedOperationsOfOneFYPSheet(internshipSheetId)).build();
+	}
 }
