@@ -1,7 +1,6 @@
 package com.internspace.entities.university;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,15 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.internspace.entities.users.Employee;
-
+/*
+ * Multiple schedule dates per classroom...
+ */
 @Entity
-@Table(name="site")
-public class Site implements Serializable {
+@Table(name="defense_schedule")
+public class DefenseSchedule implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,26 +25,18 @@ public class Site implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="site_id")
+	@Column(name="ds_id")
 	long id;
 	
 	String name;
-
+	
 	/*
 	 * Associations
 	 */
 	
-	
 	@ManyToOne
-	University university;
-	
-	@OneToMany(mappedBy = "site")
-	Set<Departement> departements;
-	
-	// Explicitly check if this employee has InternshipDirector role.
-	@OneToOne
-	Employee internshipDirector;
-	
+	Classroom classroom;
+
 	/*
 	 * Getters & Setters
 	 */

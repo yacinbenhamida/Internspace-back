@@ -10,14 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.internspace.entities.users.Employee;
 
 @Entity
-@Table(name="site")
-public class Site implements Serializable {
+@Table(name="class_option")
+public class ClassOption implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,25 +25,21 @@ public class Site implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="site_id")
+	@Column(name="classroom_id")
 	long id;
 	
 	String name;
-
+	int requiredScore;
+	
 	/*
 	 * Associations
 	 */
 	
-	
 	@ManyToOne
-	University university;
+	Departement departement;
 	
-	@OneToMany(mappedBy = "site")
-	Set<Departement> departements;
-	
-	// Explicitly check if this employee has InternshipDirector role.
-	@OneToOne
-	Employee internshipDirector;
+	@OneToMany(mappedBy = "classOption")
+	Set<StudyClass> studyClasses;
 	
 	/*
 	 * Getters & Setters

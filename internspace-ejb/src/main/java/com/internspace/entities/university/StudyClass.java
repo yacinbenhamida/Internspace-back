@@ -10,14 +10,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.internspace.entities.users.Employee;
+import com.internspace.entities.users.Student;
 
+/*
+ * Defines a set of students studying together, a specific ClassOption.
+ * Useful when selecting students by studied class-option type...
+ */
 @Entity
-@Table(name="site")
-public class Site implements Serializable {
+@Table(name="study-class")
+public class StudyClass implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,7 +30,7 @@ public class Site implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="site_id")
+	@Column(name="study_class_id")
 	long id;
 	
 	String name;
@@ -36,16 +39,14 @@ public class Site implements Serializable {
 	 * Associations
 	 */
 	
+	@OneToMany(mappedBy = "studyClass")
+	Set<Student> students;
 	
 	@ManyToOne
-	University university;
-	
-	@OneToMany(mappedBy = "site")
-	Set<Departement> departements;
-	
-	// Explicitly check if this employee has InternshipDirector role.
-	@OneToOne
-	Employee internshipDirector;
+	Departement departement;
+
+	@ManyToOne
+	ClassOption classOption;
 	
 	/*
 	 * Getters & Setters

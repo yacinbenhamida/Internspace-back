@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.Classroom;
+import com.internspace.entities.university.StudyClass;
+
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +39,10 @@ public class Student extends User {
 	
 	@ManyToOne
 	Classroom classroom;
+	
+	@ManyToOne
+	StudyClass studyClass;
+	
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	List<Notification> notifications;
 
