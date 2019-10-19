@@ -142,5 +142,15 @@ public class FYPFile implements Serializable {
 	public void setInterventions(List<FYPIntervention> interventions) {
 		this.interventions = interventions;
 	}
+
+	public Internship getInternship() {
+		return internship;
+	}
+
+	public void setInternship(Internship internship) {
+		this.internship = internship;
+	}
+	
+	
 	
 }

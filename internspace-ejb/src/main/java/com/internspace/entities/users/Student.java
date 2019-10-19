@@ -1,5 +1,6 @@
 package com.internspace.entities.users;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -36,10 +37,11 @@ public class Student extends User {
 	
 	@ManyToOne
 	Classroom classroom;
-
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	List<Notification> notifications;
-	
+	int classYear;
+	@Column(columnDefinition = "boolean default false")
+	Boolean isCreated ;
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}

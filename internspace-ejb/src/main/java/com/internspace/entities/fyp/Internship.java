@@ -53,10 +53,72 @@ public class Internship implements Serializable {
 	
 	@ManyToOne
 	FYPSubject subject;
-
+	
+	
+	
 	/*
 	 * Getters & Setters
 	 */
+	
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public FYPFile getFypFile() {
+		return fypFile;
+	}
+
+	public void setFypFile(FYPFile fypFile) {
+		this.fypFile = fypFile;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public FYPSubject getSubject() {
+		return subject;
+	}
+
+	public void setSubject(FYPSubject subject) {
+		this.subject = subject;
+	}
+
+	
+	
     
 	
 }
