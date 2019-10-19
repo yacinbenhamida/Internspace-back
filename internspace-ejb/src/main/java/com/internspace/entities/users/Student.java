@@ -39,7 +39,7 @@ public class Student extends User {
 	Classroom classroom;
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	List<Notification> notifications;
-	int classYear;
+
 	@Column(columnDefinition = "boolean default false")
 	Boolean isCreated ;
 	public Student() {
