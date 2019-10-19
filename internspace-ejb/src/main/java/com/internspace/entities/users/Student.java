@@ -9,11 +9,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.internspace.entities.fyp.Internship;
+import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.OneToMany;
@@ -27,11 +27,13 @@ public class Student extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	String password;
-	String username;
+	@Column(name="birth_date")
 	Date birthDate;
-	// the student isn't allowed to have a reporter without initially submitting a paper report to the administration
-	boolean hasSubmittedAreport;
+	
+	// The student isn't allowed to have a reporter without initially submitting a paper report to the administration
+	@Column(name = "has_submitted_a_report")
+	boolean hasSubmittedAReport;
+	
 	/*
 	 * Associations
 	 */
@@ -47,6 +49,10 @@ public class Student extends User {
 	
 	@OneToMany(mappedBy="student")
 	Set<Notification> notifications;
+	
+	// Many to Many to Categories using custom association table.
+	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
+	Set<StudentCategoryPreference> preferedCategories;
 	
 	// Many to Many to Subjects using custom association table.
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
@@ -87,11 +93,11 @@ public class Student extends User {
 	}
 
 	public boolean isHasSubmittedAreport() {
-		return hasSubmittedAreport;
+		return hasSubmittedAReport;
 	}
 
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
-		this.hasSubmittedAreport = hasSubmittedAreport;
+		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 
 	public Set<Notification> getNotifications() {
