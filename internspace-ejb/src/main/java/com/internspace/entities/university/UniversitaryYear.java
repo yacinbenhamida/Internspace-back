@@ -39,7 +39,7 @@ public class UniversitaryYear implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToMany
+	@OneToMany(mappedBy = "universitaryYear")
 	Set<StudyClass> studyClasses = new HashSet<>();
 	
 	/*

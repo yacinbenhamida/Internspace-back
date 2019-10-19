@@ -3,6 +3,7 @@ package com.internspace.entities.university;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,7 +37,7 @@ public class University implements Serializable {
 	
 	//@OneToMany(mappedBy = "university")
 	//Set<Departement> departements;
-	@OneToMany(mappedBy = "university")
+	@OneToMany(mappedBy = "university", cascade = CascadeType.ALL)
 	Set<Site> sites;
 	
 	

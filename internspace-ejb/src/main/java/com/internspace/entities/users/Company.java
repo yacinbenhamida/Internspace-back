@@ -21,7 +21,7 @@ public class Company extends User {
 	 * Attributes
 	 */
 	
-	//... email, lastname and firstname for responsible are the User's
+	//... email, lastname and firstname for responsible are the User's (from Parent)
 	String website;
 	String address;
 	String country;

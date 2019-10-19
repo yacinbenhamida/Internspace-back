@@ -49,9 +49,11 @@ public class StudyClass implements Serializable {
 	Set<Student> students;
 	
 	@ManyToOne
+	@JoinColumn(name = "departement_id")
 	Departement departement;
 
 	@ManyToOne
+	@JoinColumn(name = "class_option_id")
 	ClassOption classOption;
 	
 	/*

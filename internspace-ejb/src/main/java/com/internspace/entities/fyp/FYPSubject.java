@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
 @Entity
-@Table(name="subject")
+@Table(name="fyp_subject")
 public class FYPSubject implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

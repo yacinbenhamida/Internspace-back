@@ -44,8 +44,9 @@ public class Student extends User {
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	List<Notification> notifications;
 
-	@Column(columnDefinition = "boolean default false")
+	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated ;
+	
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}
