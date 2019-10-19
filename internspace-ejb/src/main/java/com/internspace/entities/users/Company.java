@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,7 +21,7 @@ public class Company extends User {
 	 * Attributes
 	 */
 	
-	//... email, lastname and firstname for responsible are the User's (from Parent)
+	//... email, last-name and first-name for responsible are the User's (from Parent)
 	String website;
 	String address;
 	String country;

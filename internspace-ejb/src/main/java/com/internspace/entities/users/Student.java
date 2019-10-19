@@ -9,10 +9,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.internspace.entities.fyp.Internship;
+import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.OneToMany;
 
@@ -41,9 +43,14 @@ public class Student extends User {
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
 	
+	
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
-	List<Notification> notifications;
-
+	Set<Notification> notifications;
+	
+	// Many to Many to Subjects using custom association table.
+	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
+	Set<StudentFYPSubject> studentSubjects;
+	
 	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated ;
 	

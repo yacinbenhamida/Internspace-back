@@ -1,6 +1,7 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Table;
@@ -8,12 +9,12 @@ import javax.persistence.Table;
 import com.internspace.entities.users.Company;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -47,6 +48,10 @@ public class FYPSubject implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	Company company;
+	
+	// Many to Many to Subjects using custom association table.
+	@OneToMany(mappedBy="subject", fetch = FetchType.EAGER)
+	List<StudentFYPSubject> studentSubjects;
 	
 	@ManyToMany(mappedBy = "subjects")
 	Set<FYPCategory> categories;

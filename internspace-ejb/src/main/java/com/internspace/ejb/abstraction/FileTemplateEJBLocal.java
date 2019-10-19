@@ -22,4 +22,9 @@ public interface FileTemplateEJBLocal {
 	 */
 	void createElement(FileTemplateElement element);
 	void updateElement(FileTemplateElement element);
+	
+	/*
+	 * Advanced
+	 */
+	// Random template generation
 }
