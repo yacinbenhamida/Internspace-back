@@ -28,7 +28,8 @@ public class FYPCategory implements Serializable {
 	
 	@Column(name="name")
 	String name = "default";
-	
+	@Column(name="is_approved") // a teacher can suggest categories
+	boolean isApproved = false;
 	/*
 	 * Associations
 	 */
@@ -66,4 +67,22 @@ public class FYPCategory implements Serializable {
 	public void setFypFiles(Set<FYPFile> fypFiles) {
 		this.fypFiles = fypFiles;
 	}
+
+	public boolean isApproved() {
+		return isApproved;
+	}
+
+	public void setApproved(boolean isApproved) {
+		this.isApproved = isApproved;
+	}
+
+	public Set<FYPSubject> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(Set<FYPSubject> subjects) {
+		this.subjects = subjects;
+	}
+	
+	
 }

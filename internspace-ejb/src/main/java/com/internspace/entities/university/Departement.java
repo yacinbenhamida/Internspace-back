@@ -15,7 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.internspace.entities.users.Employee;
-import com.internspace.entities.users.Teacher;
 
 @Entity
 @Table(name="department")
@@ -60,8 +59,8 @@ public class Departement implements Serializable {
 	Employee departementHead;
 
 	// Explicitly check if this employee has the Teacher role.
-	@OneToMany(mappedBy = "departement")
-	Set<Teacher> teachers;
+	@OneToMany(mappedBy = "department")
+	Set<Employee> teachers;
 	
 	@OneToMany(mappedBy = "departement")
 	Set<ClassOption> classOptions;
