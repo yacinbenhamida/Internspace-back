@@ -10,6 +10,7 @@ import com.internspace.entities.users.Company;
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,6 +42,7 @@ public class InternshipConvention implements Serializable {
 	 */
 	
 	@ManyToOne
+	@JoinColumn(name = "company_id")
 	Company company;
 	
 	/*

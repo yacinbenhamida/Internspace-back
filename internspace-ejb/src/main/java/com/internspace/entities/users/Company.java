@@ -6,6 +6,7 @@ import com.internspace.entities.fyp.InternshipConvention;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -25,14 +26,16 @@ public class Company extends User {
 	String website;
 	String address;
 	String country;
+	@Column(name="supervisor_email")
 	String supervisorEmail;
+	@Column(name="phone_number")
 	String phoneNumber;
 	
 	/*
 	 * Associations
 	 */
 	
-	@ManyToMany
+	@OneToMany(mappedBy = "company")
 	Set<FYPSubject> subjects;
 
 	@OneToMany(mappedBy = "company")
