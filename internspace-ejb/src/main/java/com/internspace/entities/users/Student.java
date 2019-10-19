@@ -86,14 +86,6 @@ public class Student extends User {
 		this.birthDate = birthDate;
 	}
 
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
-
 	public boolean isHasSubmittedAreport() {
 		return hasSubmittedAreport;
 	}
