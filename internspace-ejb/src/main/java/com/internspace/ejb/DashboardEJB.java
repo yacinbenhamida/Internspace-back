@@ -25,7 +25,10 @@ public class DashboardEJB implements DashboardEJBLocal {
 			return null;
 		
 		String op = abroad ? " <> " : " = ";
-		List<Student> students = em.createQuery("from " + Student.class.getName() + " s WHERE s.internship.location " + op + " :location AND s.classYear", Student.class).setParameter("location", uni.getLocation()).getResultList();
+		List<Student> students = em.createQuery("from " + Student.class.getName() + " s WHERE s.internship.location " + op + " :location AND s.studyClass.classYear = :fypYear", Student.class)
+				.setParameter("location", uni.getLocation())
+				.setParameter("fypYear", uni.getFypClassYear())
+				.getResultList();
 
 		return students;
 	}

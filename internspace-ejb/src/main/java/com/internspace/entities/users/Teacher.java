@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.university.Departement;
 
-@Entity(name="Teacher")
+@Entity
 public class Teacher extends User{
 
 	private static final long serialVersionUID = 1L;

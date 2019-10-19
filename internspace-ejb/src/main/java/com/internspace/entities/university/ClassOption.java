@@ -25,7 +25,7 @@ public class ClassOption implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="classroom_id")
+	@Column(name="class_option_id")
 	long id;
 	
 	String name;

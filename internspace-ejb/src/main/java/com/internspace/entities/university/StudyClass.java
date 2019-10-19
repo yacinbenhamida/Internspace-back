@@ -19,7 +19,7 @@ import com.internspace.entities.users.Student;
  * Useful when selecting students by studied class-option type...
  */
 @Entity
-@Table(name="study-class")
+@Table(name="study_class")
 public class StudyClass implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,7 +34,8 @@ public class StudyClass implements Serializable {
 	long id;
 	
 	String name;
-
+	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5éme année...
+	
 	/*
 	 * Associations
 	 */
