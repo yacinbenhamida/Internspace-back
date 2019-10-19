@@ -1,7 +1,6 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Table;
@@ -51,12 +50,12 @@ public class FYPSubject implements Serializable {
 	
 	// Many to Many to Subjects using custom association table.
 	@OneToMany(mappedBy="subject", fetch = FetchType.EAGER)
-	List<StudentFYPSubject> studentSubjects;
+	Set<StudentFYPSubject> studentSubjects;
 	
-	@ManyToMany(mappedBy = "subjects")
+	@ManyToMany(mappedBy = "subjects", fetch = FetchType.EAGER)
 	Set<FYPCategory> categories;
 	
-	@OneToMany(mappedBy = "subject")
+	@OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
 	Set<Internship> internships;
 
 	/*

@@ -13,7 +13,6 @@ import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.OneToMany;
@@ -27,11 +26,13 @@ public class Student extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	String password;
-	String username;
+	@Column(name="birth_date")
 	Date birthDate;
-	// the student isn't allowed to have a reporter without initially submitting a paper report to the administration
-	boolean hasSubmittedAreport;
+	
+	// The student isn't allowed to have a reporter without initially submitting a paper report to the administration
+	@Column(name = "has_submitted_a_report")
+	boolean hasSubmittedAReport;
+	
 	/*
 	 * Associations
 	 */
@@ -43,7 +44,6 @@ public class Student extends User {
 	@ManyToOne
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
-	
 	
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	Set<Notification> notifications;
@@ -87,11 +87,11 @@ public class Student extends User {
 	}
 
 	public boolean isHasSubmittedAreport() {
-		return hasSubmittedAreport;
+		return hasSubmittedAReport;
 	}
 
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
-		this.hasSubmittedAreport = hasSubmittedAreport;
+		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 	
 }

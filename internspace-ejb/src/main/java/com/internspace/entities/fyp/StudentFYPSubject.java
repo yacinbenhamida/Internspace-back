@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,9 +15,8 @@ import javax.persistence.Table;
 
 import com.internspace.entities.users.Student;
 
-
 @Entity
-@Table(name="student")
+@Table(name="student_fyp_subject")
 public class StudentFYPSubject implements Serializable{
 
 	public enum ApplianceStatus {
@@ -32,10 +33,11 @@ public class StudentFYPSubject implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="subject_id")
+	@Column(name="student_fyp_subject_id")
 	long id;
 	
 	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
 	ApplianceStatus applianceStatus;
 	
 	@ManyToOne

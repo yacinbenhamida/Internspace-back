@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,8 +13,6 @@ import javax.persistence.Table;
 
 import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.Site;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -34,8 +33,7 @@ public class Employee extends User implements Serializable{
 		
 	}
 	
-	String password;
-	String username;
+	@Column(name = "birth_date")
 	Date birthDate;
 	@Enumerated(EnumType.STRING)
 	Role role;

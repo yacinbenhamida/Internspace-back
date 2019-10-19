@@ -54,10 +54,6 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	public List<FileTemplate> getAllTemplates() {
 		System.out.println("Finding all FYP Templates...");
 		List<FileTemplate> fypTemplates = em.createQuery("from " + FileTemplate.class.getName(), FileTemplate.class).getResultList();
-		for(int i=0; i < fypTemplates.size(); i++)
-		{
-			System.out.println(fypTemplates.get(i).getTemplateName());
-		}
 		return fypTemplates;
 	}
 }
