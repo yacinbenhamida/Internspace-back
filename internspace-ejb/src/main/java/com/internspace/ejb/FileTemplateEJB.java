@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import com.internspace.ejb.abstraction.FileTemplateEJBLocal;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.FileTemplateElement;
+import com.internspace.entities.users.Employee;
 
 @Stateless
 public class FileTemplateEJB implements FileTemplateEJBLocal {
@@ -25,6 +26,16 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 		//em.flush();
 	}
 	
+	@Override
+	public void updateTemplateEditor(FileTemplate template, Employee editor) {
+		System.out.println("Adding: " + template);
+		// System.out.println("Template Elements count: " + template.getFyptElements().size());	
+		
+		template = em.find(FileTemplate.class, template.getId());
+		template.setEditor(editor);
+	}
+	
+	@Deprecated
 	@Override
 	public void createElement(FileTemplateElement element) {
 		System.out.println("Adding: " + element + " to " + element.getFypTemplate());

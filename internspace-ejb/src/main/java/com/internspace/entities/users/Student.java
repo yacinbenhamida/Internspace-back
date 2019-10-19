@@ -1,6 +1,7 @@
 package com.internspace.entities.users;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -21,7 +22,10 @@ public class Student extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	int classYear;
+	String password;
+	String username;
+	Date birthDate;
+	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5éme année...
 	
 	/*
 	 * Associations
@@ -32,10 +36,8 @@ public class Student extends User {
 	
 	@ManyToOne
 	Classroom classroom;
-	String password;
-	String username;
-	Date birthDate;
-	@OneToMany(mappedBy="student")
+
+	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	List<Notification> notifications;
 	
 	public Student() {

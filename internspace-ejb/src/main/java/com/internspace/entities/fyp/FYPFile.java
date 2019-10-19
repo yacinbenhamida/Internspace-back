@@ -5,8 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.internspace.entities.university.UniversitaryYear;
+
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
@@ -26,6 +31,12 @@ import javax.persistence.Column;
 @Table(name="fyp_file")
 public class FYPFile implements Serializable {
 
+	public enum FYPFileStatus {
+		pending,			// Still waiting for InternshipDirector to confirm/decline.
+		confirmed,			// InternshipDirector confirmed this.
+		declined			// InternshipDirector declined this.
+	}
+	
 	private static final long serialVersionUID = 1L;
 	
 	/*
@@ -37,12 +48,14 @@ public class FYPFile implements Serializable {
 	@Column(name="fyp_file_id")
 	long id;
 	
-	@Column(name="title")
 	String title;
-	@Column(name="description")
 	String description;
-	@Column(name="problematic")
 	String problematic;
+	UniversitaryYear universitaryYear;
+	@Enumerated(EnumType.STRING)
+	@Column(name="status")
+	FYPFileStatus fileTemplateElementType;
+	
 	
 	/*
 	 * Associations

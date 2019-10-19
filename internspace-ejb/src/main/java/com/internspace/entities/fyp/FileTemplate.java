@@ -22,12 +22,6 @@ import javax.persistence.CascadeType;
 
 import com.internspace.entities.fyp.FileTemplateElement.ElementType;
 
-/*
- * La fiche PFE (Titre, description, problématique, fonctionnalités, catégorie, mots clé, entreprise). 
- * Exemple de catégorie : .NET, nodeJS, devops, JavaEE. 
- * Une fiche PFE peut appartenir à plusieurs catégories. 
- */
-
 @XmlRootElement
 @Entity
 @Table(name="file_template")
@@ -87,7 +81,7 @@ public class FileTemplate implements Serializable {
 					ElementType.supervisor,
 					ElementType.rapporteur
 					// ...
-					);	
+					);
 		} else {
 			elemTypes = EnumSet.of(
 					ElementType.dateInfo

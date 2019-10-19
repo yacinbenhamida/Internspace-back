@@ -54,7 +54,6 @@ public class FileTemplateElement implements Serializable {
 	@Column(name="type")
 	ElementType fileTemplateElementType;
 	
-
 	float x_coord;
 
 	float y_coord;	

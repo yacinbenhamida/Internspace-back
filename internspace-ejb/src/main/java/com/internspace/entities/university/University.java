@@ -27,6 +27,8 @@ public class University implements Serializable {
 	long id;
 	
 	String name;
+	int fypClassYear; // What class year is considered to be final-year-project year? 5 for example...
+	String location; // School's location, useful to retrieve abroad internships...
 	
 	/*
 	 * Associations
@@ -38,6 +40,46 @@ public class University implements Serializable {
 	/*
 	 * Getters & Setters
 	 */
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getFypClassYear() {
+		return fypClassYear;
+	}
+
+	public void setFypClassYear(int fypClassYear) {
+		this.fypClassYear = fypClassYear;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public Set<Departement> getDepartements() {
+		return departements;
+	}
+
+	public void setDepartements(Set<Departement> departements) {
+		this.departements = departements;
+	}
 
 }
 
