@@ -45,7 +45,7 @@ public class Student extends User {
 	StudyClass studyClass;
 	
 	
-	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="student")
 	Set<Notification> notifications;
 	
 	// Many to Many to Subjects using custom association table.
@@ -92,6 +92,14 @@ public class Student extends User {
 
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
 		this.hasSubmittedAreport = hasSubmittedAreport;
+	}
+
+	public Set<Notification> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(Set<Notification> notifications) {
+		this.notifications = notifications;
 	}
 	
 }

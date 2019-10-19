@@ -1,5 +1,6 @@
 package com.internspace.ejb.abstraction;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Local;
@@ -8,9 +9,10 @@ import com.internspace.entities.fyp.FYPSheetHistory;
 
 @Local
 public interface FYPSheetHistoryEJBLocal {
-	public FYPSheetHistory recordOperation(FYPSheetHistory fypsheet);
-	public FYPSheetHistory removeOperation(long idOP);
+	public long recordOperation(FYPSheetHistory fypsheet);
+	public void removeOperation(long idOP);
+	public FYPSheetHistory getById(long id);
 	public FYPSheetHistory editOperation(FYPSheetHistory fypsheeth);
-	public Set<FYPSheetHistory> getAllRecordedOperations();
-	public Set<FYPSheetHistory> getAllRecordedOperationsOfOneFYPSheet(long fypsheetId);
+	public List<FYPSheetHistory> getAllRecordedOperations();
+	public List<FYPSheetHistory> getAllRecordedOperationsOfOneFYPSheet(long fypsheetId);
 	}
