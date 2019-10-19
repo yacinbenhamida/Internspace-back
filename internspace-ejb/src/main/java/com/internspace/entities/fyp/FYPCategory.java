@@ -5,8 +5,10 @@ import java.util.Set;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -28,8 +30,13 @@ public class FYPCategory implements Serializable {
 	
 	@Column(name="name")
 	String name = "default";
-	@Column(name="is_approved") // a teacher can suggest categories
+	@Column(name="is_approved") // Teachers can suggest categories.
 	boolean isApproved = false;
+	
+	// Many to Many to Students using custom association table.
+	@OneToMany(mappedBy="category", fetch = FetchType.EAGER)
+	Set<StudentCategoryPreference> preferedByStudents;
+	
 	/*
 	 * Associations
 	 */

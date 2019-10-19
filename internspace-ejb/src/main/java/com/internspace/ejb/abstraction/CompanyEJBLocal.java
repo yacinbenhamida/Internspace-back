@@ -34,7 +34,7 @@ public interface CompanyEJBLocal {
 	 * Advanced
  	 */
 	List<FYPSubject> getFypSubjectsByCompany(long companyId, boolean filterUntaken);
-	List<FYPSubject> getSuggestedSubjectsByUser(long userId, boolean filterUntaken);
+	List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken);
 	List<FYPSubject> getSuggestedSubjectsByCategories(List<FYPCategory> categories);
 	List<StudentFYPSubject> getStudentFypSubjectsByStatus(ApplianceStatus status, boolean fetchAll);
 	boolean tryApplyOnSubject(FYPSubject subject, long studentId);

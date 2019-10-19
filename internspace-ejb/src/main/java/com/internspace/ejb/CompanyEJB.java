@@ -81,7 +81,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 	}
 
 	@Override
-	public List<FYPSubject> getSuggestedSubjectsByUser(long userId, boolean filterUntaken) {
+	public List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken) {
 		// TODO Auto-generated method stub
 		return null;
 	}
