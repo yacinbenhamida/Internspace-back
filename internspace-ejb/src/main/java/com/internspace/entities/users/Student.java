@@ -30,7 +30,8 @@ public class Student extends User {
 	String password;
 	String username;
 	Date birthDate;
-
+	// the student isn't allowed to have a reporter without initially submitting a paper report to the administration
+	boolean hasSubmittedAreport;
 	/*
 	 * Associations
 	 */
@@ -91,6 +92,14 @@ public class Student extends User {
 
 	public void setNotifications(List<Notification> notifications) {
 		this.notifications = notifications;
+	}
+
+	public boolean isHasSubmittedAreport() {
+		return hasSubmittedAreport;
+	}
+
+	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
+		this.hasSubmittedAreport = hasSubmittedAreport;
 	}
 	
 }

@@ -11,7 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.internspace.entities.users.Teacher;
+import com.internspace.entities.users.Employee;
+
+
 // this class specifies a teacher's role towards an internship sheet
 @Entity(name = "FYP_INTERVENTION")
 public class FYPIntervention implements Serializable{
@@ -33,7 +35,7 @@ public class FYPIntervention implements Serializable{
 	@Enumerated(EnumType.STRING)
 	TeacherRole teacherRole;
 	@ManyToOne
-	Teacher  teacher;
+	Employee  teacher;
 	@ManyToOne
 	FYPFile internshipSheet;
 	
@@ -58,10 +60,10 @@ public class FYPIntervention implements Serializable{
 	public void setTeacherRole(TeacherRole teacherRole) {
 		this.teacherRole = teacherRole;
 	}
-	public Teacher getTeacher() {
+	public Employee getTeacher() {
 		return teacher;
 	}
-	public void setTeacher(Teacher teacher) {
+	public void setTeacher(Employee teacher) {
 		this.teacher = teacher;
 	}
 	public FYPFile getInternshipSheet() {
