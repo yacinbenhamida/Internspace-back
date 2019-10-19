@@ -39,4 +39,22 @@ public class DashboardService {
   
         //return Response.status(Response.Status.NOT_FOUND).build();        
 	}
+	//getFypStudentsBySite
+	@GET
+	@Path("/site/students")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentsBySite(
+			@QueryParam("site") int siteId) {
+		List<Student> students = service.getStudentsBySite(siteId);
+
+        return Response.ok(students).status(200)
+	        .header("Access-Control-Allow-Origin", "*")
+	        //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	        //.header("Access-Control-Allow-Credentials", "true")
+	        //.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	        .header("Access-Control-Max-Age", "1209600")
+	        .build();
+  
+        //return Response.status(Response.Status.NOT_FOUND).build();        
+	}
 }

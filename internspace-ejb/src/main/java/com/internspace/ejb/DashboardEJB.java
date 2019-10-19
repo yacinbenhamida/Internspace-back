@@ -17,7 +17,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 	EntityManager em;
 	
 	@Override
-	public List<Student> getStudentsLocationDistribution(int uniId, boolean abroad) {
+	public List<Student> getStudentsLocationDistribution(long uniId, boolean abroad) {
 		
 		University uni = em.find(University.class, Long.valueOf(uniId));
 
@@ -34,8 +34,13 @@ public class DashboardEJB implements DashboardEJBLocal {
 	}
 	
 	@Override
-	public List<Student> getFypStudentsBySite(int siteId) {
-		return null;
+	public List<Student> getStudentsBySite(long siteId) {
+
+		List<Student> students = em.createQuery("from " + Student.class.getName() + " s WHERE s.studyClass.departement.site.id = :siteId", Student.class)
+				.setParameter("siteId", siteId)
+				.getResultList();
+
+		return students;
 	}
 	
 }

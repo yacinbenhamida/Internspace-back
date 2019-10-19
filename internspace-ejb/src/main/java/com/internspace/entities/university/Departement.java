@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -47,6 +48,7 @@ public class Departement implements Serializable {
 	 */
 	
 	@ManyToOne
+	@JoinColumn(name = "site_id")
 	Site site;
 	
 	@OneToMany(mappedBy = "departement")
@@ -54,6 +56,7 @@ public class Departement implements Serializable {
 	
 	// Explicitly check if this employee has DepartmentHead role.
 	@OneToOne
+	@JoinColumn(name = "departement_head_id")
 	Employee departementHead;
 
 	// Explicitly check if this employee has the Teacher role.
