@@ -34,8 +34,11 @@ public class University implements Serializable {
 	 * Associations
 	 */
 	
+	//@OneToMany(mappedBy = "university")
+	//Set<Departement> departements;
 	@OneToMany(mappedBy = "university")
-	Set<Departement> departements;
+	Set<Site> sites;
+	
 	
 	/*
 	 * Getters & Setters
@@ -73,13 +76,6 @@ public class University implements Serializable {
 		this.location = location;
 	}
 
-	public Set<Departement> getDepartements() {
-		return departements;
-	}
-
-	public void setDepartements(Set<Departement> departements) {
-		this.departements = departements;
-	}
 
 }
 

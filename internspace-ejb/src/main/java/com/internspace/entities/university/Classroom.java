@@ -36,7 +36,7 @@ public class Classroom implements Serializable {
 	 */
 	
 	@ManyToOne
-	Site site;
+	Departement departement;
 	
 	@OneToMany(mappedBy = "classroom")
 	Set<Student> students;

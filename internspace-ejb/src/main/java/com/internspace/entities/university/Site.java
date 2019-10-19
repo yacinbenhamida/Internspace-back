@@ -36,14 +36,16 @@ public class Site implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToOne
-	Employee internshipDirector;
 	
 	@ManyToOne
-	Departement departement;
+	University university;
 	
 	@OneToMany(mappedBy = "site")
-	Set<Classroom> classrooms;
+	Set<Departement> departements;
+	
+	@OneToOne
+	Employee internshipDirector;
+
 	
 	/*
 	 * Getters & Setters

@@ -12,5 +12,6 @@ public interface DashboardEJBLocal {
 	 * Dashboard STATS
 	 */
 	List<Student> getStudentsLocationDistribution(int uniId, boolean abroad);
-
+	List<Student> getFypStudentsBySite(int siteId);
+	
 }

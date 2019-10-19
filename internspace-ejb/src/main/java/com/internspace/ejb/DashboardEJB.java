@@ -29,4 +29,10 @@ public class DashboardEJB implements DashboardEJBLocal {
 
 		return students;
 	}
+	
+	@Override
+	public List<Student> getFypStudentsBySite(int siteId) {
+		return null;
+	}
+	
 }
