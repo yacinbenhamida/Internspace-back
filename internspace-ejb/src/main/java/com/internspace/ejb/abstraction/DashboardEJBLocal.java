@@ -1,6 +1,7 @@
 package com.internspace.ejb.abstraction;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Local;
 
@@ -11,7 +12,8 @@ public interface DashboardEJBLocal {
 	/*
 	 * Dashboard STATS
 	 */
-	List<Student> getStudentsLocationDistribution(long uniId, boolean abroad);
 	List<Student> getStudentsBySite(long siteId);
+	List<Student> getStudentsLocationDistribution(long uniId, boolean abroad);
+	Map<Long, Float> getAbroadPercentagePerYear(long uniId);
 	
 }

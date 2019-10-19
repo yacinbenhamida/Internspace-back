@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,6 +36,10 @@ public class StudyClass implements Serializable {
 	
 	String name;
 	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5éme année...
+	
+	@ManyToOne
+	@JoinColumn(name = "universitary_year_id")
+	UniversitaryYear universitaryYear;
 	
 	/*
 	 * Associations
