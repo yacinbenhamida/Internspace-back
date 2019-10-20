@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.ejb.Local;
 
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
@@ -18,4 +19,7 @@ public interface DashboardEJBLocal {
 	Map<Long, Float> getAbroadPercentagePerYear(long uniId);
 	float getStudentsDistributionByLocationAndUY(long uniId, String location, long uyId);
 	List<Company> getMostCompanyAcceptingInternsWithUniversity(long uniId, int n);
+	int getInternshipsByCategory(long uniId, long categoryId);
+	List<FYPCategory> getMostRequestedCategoriesByCompanies();
+	List<FYPCategory> getMostRequestedCategoriesByStudentsOfUni(long uniId);
 }
