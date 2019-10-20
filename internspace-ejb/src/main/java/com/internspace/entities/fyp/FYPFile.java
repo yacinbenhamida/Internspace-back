@@ -55,7 +55,8 @@ public class FYPFile implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
 	FYPFileStatus fileTemplateElementType;
-	
+	@Column(name="cancled" ,columnDefinition = "boolean default false")
+	Boolean isCanceled;
 	
 	/*
 	 * Associations
@@ -150,6 +151,34 @@ public class FYPFile implements Serializable {
 	public void setInternship(Internship internship) {
 		this.internship = internship;
 	}
+
+	public UniversitaryYear getUniversitaryYear() {
+		return universitaryYear;
+	}
+
+	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
+		this.universitaryYear = universitaryYear;
+	}
+
+	public FYPFileStatus getFileTemplateElementType() {
+		return fileTemplateElementType;
+	}
+
+	public void setFileTemplateElementType(FYPFileStatus fileTemplateElementType) {
+		this.fileTemplateElementType = fileTemplateElementType;
+	}
+
+	public Boolean getIsCanceled() {
+		return isCanceled;
+	}
+
+	public void setIsCanceled(Boolean isCanceled) {
+		this.isCanceled = isCanceled;
+	}
+	
+	
+	
+	
 	
 	
 	
