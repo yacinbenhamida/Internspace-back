@@ -10,6 +10,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
+import com.internspace.entities.fyp.FYPCategory;
+import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.university.University;
 import com.internspace.entities.users.Company;
@@ -128,6 +130,47 @@ public class DashboardEJB implements DashboardEJBLocal {
 		return companies;
 	}
 
+	@Override
+	public int getInternshipsByCategory(long uniId, long categoryId) {
+		FYPCategory category = em.find(FYPCategory .class, Long.valueOf(categoryId));
+		String queryStr = "FROM " + Internship.class.getName() + " i WHERE"
+				+ " i.student.studyClass.departement.site.university.id = :uniId"
+				+ " AND :category MEMBER OF i.subject.categories"
+				;
+		
+		TypedQuery<Internship> query = em.createQuery(queryStr, Internship.class)
+				.setParameter("category", category)
+				.setParameter("uniId", uniId);
+			
+		List<Internship> out = query.getResultList();
+		
+		System.out.println(out);
+		
+		return out.size();
+	}
+	
+	@Override
+	public List<FYPCategory> getMostRequestedCategoriesByCompanies() {
+		
+		String queryStr = "SELECT C FROM " + FYPCategory.class.getName() + " C"
+				+ " JOIN FETCH C.subjects S WHERE C.id <> 0"
+				//+ " ORDER BY size(C.subjects) DESC"
+				;
+		
+		TypedQuery<FYPCategory> query = em.createQuery(queryStr, FYPCategory.class);
+			
+		List<FYPCategory> out = query.getResultList();
+		//out.stream().forEach(e -> e.getSubjects().stream().forEach(s -> s.setCategories(null)));
+		
+		return out;
+	}
+
+	@Override
+	public List<FYPCategory> getMostRequestedCategoriesByStudentsOfUni(long uniId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	// PRIVATE METHODS
 
 	/***
@@ -148,7 +191,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 		if (uni == null)
 			return null;
 		
-		String queryStr = "from " + Student.class.getName() + " s WHERE"
+		String queryStr = "FROM " + Student.class.getName() + " s WHERE"
 				+ " s.studyClass.classYear = :studyClassYear"
 				+ " AND s.studyClass.departement.site.university.id = :uniId"
 				;
@@ -194,6 +237,8 @@ public class DashboardEJB implements DashboardEJBLocal {
 		students = query.getResultList();
 		
 		return students;
-	}
+ 	}
+
+
 
 }
