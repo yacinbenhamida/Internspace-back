@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -28,7 +30,13 @@ public class University implements Serializable {
 	long id;
 	
 	String name;
+	@Column(name="fyp_class_year")
 	int fypClassYear; // What class year is considered to be final-year-project year? 5 for example...
+	
+	@ManyToOne()
+	@JoinColumn(name="current_universitary_year")
+	UniversitaryYear currentUniversitaryYear; // Each university has its own Current University Year
+	
 	String location; // School's location, useful to retrieve abroad internships...
 	
 	/*
@@ -75,6 +83,22 @@ public class University implements Serializable {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public UniversitaryYear getCurrentUniversitaryYear() {
+		return currentUniversitaryYear;
+	}
+
+	public void setCurrentUniversitaryYear(UniversitaryYear currentUniversitaryYear) {
+		this.currentUniversitaryYear = currentUniversitaryYear;
+	}
+
+	public Set<Site> getSites() {
+		return sites;
+	}
+
+	public void setSites(Set<Site> sites) {
+		this.sites = sites;
 	}
 
 

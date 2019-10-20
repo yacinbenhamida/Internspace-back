@@ -13,7 +13,7 @@ public interface DashboardEJBLocal {
 	 * Dashboard STATS
 	 */
 	List<Student> getStudentsBySite(long siteId);
-	List<Student> getStudentsLocationDistribution(long uniId, boolean abroad);
+	float getStudentsLocalAbroadDistribution(long uniId, boolean abroad);
 	Map<Long, Float> getAbroadPercentagePerYear(long uniId);
-	
+	float getStudentsDistributionByLocationAndUY(long uniId, String location, long uyId);
 }

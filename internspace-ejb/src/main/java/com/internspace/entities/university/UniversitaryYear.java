@@ -31,9 +31,9 @@ public class UniversitaryYear implements Serializable {
 	long id;
 
 	@Column(name = "start_date")
-	Date startDate;
+	int startDate;
 	@Column(name = "end_date")
-	Date endDate;
+	int endDate;
 	
 	/*
 	 * Associations
@@ -41,6 +41,11 @@ public class UniversitaryYear implements Serializable {
 	
 	@OneToMany(mappedBy = "universitaryYear")
 	Set<StudyClass> studyClasses = new HashSet<>();
+
+	
+	@OneToMany(mappedBy = "currentUniversitaryYear")
+	Set<University> universities = new HashSet<>();
+	
 	
 	/*
 	 * Getters & Setters
@@ -49,20 +54,33 @@ public class UniversitaryYear implements Serializable {
 	public long getId() {
 		return id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Date getStartDate() {
+
+	public int getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date startDate) {
+
+	public void setStartDate(int startDate) {
 		this.startDate = startDate;
 	}
-	public Date getEndDate() {
+
+	public int getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+
+	public void setEndDate(int endDate) {
 		this.endDate = endDate;
+	}
+
+	public Set<StudyClass> getStudyClasses() {
+		return studyClasses;
+	}
+
+	public void setStudyClasses(Set<StudyClass> studyClasses) {
+		this.studyClasses = studyClasses;
 	}
 
 
