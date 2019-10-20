@@ -47,7 +47,7 @@ public class Student extends User {
 	StudyClass studyClass;
 	
 	
-	@OneToMany(mappedBy="student")
+	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	Set<Notification> notifications;
 	
 	// Many to Many to Categories using custom association table.

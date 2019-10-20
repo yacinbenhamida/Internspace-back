@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.university.University;
+import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
 @Stateless
@@ -32,9 +33,12 @@ public class DashboardEJB implements DashboardEJBLocal {
 	
 	@Override
 	public float getStudentsLocalAbroadDistribution(long uniId, boolean abroad) {
-		List<Student> thisYearsStudents = getFypStudentsByUY(uniId, -1, false, false, null, false);
+		List<Student> thisYearsStudents = getFypStudentsByUY(uniId, -2, false, false, null, false);
 		
-		float dist = getFypStudentsByUY(uniId, -1, true, !abroad, null, false).size();
+		float dist = getFypStudentsByUY(uniId, -2, true, !abroad, null, false).size();
+		
+		System.out.println(dist);
+		System.out.println(thisYearsStudents != null ? thisYearsStudents.size(): "X");
 		
 		return dist / thisYearsStudents.size();
 	}
@@ -96,8 +100,6 @@ public class DashboardEJB implements DashboardEJBLocal {
 
 	@Override
 	public float getStudentsDistributionByLocationAndUY(long uniId, String location, long uyId) {
-		University uni = em.find(University.class, Long.valueOf(uniId));
-
 		List<Student> uyStudents = getFypStudentsByUY(uniId, uyId, false, false, null, false);
 		
 		float dist = getFypStudentsByUY(uniId, uyId, false, false, location, false).size();
@@ -107,13 +109,27 @@ public class DashboardEJB implements DashboardEJBLocal {
 		
 		return dist / uyStudents.size();
 	}
-	
+
+	@Override
+	public List<Company> getMostCompanyAcceptingInternsWithUniversity(long uniId, int n) {
+		
+		String queryStr = "SELECT * FROM " + Company.class.getName() + " C"
+				+ " JOIN FETCH C.internships INS WHERE INS.student.studyClass..departement.site.university.id = :uniId"
+				+ " ORDER BY COUNT(e.internships) DESC";
+		TypedQuery<Company> query = em.createQuery(queryStr, Company.class);
+		
+		// Acts like TOP in classical SQL query.
+		List<Company> companies = query.setMaxResults(n).getResultList();
+		
+		return companies;
+	}
+
 	// PRIVATE METHODS
 
 	/***
 	 * 
 	 * @param uniId University ID
-	 * @param uyId -1 means current UY
+	 * @param uyId -1 means current UY, -2 means all, else specified
 	 * @param onlyAbroad will return only abroad, else all relevant to other parameters...
 	 * @param reverseFilter if onlyAboard is true, then this will reverse it to only local
 	 * @return
@@ -131,16 +147,22 @@ public class DashboardEJB implements DashboardEJBLocal {
 		String queryStr = "from " + Student.class.getName() + " s WHERE"
 				+ " s.studyClass.classYear = :studyClassYear"
 				+ " AND s.studyClass.departement.site.university.id = :uniId"
-				+ " AND s.studyClass.universitaryYear.id = :uniYear";
+				;
+		
 		// Current UY?
 		//queryStr = uyId != -1 ? queryStr + " AND s.studyClass.universitaryYear.id = :uniYear" : queryStr;
+		
+		if(uyId != -2)
+		{
+			queryStr = queryStr + " AND s.studyClass.universitaryYear.id = :uniYear";
+		}
 		
 		// Reverse abroad/local filtering?
 		String onlyAbroad_OP = reverseFilter ? " = " : " <> ";
 		String onlyLocation_OP = excludeLocation ? " <> " : " = ";
 		
 		// Apply filtering?
-		if (onlyAbroad)
+		if (onlyAbroad )
 			queryStr = queryStr + " AND s.internship.location " + onlyAbroad_OP + " :location";
 		else if(location != null) // Specific Internship Location?
 			queryStr = queryStr + " AND s.internship.location " + onlyLocation_OP + " :location";
@@ -151,8 +173,11 @@ public class DashboardEJB implements DashboardEJBLocal {
 				.setParameter("uniId", uniId);
 			
 		// Set parameters
-		query = uyId != -1 ? query.setParameter("uniYear", uyId) : 
-			query.setParameter("uniYear", uni.getCurrentUniversitaryYear().getId());
+		if(uyId != -2)
+		{
+			query = uyId != -1 ? query.setParameter("uniYear", uyId) : 
+				query.setParameter("uniYear", uni.getCurrentUniversitaryYear().getId());
+		}
 		
 		query = onlyAbroad ? query.setParameter("location", uni.getLocation()) : query;
 
