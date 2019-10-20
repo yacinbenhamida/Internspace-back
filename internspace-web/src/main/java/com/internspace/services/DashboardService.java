@@ -26,7 +26,7 @@ public class DashboardService {
 	@Path("/site/students")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStudentsBySite(
-			@QueryParam("site") int siteId) {
+			@QueryParam("site") long siteId) {
 		List<Student> students = service.getStudentsBySite(siteId);
 
         return Response.ok(students).status(200)
@@ -44,9 +44,9 @@ public class DashboardService {
 	@Path("/internship/distribution")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStudentsLocationDistribution(
-			@QueryParam("uni") int uniId, 
+			@QueryParam("uni") long uniId, 
 			@QueryParam("abroad") boolean abroad) {
-		float distribution = service.getStudentsLocationDistribution(uniId, abroad);
+		float distribution = service.getStudentsLocalAbroadDistribution(uniId, abroad);
 
         return Response.ok(distribution).status(200)
 	        .header("Access-Control-Allow-Origin", "*")
@@ -66,8 +66,28 @@ public class DashboardService {
 	@Path("/site/distribution/abroad")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAbroadPercentagePerYear(
-			@QueryParam("uni") int uniId) {
+			@QueryParam("uni") long uniId) {
 		Map<Long, Float> out = service.getAbroadPercentagePerYear(uniId);
+
+        return Response.ok(out).status(200)
+	        .header("Access-Control-Allow-Origin", "*")
+	        //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	        //.header("Access-Control-Allow-Credentials", "true")
+	        //.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	        .header("Access-Control-Max-Age", "1209600")
+	        .build();
+  
+        //return Response.status(Response.Status.NOT_FOUND).build();        
+	}
+	
+	@GET
+	@Path("/site/distribution/location")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentsDistributionByLocationAndUY(
+			@QueryParam("uni") long uniId,
+			@QueryParam("location") String location,
+			@QueryParam("uy") long uyId){
+		float out = service.getStudentsDistributionByLocationAndUY(uniId, location, uyId);
 
         return Response.ok(out).status(200)
 	        .header("Access-Control-Allow-Origin", "*")
