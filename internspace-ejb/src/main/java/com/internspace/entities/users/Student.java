@@ -1,5 +1,6 @@
 package com.internspace.entities.users;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,12 +9,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.json.JSONPropertyIgnore;
+
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.OneToMany;
@@ -46,10 +51,7 @@ public class Student extends User {
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
 	
-	
-	@OneToMany(mappedBy="student")
-	Set<Notification> notifications;
-	
+
 	// Many to Many to Categories using custom association table.
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	Set<StudentCategoryPreference> preferedCategories;
@@ -100,13 +102,7 @@ public class Student extends User {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 
-	public Set<Notification> getNotifications() {
-		return notifications;
-	}
 
-	public void setNotifications(Set<Notification> notifications) {
-		this.notifications = notifications;
-	}
 	
 }
 

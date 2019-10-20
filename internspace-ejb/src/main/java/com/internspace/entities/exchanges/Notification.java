@@ -67,6 +67,11 @@ public class Notification implements Serializable{
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
+	@Override
+	public String toString() {
+		return "Notification [id=" + id + ", content=" + content + ", seen=" + seen + ", student=" + student
+				+ ", employee=" + employee + "]";
+	}
 	
 	
 	

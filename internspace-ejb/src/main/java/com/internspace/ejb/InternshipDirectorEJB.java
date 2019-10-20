@@ -94,7 +94,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		else{
 			lf.addAll(getFYPFileListByCountry(location));
 			for (int i = 0; i < lf.size (); i++) {
-				if(lf.get(i).getyear()==year)
+				if(lf.get(i).getUniversitaryYear().getStartDate()==year)
 					rs.add(lf.get(i));
 			}
 		}

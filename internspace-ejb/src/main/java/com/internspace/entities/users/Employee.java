@@ -1,13 +1,18 @@
 package com.internspace.entities.users;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -46,13 +51,15 @@ public class Employee extends User implements Serializable{
 	@OneToOne(mappedBy = "internshipDirector",optional = true)
 	Site site;
 	
-	@OneToMany(mappedBy="employee")
-	List<Notification> notifications;
+
+
+	
 	// has a no of interventions if the employee is a teacher
-	@OneToMany(mappedBy = "teacher")
-	List<FYPIntervention> interventions;
+	@OneToMany(mappedBy = "teacher",fetch = FetchType.EAGER)
+	Set<FYPIntervention> interventions;
 	// use this when role == teacher
 	@ManyToOne(optional = true)
+	@JoinColumn(name="department_id")
 	Departement department;
 	/*
 	 * Getters & Setters
@@ -75,12 +82,19 @@ public class Employee extends User implements Serializable{
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
 
+	public Set<FYPIntervention> getInterventions() {
+		return interventions;
+	}
+	public void setInterventions(Set<FYPIntervention> interventions) {
+		this.interventions = interventions;
+	}
+	public Departement getDepartment() {
+		return department;
+	}
+	public void setDepartment(Departement department) {
+		this.department = department;
+	}
+	
 }
 
