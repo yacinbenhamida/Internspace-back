@@ -31,9 +31,14 @@ public class DashboardEJB implements DashboardEJBLocal {
 	}
 	
 	@Override
-	public List<Student> getStudentsLocationDistribution(long uniId, boolean abroad) {
+	public float getStudentsLocationDistribution(long uniId, boolean abroad) {
+		List<Student> thisYearsStudents = getFypStudentsByUY(uniId, -1, false, false);
 		
-		return getFypStudentsByUY(uniId, -1, true, false);
+		float dist = getFypStudentsByUY(uniId, -1, true, !abroad).size();
+		
+		System.out.println("Dist: " + dist + " | Count: " + thisYearsStudents);
+		
+		return dist / thisYearsStudents.size();
 	}
 	
 
@@ -93,6 +98,14 @@ public class DashboardEJB implements DashboardEJBLocal {
 	
 	// PRIVATE METHODS
 
+	/***
+	 * 
+	 * @param uniId University ID
+	 * @param uyId -1 means current UY
+	 * @param onlyAbroad will return only abroad, else all relevant to other parameters...
+	 * @param reverseFilter if onlyAboard is true, then this will reverse it to only local
+	 * @return
+	 */
 	private List<Student> getFypStudentsByUY(long uniId, long uyId, boolean onlyAbroad, boolean reverseFilter) {
 		
 		University uni = em.find(University.class, Long.valueOf(uniId));
@@ -102,10 +115,10 @@ public class DashboardEJB implements DashboardEJBLocal {
 		
 		String queryStr = "from " + Student.class.getName() + " s WHERE"
 				+ " s.studyClass.classYear = :studyClassYear"
-				+ " AND s.studyClass.departement.site.university.id = :uniId";
-		
-		// All Universitary Years?
-		queryStr = uyId != -1 ? queryStr + " AND s.studyClass.universitaryYear.id = :uniYear" : queryStr;
+				+ " AND s.studyClass.departement.site.university.id = :uniId"
+				+ " AND s.studyClass.universitaryYear.id = :uniYear";
+		// Current UY?
+		//queryStr = uyId != -1 ? queryStr + " AND s.studyClass.universitaryYear.id = :uniYear" : queryStr;
 		
 		// Reverse abroad/local filtering?
 		String op = reverseFilter ? " = " : " <> ";
@@ -119,7 +132,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 				.setParameter("uniId", uniId);
 			
 		// Set parameters
-		query = uyId != -1 ? query.setParameter("uniYear", uyId) : query;
+		query = uyId != -1 ? query.setParameter("uniYear", uyId) : 
+			query.setParameter("uniYear", uni.getCurrentUniversitaryYear().getId());
+		
 		query = onlyAbroad ? query.setParameter("location", uni.getLocation()) : query;
 
 		students = query.getResultList();

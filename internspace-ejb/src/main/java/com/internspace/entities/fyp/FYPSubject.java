@@ -37,7 +37,7 @@ public class FYPSubject implements Serializable {
 	String title = "default";
 	
 	// Apply NLP with fypFile.features
-	@Column(name="content")
+	@Column(name="content", length = 65535, columnDefinition = "text")
 	String content;
 	
 	/*

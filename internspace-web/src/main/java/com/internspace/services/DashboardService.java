@@ -46,9 +46,9 @@ public class DashboardService {
 	public Response getStudentsLocationDistribution(
 			@QueryParam("uni") int uniId, 
 			@QueryParam("abroad") boolean abroad) {
-		List<Student> students = service.getStudentsLocationDistribution(uniId, abroad);
+		float distribution = service.getStudentsLocationDistribution(uniId, abroad);
 
-        return Response.ok(students).status(200)
+        return Response.ok(distribution).status(200)
 	        .header("Access-Control-Allow-Origin", "*")
 	        //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
 	        //.header("Access-Control-Allow-Credentials", "true")
