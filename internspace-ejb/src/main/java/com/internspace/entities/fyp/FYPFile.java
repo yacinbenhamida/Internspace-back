@@ -58,7 +58,8 @@ public class FYPFile implements Serializable {
 	
 	@Column(name="cancled" ,columnDefinition = "boolean default false")
 	Boolean isCanceled;
-	
+	@Column(name="final_mark")
+	int finalMark;
 	/*
 	 * Associations
 	 */
@@ -175,6 +176,14 @@ public class FYPFile implements Serializable {
 
 	public void setIsCanceled(Boolean isCanceled) {
 		this.isCanceled = isCanceled;
+	}
+
+	public int getFinalMark() {
+		return finalMark;
+	}
+
+	public void setFinalMark(int finalMark) {
+		this.finalMark = finalMark;
 	}
 	
 	
