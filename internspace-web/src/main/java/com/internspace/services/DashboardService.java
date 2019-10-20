@@ -104,7 +104,7 @@ public class DashboardService {
 	//getMostCompanyAcceptingInternsWithUniversity
 	
 	@GET
-	@Path("/site/distribution/location")
+	@Path("/distribution/topcompanies")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMostCompanyAcceptingInternsWithUniversity(
 			@QueryParam("uni") long uniId,

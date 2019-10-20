@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,13 +35,13 @@ public class Company extends User {
 	 * Associations
 	 */
 	
-	@OneToMany(mappedBy = "company")
+	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
 	Set<FYPSubject> subjects;
 
-	@OneToMany(mappedBy = "company")
+	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
 	Set<Internship> internships;
 
-	@OneToMany(mappedBy = "company")
+	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
 	Set<InternshipConvention> internshipConventions;
 	
 	/*

@@ -113,13 +113,17 @@ public class DashboardEJB implements DashboardEJBLocal {
 	@Override
 	public List<Company> getMostCompanyAcceptingInternsWithUniversity(long uniId, int n) {
 		
-		String queryStr = "SELECT * FROM " + Company.class.getName() + " C"
-				+ " JOIN FETCH C.internships INS WHERE INS.student.studyClass..departement.site.university.id = :uniId"
-				+ " ORDER BY COUNT(e.internships) DESC";
+		String queryStr = "FROM " + Company.class.getName() + " C"
+				//+ " JOIN FETCH C.internships INS WHERE INS.student.studyClass.departement.site.university.id = :uniId"
+				+ " WHERE size(C.internships) <> 0"
+				+ " ORDER BY size(C.internships) DESC";
+		
 		TypedQuery<Company> query = em.createQuery(queryStr, Company.class);
+				//.setParameter("uniId", uniId);
 		
 		// Acts like TOP in classical SQL query.
 		List<Company> companies = query.setMaxResults(n).getResultList();
+		companies.stream().forEach(x -> {x.setInternships(null);});
 		
 		return companies;
 	}
