@@ -55,6 +55,7 @@ public class FYPFile implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
 	FYPFileStatus fileTemplateElementType;
+	
 	@Column(name="cancled" ,columnDefinition = "boolean default false")
 	Boolean isCanceled;
 	

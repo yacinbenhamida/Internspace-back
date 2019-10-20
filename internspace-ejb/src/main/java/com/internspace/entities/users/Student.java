@@ -51,7 +51,6 @@ public class Student extends User {
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
 	
-
 	// Many to Many to Categories using custom association table.
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
 	Set<StudentCategoryPreference> preferedCategories;
@@ -102,7 +101,55 @@ public class Student extends User {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 
+	public Boolean getIsCreated() {
+		return isCreated;
+	}
 
+	public void setIsCreated(Boolean isCreated) {
+		this.isCreated = isCreated;
+	}
+
+	public boolean isHasSubmittedAReport() {
+		return hasSubmittedAReport;
+	}
+
+	public void setHasSubmittedAReport(boolean hasSubmittedAReport) {
+		this.hasSubmittedAReport = hasSubmittedAReport;
+	}
+
+	public Internship getInternship() {
+		return internship;
+	}
+
+	public void setInternship(Internship internship) {
+		this.internship = internship;
+	}
+
+	public StudyClass getStudyClass() {
+		return studyClass;
+	}
+
+	public void setStudyClass(StudyClass studyClass) {
+		this.studyClass = studyClass;
+	}
+
+	public Set<StudentCategoryPreference> getPreferedCategories() {
+		return preferedCategories;
+	}
+
+	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
+		this.preferedCategories = preferedCategories;
+	}
+
+	public Set<StudentFYPSubject> getStudentSubjects() {
+		return studentSubjects;
+	}
+
+	public void setStudentSubjects(Set<StudentFYPSubject> studentSubjects) {
+		this.studentSubjects = studentSubjects;
+	}
+	
+	
 	
 }
 
