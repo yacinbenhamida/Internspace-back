@@ -27,7 +27,7 @@ import javax.mail.internet.MimeMessage;
 public class Mailer {
     
     
-    public void send(String mail){
+    public void send(String mail,String msgt, String sub){
         
           String myEmail = "omranimahmoud@gmail.com";
             String password = "passs";
@@ -47,8 +47,8 @@ public class Mailer {
    Message msg = new MimeMessage(ss);
    msg.setFrom(new InternetAddress(myEmail));
    msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(opponentEmail));
-   msg.setSubject("Administration");
-   msg.setText("Bonjour , votre compte est activé");
+   msg.setSubject(sub);
+   msg.setText(msgt);
    Transport trans = ss.getTransport("smtp");
    trans.send(msg);
    System.out.println("message sent !! ");
