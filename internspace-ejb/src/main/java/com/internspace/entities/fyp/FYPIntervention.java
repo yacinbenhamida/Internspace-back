@@ -3,6 +3,7 @@ package com.internspace.entities.fyp;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -38,6 +39,8 @@ public class FYPIntervention implements Serializable{
 	Employee  teacher;
 	@ManyToOne
 	FYPFile internshipSheet;
+	@Column(name="given_mark")
+	int givenMark;
 	
 	public FYPIntervention() {
 		// TODO Auto-generated constructor stub
@@ -71,6 +74,12 @@ public class FYPIntervention implements Serializable{
 	}
 	public void setInternshipSheet(FYPFile internshipSheet) {
 		this.internshipSheet = internshipSheet;
+	}
+	public int getGivenMark() {
+		return givenMark;
+	}
+	public void setGivenMark(int givenMark) {
+		this.givenMark = givenMark;
 	}
 	
 }

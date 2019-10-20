@@ -1,5 +1,6 @@
 package com.internspace.entities.users;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,12 +9,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.json.JSONPropertyIgnore;
+
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.OneToMany;
@@ -45,10 +50,6 @@ public class Student extends User {
 	@ManyToOne
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
-	
-	
-	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
-	Set<Notification> notifications;
 	
 	// Many to Many to Categories using custom association table.
 	@OneToMany(mappedBy="student", fetch = FetchType.EAGER)
@@ -100,13 +101,55 @@ public class Student extends User {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 
-	public Set<Notification> getNotifications() {
-		return notifications;
+	public Boolean getIsCreated() {
+		return isCreated;
 	}
 
-	public void setNotifications(Set<Notification> notifications) {
-		this.notifications = notifications;
+	public void setIsCreated(Boolean isCreated) {
+		this.isCreated = isCreated;
 	}
+
+	public boolean isHasSubmittedAReport() {
+		return hasSubmittedAReport;
+	}
+
+	public void setHasSubmittedAReport(boolean hasSubmittedAReport) {
+		this.hasSubmittedAReport = hasSubmittedAReport;
+	}
+
+	public Internship getInternship() {
+		return internship;
+	}
+
+	public void setInternship(Internship internship) {
+		this.internship = internship;
+	}
+
+	public StudyClass getStudyClass() {
+		return studyClass;
+	}
+
+	public void setStudyClass(StudyClass studyClass) {
+		this.studyClass = studyClass;
+	}
+
+	public Set<StudentCategoryPreference> getPreferedCategories() {
+		return preferedCategories;
+	}
+
+	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
+		this.preferedCategories = preferedCategories;
+	}
+
+	public Set<StudentFYPSubject> getStudentSubjects() {
+		return studentSubjects;
+	}
+
+	public void setStudentSubjects(Set<StudentFYPSubject> studentSubjects) {
+		this.studentSubjects = studentSubjects;
+	}
+	
+	
 	
 }
 

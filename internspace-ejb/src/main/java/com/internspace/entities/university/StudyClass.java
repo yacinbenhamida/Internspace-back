@@ -55,9 +55,67 @@ public class StudyClass implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "class_option_id")
 	ClassOption classOption;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getClassYear() {
+		return classYear;
+	}
+
+	public void setClassYear(int classYear) {
+		this.classYear = classYear;
+	}
+
+	public UniversitaryYear getUniversitaryYear() {
+		return universitaryYear;
+	}
+
+	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
+		this.universitaryYear = universitaryYear;
+	}
+
+	public Set<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(Set<Student> students) {
+		this.students = students;
+	}
+
+	public Departement getDepartement() {
+		return departement;
+	}
+
+	public void setDepartement(Departement departement) {
+		this.departement = departement;
+	}
+
+	public ClassOption getClassOption() {
+		return classOption;
+	}
+
+	public void setClassOption(ClassOption classOption) {
+		this.classOption = classOption;
+	}
 	
 	/*
 	 * Getters & Setters
 	 */
+	
+	
 
 }

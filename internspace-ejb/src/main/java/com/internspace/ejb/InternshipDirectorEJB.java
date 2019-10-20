@@ -20,6 +20,7 @@ import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileArchive;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.Internship;
+import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
@@ -31,15 +32,29 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public List<Student> getLateStudentsList(int year) {
-		return em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.classYear =:year AND s.isCreated =false").setParameter("year", year).getResultList();
+		//return em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.classYear =:year AND s.isCreated =false").setParameter("year", year).getResultList();
+		List<StudyClass> ls = em.createQuery("FROM " + StudyClass.class.getName()).getResultList();
+		List<StudyClass> FiltredLs = new ArrayList<StudyClass>();
+		List<Student> l = new ArrayList<Student>();
+		List<Student> rs = new ArrayList<Student>();
+		 for(int i=0;i<ls.size();i++) {
+			 if(ls.get(i).getUniversitaryYear().getStartDate()==year)
+				 FiltredLs.add(ls.get(i));
+		 }
+		 FiltredLs.forEach(x->l.addAll(x.getStudents()));
+		 for(int i=0;i<l.size();i++) {
+			 if(l.get(i).getIsCreated()==true)
+				 l.remove(i);	 
+		 }
+		 return l;
 	}
 
 	@Override
 	public void sendMail(int year, String text) {
 		String subject = "rappel pour saisir votre fiche PFE " ;
 		Mailer mail = new Mailer();
-		List<String> ls = em.createQuery("SELECT email FROM " + Student.class.getName()  + " s WHERE s.classYear =:year AND s.isCreated =false").setParameter("year", year).getResultList();
-		ls.forEach(x->mail.send(x,text,subject));
+		List<Student> ls = getLateStudentsList(year);
+		ls.forEach(x->mail.send(x.getEmail(),text,subject));
 	}
 
 	@Override
@@ -50,12 +65,19 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public List<FYPFile> getFYPFileListByState(FYPFileStatus state) {
-		return em.createQuery("select * FROM FYPFile f WHERE f.fileTemplateElementType =:state").setParameter("state", state).getResultList();
+		return em.createQuery("SELECT * FROM FYPFile f WHERE f.fileTemplateElementType =:state").setParameter("state", state).getResultList();
 	}
 
 	@Override
 	public List<FYPFile> getFYPFileListByYear( int year) {
-		return em.createQuery("FROM " + FYPFile.class.getName()  + " f WHERE f.year =:year").setParameter("year", year).getResultList();
+		 List<FYPFile> ls = em.createQuery("select * FROM FYPFile").getResultList();
+		 List<FYPFile> rs = new ArrayList<FYPFile>();
+		 for(int i=0;i<ls.size();i++) {
+			 if(ls.get(i).getUniversitaryYear().getStartDate()==year) {
+				 rs.add(ls.get(i));
+			 } 
+		 }
+		 return rs;
 	}
 
 	//SELECT * FROM Employee e, Team t WHERE e.Id_team=t.Id_team
@@ -94,7 +116,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		else{
 			lf.addAll(getFYPFileListByCountry(location));
 			for (int i = 0; i < lf.size (); i++) {
-				if(lf.get(i).getyear()==year)
+				if(lf.get(i).getUniversitaryYear().getStartDate()==year)
 					rs.add(lf.get(i));
 			}
 		}
@@ -128,7 +150,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
 		em.persist(n);
-		em.flush();
+		em.flush(); 
 		Mailer mail = new Mailer();
 		List<Student> ls =em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.internship =:intern").setParameter("intern", i).getResultList();
 		mail.send(ls.get(1).getEmail(),text,subject);

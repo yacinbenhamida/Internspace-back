@@ -1,5 +1,6 @@
 package com.internspace.ejb.abstraction;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Local;
@@ -11,7 +12,7 @@ public interface NotificationEJBLocal {
 	public Notification addNotification(Notification notification);
 	public boolean removeNotification(long notifId);
 	public Notification editNotification(Notification notification);
-	public Set<Notification> getNotificationHistoryOfStudent(long studentId);
-	public Set<Notification> getNotificationHistoryOfEmployee(long employeeId);
-	public Set<Notification> getAll();
+	public List<Notification> getNotificationHistoryOfStudent(long studentId);
+	public List<Notification> getNotificationHistoryOfEmployee(long employeeId);
+	public List<Notification> getAll();
 }
