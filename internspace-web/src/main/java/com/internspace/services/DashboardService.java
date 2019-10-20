@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.GET;
 
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
@@ -121,4 +122,41 @@ public class DashboardService {
   
         //return Response.status(Response.Status.NOT_FOUND).build();        
 	}
+	
+	
+	@GET
+	@Path("/internship/category")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getInternshipsByCategory(
+			@QueryParam("uni") long uniId,
+			@QueryParam("category") long categoryId){
+		int out = service.getInternshipsByCategory(uniId, categoryId);
+
+        return Response.ok(out).status(200)
+	        .header("Access-Control-Allow-Origin", "*")
+	        //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	        //.header("Access-Control-Allow-Credentials", "true")
+	        //.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	        .header("Access-Control-Max-Age", "1209600")
+	        .build();
+  
+        //return Response.status(Response.Status.NOT_FOUND).build();        
+	}
+	
+	@GET
+	@Path("/company/category/most-requested")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getMostRequestedCategoriesByCompanies()
+	{
+		List<FYPCategory> out = service.getMostRequestedCategoriesByCompanies();
+
+        return Response.ok(out).status(200)
+	        .header("Access-Control-Allow-Origin", "*")
+	        //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	        //.header("Access-Control-Allow-Credentials", "true")
+	        //.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	        .header("Access-Control-Max-Age", "1209600")
+	        .build();
+	}
+	
 }
