@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.GET;
 
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
+import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
 @Path("dashboard")
@@ -63,7 +64,7 @@ public class DashboardService {
 	
 	
 	@GET
-	@Path("/site/distribution/abroad")
+	@Path("/distribution/abroad")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAbroadPercentagePerYear(
 			@QueryParam("uni") long uniId) {
@@ -81,13 +82,34 @@ public class DashboardService {
 	}
 	
 	@GET
-	@Path("/site/distribution/location")
+	@Path("/distribution/location")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStudentsDistributionByLocationAndUY(
 			@QueryParam("uni") long uniId,
 			@QueryParam("location") String location,
 			@QueryParam("uy") long uyId){
 		float out = service.getStudentsDistributionByLocationAndUY(uniId, location, uyId);
+
+        return Response.ok(out).status(200)
+	        .header("Access-Control-Allow-Origin", "*")
+	        //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	        //.header("Access-Control-Allow-Credentials", "true")
+	        //.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	        .header("Access-Control-Max-Age", "1209600")
+	        .build();
+  
+        //return Response.status(Response.Status.NOT_FOUND).build();        
+	}
+	
+	//getMostCompanyAcceptingInternsWithUniversity
+	
+	@GET
+	@Path("/site/distribution/location")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getMostCompanyAcceptingInternsWithUniversity(
+			@QueryParam("uni") long uniId,
+			@QueryParam("n") int n){
+		List<Company> out = service.getMostCompanyAcceptingInternsWithUniversity(uniId, n);
 
         return Response.ok(out).status(200)
 	        .header("Access-Control-Allow-Origin", "*")
