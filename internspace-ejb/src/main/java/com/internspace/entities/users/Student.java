@@ -54,6 +54,10 @@ public class Student extends User {
 	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated ;
 	
+	// behs nshouf est ce qui letudiant ynajem y3adi pfe ou nn ( ynajem yconnecti fel platforme ou nn )
+	@Column(name = "is_disabled", columnDefinition = "boolean default false")
+	Boolean isDisabled ;
+	
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}
@@ -140,6 +144,15 @@ public class Student extends User {
 	public void setStudentSubjects(Set<StudentFYPSubject> studentSubjects) {
 		this.studentSubjects = studentSubjects;
 	}
+
+	public Boolean getIsDisabled() {
+		return isDisabled;
+	}
+
+	public void setIsDisabled(Boolean isDisabled) {
+		this.isDisabled = isDisabled;
+	}
+	
 	
 	
 	

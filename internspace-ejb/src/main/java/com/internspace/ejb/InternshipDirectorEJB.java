@@ -18,6 +18,8 @@ import com.internspace.entities.exchanges.Notification;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileArchive;
+import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.StudyClass;
@@ -191,6 +193,69 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 				.setParameter("archive", archive).getResultList();
 		
 	}
+
+	@Override
+	public boolean disableAccount(int id) {
+		Student s =em.find(Student.class, id);
+		if(s!=null)
+		{
+			s.setIsDisabled(true);
+			em.persist(s);
+			em.flush();
+			return true;
+		}
+		return false;
+	}
+	
+	public List<Student> getAllStudentsList() {
+		return em.createQuery("FROM " + Student.class.getName()  + " s").getResultList();
+		
+	}
+	
+	public Student FindStudent(int id) {
+		return em.find(Student.class, id);	
+	}
+
+	@Override
+	public Boolean ValidateSubmittedAReport(int id) {
+		Student s = em.find(Student.class, id);
+		s.setHasSubmittedAreport(true);
+		em.persist(s);
+		em.flush();
+		return true;
+	}
+
+	@Override
+	public List<FYPFile> WaitingForDefensePlanningList() {
+		List<FYPFile> ls = getAllFYPFileList();
+		List<FYPFile> rs = new ArrayList<FYPFile>();
+		TeacherRole protractor = TeacherRole.protractor;
+		TeacherRole  supervisor = TeacherRole.supervisor;
+		int noteP=0;
+		int noteSup=0;
+		for(int i=0; i<ls.size();i++) {
+			List<FYPIntervention> interLS= ls.get(i).getInterventions();
+			for(int j=0; j<interLS.size();j++) {
+				
+				if(interLS.get(j).getTeacherRole()== protractor)
+				{
+					noteP = interLS.get(j).getGivenMark();
+				}
+				if(interLS.get(j).getTeacherRole()== supervisor)
+				{
+					noteSup = interLS.get(j).getGivenMark();
+				}
+				
+			}
+			if(noteSup > 0 && noteP > 0)
+				rs.add(ls.get(i));
+				
+		}
+		
+		return rs;
+	}
+
+	
 	
 	
 	

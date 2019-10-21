@@ -24,6 +24,12 @@ public interface InternshipDirectorEJBLocal {
 	void acceptCancelingDemand(int id);
 	void declineCancelingDemand(int id, String text);
 	List<FYPFile> listCancelingDemand();
+	public boolean disableAccount(int id);
+	public List<Student> getAllStudentsList();
+	public Student FindStudent(int id);
+	public Boolean ValidateSubmittedAReport(int id);
+	public List<FYPFile> WaitingForDefensePlanningList();
+	
 	
 	
 	
