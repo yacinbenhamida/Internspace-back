@@ -102,14 +102,14 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		if(year == 0) {
 			lf.addAll(getFYPFileListByCountry(location));
 			for (int i = 0; i < lf.size (); i++) {
-				if(lf.get(i).getFileTemplateElementType()==state)
+				if(lf.get(i).getFileStatus()==state)
 					rs.add(lf.get(i));
 			}
 		}
 		else if(location==""){
 			lf.addAll(getFYPFileListByYear(year));
 			for (int i = 0; i < lf.size (); i++) {
-				if(lf.get(i).getFileTemplateElementType()==state)
+				if(lf.get(i).getFileStatus()==state)
 					rs.add(lf.get(i));
 			}
 		}
@@ -164,7 +164,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		Farchive.getFypFile().setCategories(f.getCategories());
 		Farchive.getFypFile().setDescription(f.getDescription());
 		Farchive.getFypFile().setFeatures(f.getFeatures());
-		Farchive.getFypFile().setFileStatus(f.getFileTemplateElementType());
+		Farchive.getFypFile().setFileStatus(f.getFileStatus());
 		Farchive.setId(f.getId());
 		Farchive.getFypFile().setInternship(f.getInternship());
 		Farchive.getFypFile().setInterventions(f.getInterventions());
