@@ -89,9 +89,6 @@ public class FYPFile implements Serializable {
 	 * Getters & Setters
 	 */
     
-	public Set<FYPCategory> getCategories() {
-		return categories;
-	}
 
 	public void setCategories(Set<FYPCategory> categories) {
 		this.categories = categories;
@@ -130,25 +127,11 @@ public class FYPFile implements Serializable {
 	}
 
 
-	public Set<FYPFeature> getFeatures() {
-		return features;
-	}
 
 	public void setFeatures(Set<FYPFeature> features) {
 		this.features = features;
 	}
 
-	public Set<FYPKeyword> getKeywords() {
-		return keywords;
-	}
-
-	public void setKeywords(Set<FYPKeyword> keywords) {
-		this.keywords = keywords;
-	}
-
-	public List<FYPIntervention> getInterventions() {
-		return interventions;
-	}
 
 	public void setInterventions(List<FYPIntervention> interventions) {
 		this.interventions = interventions;
