@@ -33,15 +33,6 @@ public class Internship implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="internship_id")
 	long id;
-
-	String title;
-	
-	// Compare with University's location to get abroad internships.
-	String location; 
-	
-	/*
-	 * Associations
-	 */
 	
 	@OneToOne
 	@JoinColumn(name = "fyp_file_id")
@@ -68,22 +59,6 @@ public class Internship implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public FYPFile getFypFile() {

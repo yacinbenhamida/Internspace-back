@@ -215,9 +215,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 		
 		// Apply filtering?
 		if (onlyAbroad )
-			queryStr = queryStr + " AND s.internship.location " + onlyAbroad_OP + " :location";
-		else if(location != null) // Specific Internship Location?
-			queryStr = queryStr + " AND s.internship.location " + onlyLocation_OP + " :location";
+			queryStr = queryStr + " AND s.internship.subject.location " + onlyAbroad_OP + " :location";
+		else if(location != null) // Specific Internship's Subject Location?
+			queryStr = queryStr + " AND s.internship.subject.location " + onlyLocation_OP + " :location";
 		
 		List<Student> students;
 		TypedQuery<Student> query = em.createQuery(queryStr, Student.class)
