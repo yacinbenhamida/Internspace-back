@@ -55,7 +55,7 @@ public class FYPFile implements Serializable {
 	UniversitaryYear universitaryYear;
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
-	FYPFileStatus fileTemplateElementType;
+	FYPFileStatus fileStatus;
 	
 	@Column(name="canceled" ,columnDefinition = "boolean default false")
 	Boolean isCanceled;
@@ -82,7 +82,6 @@ public class FYPFile implements Serializable {
 	@ManyToMany(mappedBy = "fypFiles")
 	Set<FYPCategory> categories;
 
-	
 	/*
 	 * Getters & Setters
 	 */
@@ -168,12 +167,12 @@ public class FYPFile implements Serializable {
 		this.universitaryYear = universitaryYear;
 	}
 
-	public FYPFileStatus getFileTemplateElementType() {
-		return fileTemplateElementType;
+	public FYPFileStatus getFileStatus() {
+		return fileStatus;
 	}
 
-	public void setFileTemplateElementType(FYPFileStatus fileTemplateElementType) {
-		this.fileTemplateElementType = fileTemplateElementType;
+	public void setFileStatus(FYPFileStatus fileStatus) {
+		this.fileStatus = fileStatus;
 	}
 
 	public Boolean getIsCanceled() {

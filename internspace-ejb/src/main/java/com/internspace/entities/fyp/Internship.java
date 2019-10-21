@@ -44,6 +44,7 @@ public class Internship implements Serializable {
 	 */
 	
 	@OneToOne
+	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
 	
 	@OneToOne(mappedBy = "internship")

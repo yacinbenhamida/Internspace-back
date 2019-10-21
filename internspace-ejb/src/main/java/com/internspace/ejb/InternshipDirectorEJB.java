@@ -133,7 +133,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	@Override
 	public void acceptFile(int id ) {
 		FYPFile f = em.find(FYPFile.class, id);
-		f.setFileTemplateElementType(FYPFileStatus.confirmed);
+		f.setFileStatus(FYPFileStatus.confirmed);
 		em.persist(f);
 		em.flush();
 		
@@ -143,7 +143,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	public void refuseFile(int id , String text) {
 		String subject = "Refus d'une fiche PFE" ;
 		FYPFile f = em.find(FYPFile.class, id);
-		f.setFileTemplateElementType(FYPFileStatus.declined);
+		f.setFileStatus(FYPFileStatus.declined);
 		Internship i = f.getInternship();
 		Notification n = new Notification();
 		n.setStudent(i.getStudent());
@@ -164,7 +164,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		Farchive.getFypFile().setCategories(f.getCategories());
 		Farchive.getFypFile().setDescription(f.getDescription());
 		Farchive.getFypFile().setFeatures(f.getFeatures());
-		Farchive.getFypFile().setFileTemplateElementType(f.getFileTemplateElementType());
+		Farchive.getFypFile().setFileStatus(f.getFileTemplateElementType());
 		Farchive.setId(f.getId());
 		Farchive.getFypFile().setInternship(f.getInternship());
 		Farchive.getFypFile().setInterventions(f.getInterventions());
