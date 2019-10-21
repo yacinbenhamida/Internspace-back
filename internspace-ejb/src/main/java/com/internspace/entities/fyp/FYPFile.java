@@ -62,6 +62,9 @@ public class FYPFile implements Serializable {
 	@Column(name="final_mark")
 	int finalMark;
 	
+	@Column(name="isArchived" ,columnDefinition = "boolean default false")
+	Boolean isArchived;
+	
 	/*
 	 * Associations
 	 */
@@ -190,6 +193,15 @@ public class FYPFile implements Serializable {
 	public void setFinalMark(int finalMark) {
 		this.finalMark = finalMark;
 	}
+
+	public Boolean getIsArchived() {
+		return isArchived;
+	}
+
+	public void setIsArchived(Boolean isArchived) {
+		this.isArchived = isArchived;
+	}
+	
 	
 	
 }

@@ -160,18 +160,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	public void acceptCancelingDemand(int id) {
 		FYPFile f = em.find(FYPFile.class, id);
 		FYPFileArchive Farchive = new FYPFileArchive() ;
+		f.setIsArchived(true);
+		Farchive.setFypFile(f);
 		Farchive.setArchiveDate(new Date());
-		Farchive.getFypFile().setCategories(f.getCategories());
-		Farchive.getFypFile().setDescription(f.getDescription());
-		Farchive.getFypFile().setFeatures(f.getFeatures());
-		Farchive.getFypFile().setFileStatus(f.getFileStatus());
-		Farchive.setId(f.getId());
-		Farchive.getFypFile().setInternship(f.getInternship());
-		Farchive.getFypFile().setInterventions(f.getInterventions());
-		Farchive.getFypFile().setKeywords(f.getKeywords());
-		Farchive.getFypFile().setProblematic(f.getProblematic());
-		Farchive.getFypFile().setTitle(f.getTitle());
-		Farchive.getFypFile().setUniversitaryYear(f.getUniversitaryYear());
+		em.persist(f);
 		em.persist(Farchive);
 		em.flush();
 		
@@ -186,12 +178,17 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		Internship i = f.getInternship();
 		List<Student> ls =em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.internship =:intern").setParameter("intern", i).getResultList();
 		mail.send(ls.get(1).getEmail(),text,subject);
+		em.persist(f);
+		em.flush();
 	}
 
 	@Override
 	public List<FYPFile> listCancelingDemand() {
 		Boolean state = true;
-		return em.createQuery("select * FROM FYPFile f WHERE f.isCanceled =:state").setParameter("state", state).getResultList();
+		Boolean archive = false;
+		return em.createQuery("select * FROM FYPFile f WHERE f.isCanceled =:state AND f.isArchived =:archive")
+				.setParameter("state", state)
+				.setParameter("archive", archive).getResultList();
 		
 	}
 	
