@@ -1,12 +1,9 @@
 package com.internspace.entities.users;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,7 +18,6 @@ import com.internspace.entities.university.Site;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.internspace.entities.exchanges.Notification;
 import com.internspace.entities.fyp.FYPIntervention;
 
 @Entity
@@ -48,14 +44,11 @@ public class Employee extends User implements Serializable{
 	 */
 	
 	// Only use this when role == internshipDirector
-	@OneToOne(mappedBy = "internshipDirector",optional = true)
+	@OneToOne(optional = true)
 	Site site;
 	
-
-
-	
-	// has a no of interventions if the employee is a teacher
-	@OneToMany(mappedBy = "teacher",fetch = FetchType.EAGER)
+	// Has a no of interventions if the employee is a teacher
+	@OneToMany(mappedBy = "teacher",fetch = FetchType.LAZY)
 	Set<FYPIntervention> interventions;
 	// use this when role == teacher
 	@ManyToOne(optional = true)

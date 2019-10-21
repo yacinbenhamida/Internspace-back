@@ -43,7 +43,7 @@ public class Internship implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToOne(mappedBy = "internship")
+	@OneToOne
 	FYPFile fypFile;
 	
 	@OneToOne(mappedBy = "internship")

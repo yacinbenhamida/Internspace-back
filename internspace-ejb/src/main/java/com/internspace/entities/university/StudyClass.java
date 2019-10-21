@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,7 +38,7 @@ public class StudyClass implements Serializable {
 	String name;
 	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5éme année...
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "universitary_year_id")
 	UniversitaryYear universitaryYear;
 	
@@ -55,7 +56,11 @@ public class StudyClass implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "class_option_id")
 	ClassOption classOption;
-
+	
+	/*
+	 * Getters & Setters
+	 */
+	
 	public long getId() {
 		return id;
 	}
@@ -111,11 +116,5 @@ public class StudyClass implements Serializable {
 	public void setClassOption(ClassOption classOption) {
 		this.classOption = classOption;
 	}
-	
-	/*
-	 * Getters & Setters
-	 */
-	
-	
 
 }

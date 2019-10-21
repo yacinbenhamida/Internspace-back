@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="company")
+@Table(name = "company")
 public class Company extends User {
 
 	private static final long serialVersionUID = 1L;
@@ -21,33 +21,34 @@ public class Company extends User {
 	/*
 	 * Attributes
 	 */
-	
-	//... email, last-name and first-name for responsible are the User's (from Parent)
+
+	// ... email, last-name and first-name for responsible are the User's (from
+	// Parent)
 	String website;
 	String address;
 	String country;
-	@Column(name="supervisor_email")
+	@Column(name = "supervisor_email")
 	String supervisorEmail;
-	@Column(name="phone_number")
+	@Column(name = "phone_number")
 	String phoneNumber;
-	
+
 	/*
 	 * Associations
 	 */
-	
-	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<FYPSubject> subjects;
 
-	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<Internship> internships;
 
-	@OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<InternshipConvention> internshipConventions;
-	
+
 	/*
 	 * Getters & Setters
 	 */
-	
+
 	public Set<FYPSubject> getSubjects() {
 		return subjects;
 	}
@@ -111,7 +112,5 @@ public class Company extends User {
 	public void setInternshipConventions(Set<InternshipConvention> internshipConventions) {
 		this.internshipConventions = internshipConventions;
 	}
-	
-	
-}
 
+}

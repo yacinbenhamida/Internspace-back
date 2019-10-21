@@ -49,15 +49,15 @@ public class FYPSubject implements Serializable {
 	Company company;
 	
 	// Many to Many to Subjects using custom association table.
-	@OneToMany(mappedBy="subject", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="subject", fetch = FetchType.LAZY)
 	Set<StudentFYPSubject> studentSubjects;
-	
-	@ManyToMany(mappedBy = "subjects", fetch = FetchType.EAGER)
-	Set<FYPCategory> categories;
-	
-	@OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
 	Set<Internship> internships;
 
+	@ManyToMany(mappedBy = "subjects")
+	Set<FYPCategory> categories;
+	
 	/*
 	 * Getters & Setters
 	 */
@@ -86,11 +86,4 @@ public class FYPSubject implements Serializable {
 		this.content = content;
 	}
 
-	public Set<FYPCategory> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(Set<FYPCategory> categories) {
-		this.categories = categories;
-	}
 }

@@ -21,7 +21,7 @@ public class Notification implements Serializable{
 	String content;
 	boolean seen;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	Student student;
 	
 	@ManyToOne

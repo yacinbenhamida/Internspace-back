@@ -6,12 +6,16 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import com.internspace.entities.fyp.FYPFile;
 
 // This could be set by the administrator of Internspace.
 @Entity
@@ -38,11 +42,15 @@ public class UniversitaryYear implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToMany(mappedBy = "universitaryYear")
+	@OneToMany(mappedBy = "universitaryYear", fetch = FetchType.LAZY)
+	Set<FYPFile> fypFiles = new HashSet<>();
+	
+	
+	@OneToMany(mappedBy = "universitaryYear", fetch = FetchType.EAGER)
 	Set<StudyClass> studyClasses = new HashSet<>();
 
 	
-	@OneToMany(mappedBy = "currentUniversitaryYear")
+	@OneToMany(mappedBy = "currentUniversitaryYear", fetch = FetchType.LAZY)
 	Set<University> universities = new HashSet<>();
 	
 	

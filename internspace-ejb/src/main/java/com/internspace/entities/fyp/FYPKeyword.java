@@ -34,7 +34,7 @@ public class FYPKeyword implements Serializable {
 	 * Associations
 	 */
 
-	@ManyToMany(mappedBy = "keywords")
+	@ManyToMany
 	Set<FYPFile> fypFiles;
 	
 	/*

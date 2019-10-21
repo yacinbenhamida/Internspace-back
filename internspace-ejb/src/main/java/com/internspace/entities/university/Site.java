@@ -3,7 +3,6 @@ package com.internspace.entities.university;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,11 +41,11 @@ public class Site implements Serializable {
 	@JoinColumn(name = "uni_id")
 	University university;
 	
-	@OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "site")
 	Set<Departement> departements;
 	
 	// Explicitly check if this employee has InternshipDirector role.
-	@OneToOne
+	@OneToOne(mappedBy = "site")
 	@JoinColumn(name = "internship_director_id")
 	Employee internshipDirector;
 	

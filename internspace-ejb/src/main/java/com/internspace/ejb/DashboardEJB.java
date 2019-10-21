@@ -104,12 +104,17 @@ public class DashboardEJB implements DashboardEJBLocal {
 	public float getStudentsDistributionByLocationAndUY(long uniId, String location, long uyId) {
 		List<Student> uyStudents = getFypStudentsByUY(uniId, uyId, false, false, null, false);
 		
-		float dist = getFypStudentsByUY(uniId, uyId, false, false, location, false).size();
+		List<Student> distStudents = getFypStudentsByUY(uniId, uyId, false, false, location, false);
 		
-		System.out.println(dist);
+		System.out.println(distStudents);
+		
+		if(uyStudents == null || distStudents == null)
+			return 0f;
+		
+		System.out.println(distStudents.size());
 		System.out.println(uyStudents.size());
 		
-		return dist / uyStudents.size();
+		return distStudents.size() / uyStudents.size();
 	}
 
 	@Override
@@ -153,7 +158,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 	public List<FYPCategory> getMostRequestedCategoriesByCompanies() {
 		
 		String queryStr = "SELECT C FROM " + FYPCategory.class.getName() + " C"
-				+ " JOIN FETCH C.subjects S WHERE C.id <> 0"
+				+ " JOIN FETCH C.subjects S"
 				//+ " ORDER BY size(C.subjects) DESC"
 				;
 		

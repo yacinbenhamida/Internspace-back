@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.internspace.entities.university.UniversitaryYear;
 
 import javax.persistence.Table;
@@ -13,7 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
@@ -26,7 +26,6 @@ import javax.persistence.Column;
  * Une fiche PFE peut appartenir à plusieurs catégories. 
  */
 
-@XmlRootElement
 @Entity
 @Table(name="fyp_file")
 public class FYPFile implements Serializable {
@@ -51,37 +50,51 @@ public class FYPFile implements Serializable {
 	String title;
 	String description;
 	String problematic;
+	@ManyToOne
+	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
 	FYPFileStatus fileTemplateElementType;
 	
-	@Column(name="cancled" ,columnDefinition = "boolean default false")
+	@Column(name="canceled" ,columnDefinition = "boolean default false")
 	Boolean isCanceled;
 	@Column(name="final_mark")
 	int finalMark;
+	
 	/*
 	 * Associations
 	 */
-	
-	@ManyToMany
-	Set<FYPCategory> categories;
 
-	@ManyToMany
+
+	@ManyToMany(mappedBy = "fypFiles")
 	Set<FYPFeature> features;
 	
-	@ManyToMany
+	@ManyToMany(mappedBy = "fypFiles")
 	Set<FYPKeyword> keywords;
 
-	@OneToOne
+	@OneToOne(mappedBy = "fypFile")
 	Internship internship;
 	
 	@OneToMany(mappedBy="internshipSheet")
 	List<FYPIntervention> interventions;
+	
+	@ManyToMany(mappedBy = "fypFiles")
+	Set<FYPCategory> categories;
+
+	
 	/*
 	 * Getters & Setters
 	 */
     
+	public Set<FYPCategory> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<FYPCategory> categories) {
+		this.categories = categories;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -114,13 +127,6 @@ public class FYPFile implements Serializable {
 		this.problematic = problematic;
 	}
 
-	public Set<FYPCategory> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(Set<FYPCategory> categories) {
-		this.categories = categories;
-	}
 
 	public Set<FYPFeature> getFeatures() {
 		return features;
@@ -185,11 +191,6 @@ public class FYPFile implements Serializable {
 	public void setFinalMark(int finalMark) {
 		this.finalMark = finalMark;
 	}
-	
-	
-	
-	
-	
 	
 	
 }

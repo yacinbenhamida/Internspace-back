@@ -47,7 +47,7 @@ public class FileTemplate implements Serializable {
 	 * Associations
 	 */	
 	
-	@OneToMany(mappedBy="fileTemplate", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="fileTemplate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	List<FileTemplateElement> templateElements = new ArrayList<FileTemplateElement>();
 	
 	// Explicitly check if this employee has InternshipsDirector role.

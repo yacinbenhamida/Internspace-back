@@ -14,43 +14,43 @@ import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
 @Entity
-@Table(name="category")
+@Table(name = "category")
 public class FYPCategory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="category_id")
+	@Column(name = "category_id")
 	long id;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	String name = "default";
-	@Column(name="is_approved") // Teachers can suggest categories.
+	@Column(name = "is_approved") // Teachers can suggest categories.
 	boolean isApproved = false;
-	
-	// Many to Many to Students using custom association table.
-	@OneToMany(mappedBy="category", fetch = FetchType.EAGER)
-	Set<StudentCategoryPreference> preferedByStudents;
-	
+
 	/*
 	 * Associations
 	 */
 
-	@ManyToMany(mappedBy = "categories")
+	// Many to Many to Students using custom association table.
+	@OneToMany(mappedBy = "category")
+	Set<StudentCategoryPreference> preferedByStudents;
+
+	@ManyToMany(fetch = FetchType.LAZY)
 	Set<FYPFile> fypFiles;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	Set<FYPSubject> subjects;
-	
+
 	/*
 	 * Getters & Setters
 	 */
-	
+
 	public long getId() {
 		return id;
 	}
@@ -65,14 +65,6 @@ public class FYPCategory implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Set<FYPFile> getFypFiles() {
-		return fypFiles;
-	}
-
-	public void setFypFiles(Set<FYPFile> fypFiles) {
-		this.fypFiles = fypFiles;
 	}
 
 	public boolean isApproved() {
@@ -90,6 +82,5 @@ public class FYPCategory implements Serializable {
 	public void setSubjects(Set<FYPSubject> subjects) {
 		this.subjects = subjects;
 	}
-	
-	
+
 }

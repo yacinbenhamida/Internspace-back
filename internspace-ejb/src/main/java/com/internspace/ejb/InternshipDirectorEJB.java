@@ -161,17 +161,17 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		FYPFile f = em.find(FYPFile.class, id);
 		FYPFileArchive Farchive = new FYPFileArchive() ;
 		Farchive.setArchiveDate(new Date());
-		Farchive.setCategories(f.getCategories());
-		Farchive.setDescription(f.getDescription());
-		Farchive.setFeatures(f.getFeatures());
-		Farchive.setFileTemplateElementType(f.getFileTemplateElementType());
+		Farchive.getFypFile().setCategories(f.getCategories());
+		Farchive.getFypFile().setDescription(f.getDescription());
+		Farchive.getFypFile().setFeatures(f.getFeatures());
+		Farchive.getFypFile().setFileTemplateElementType(f.getFileTemplateElementType());
 		Farchive.setId(f.getId());
-		Farchive.setInternship(f.getInternship());
-		Farchive.setInterventions(f.getInterventions());
-		Farchive.setKeywords(f.getKeywords());
-		Farchive.setProblematic(f.getProblematic());
-		Farchive.setTitle(f.getTitle());
-		Farchive.setUniversitaryYear(f.getUniversitaryYear());
+		Farchive.getFypFile().setInternship(f.getInternship());
+		Farchive.getFypFile().setInterventions(f.getInterventions());
+		Farchive.getFypFile().setKeywords(f.getKeywords());
+		Farchive.getFypFile().setProblematic(f.getProblematic());
+		Farchive.getFypFile().setTitle(f.getTitle());
+		Farchive.getFypFile().setUniversitaryYear(f.getUniversitaryYear());
 		em.persist(Farchive);
 		em.flush();
 		

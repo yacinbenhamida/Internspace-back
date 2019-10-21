@@ -33,7 +33,7 @@ public class FYPFeature implements Serializable {
 	 * Associations
 	 */
 
-	@ManyToMany(mappedBy = "features")
+	@ManyToMany
 	Set<FYPFile> fypFiles;
 	
 	/*
