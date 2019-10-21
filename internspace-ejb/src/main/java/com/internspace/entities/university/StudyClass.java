@@ -36,6 +36,8 @@ public class StudyClass implements Serializable {
 	long id;
 	
 	String name;
+	
+	@Column(name = "class_year")
 	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5éme année...
 	
 	@ManyToOne(fetch = FetchType.LAZY)
