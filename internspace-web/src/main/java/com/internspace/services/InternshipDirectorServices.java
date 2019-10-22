@@ -17,6 +17,7 @@ import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FileTemplate;
+import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.users.Student;
 
@@ -148,5 +149,19 @@ public class InternshipDirectorServices {
 	@Path("ValidateSubmittedAReport")
 	public void ValidateSubmittedAReport(@QueryParam(value = "id") long id){
 		service.ValidateSubmittedAReport(id);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("WaitingForDefensePlanningList")
+	public  List<FYPFile> WaitingForDefensePlanningList (){
+		return service.WaitingForDefensePlanningList();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("FilterWaitingForDefensePlanningList")
+	public  FYPFile FilterWaitingForDefensePlanningList (@QueryParam(value = "id") long id){
+		return service.FilterWaitingForDefensePlanningList(id);
 	};
 }

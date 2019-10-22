@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.users.Student;
 
@@ -30,6 +31,7 @@ public interface InternshipDirectorEJBLocal {
 	public Student FindStudent(long id);
 	public Boolean ValidateSubmittedAReport(long id);
 	public List<FYPFile> WaitingForDefensePlanningList();
+	public FYPFile FilterWaitingForDefensePlanningList(long id);
 	
 	
 	

@@ -46,9 +46,51 @@ public class InternshipConvention implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	Company company;
+
+
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+
+	public Company getCompany() {
+		return company;
+	}
+
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 	
 	/*
 	 * Getters & Setters
 	 */
+	
+	
     
 }
