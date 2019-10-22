@@ -55,8 +55,6 @@ public class University implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="university")
 	private Set<Site> sites;
 	
-	@OneToMany(mappedBy = "university")
-	Set<Departement> departements;
 
 	
 	
@@ -127,22 +125,6 @@ public class University implements Serializable {
 	}
 
 	
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public int getFypClassYear() {
 		return fypClassYear;
 	}

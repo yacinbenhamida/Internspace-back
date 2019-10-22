@@ -65,11 +65,74 @@ public class Departement implements Serializable {
 	@OneToMany(mappedBy = "departement")
 	Set<ClassOption> classOptions;
 	
+	@ManyToOne
+	@JoinColumn(name = "university_id")
+	University university;
 	/*
 	 * Getters & Setters
 	 */
 	public Departement() {
 		// TODO Auto-generated constructor stub
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getNumberOfActionsAllowedForProtractors() {
+		return numberOfActionsAllowedForProtractors;
+	}
+	public void setNumberOfActionsAllowedForProtractors(int numberOfActionsAllowedForProtractors) {
+		this.numberOfActionsAllowedForProtractors = numberOfActionsAllowedForProtractors;
+	}
+	public int getNumberOfActionsAllowedForSupervisors() {
+		return numberOfActionsAllowedForSupervisors;
+	}
+	public void setNumberOfActionsAllowedForSupervisors(int numberOfActionsAllowedForSupervisors) {
+		this.numberOfActionsAllowedForSupervisors = numberOfActionsAllowedForSupervisors;
+	}
+	public int getNumberOfActionsAllowedForPreValidators() {
+		return numberOfActionsAllowedForPreValidators;
+	}
+	public void setNumberOfActionsAllowedForPreValidators(int numberOfActionsAllowedForPreValidators) {
+		this.numberOfActionsAllowedForPreValidators = numberOfActionsAllowedForPreValidators;
+	}
+	public int getNumberOfActionsAllowedForPresidents() {
+		return numberOfActionsAllowedForPresidents;
+	}
+	public void setNumberOfActionsAllowedForPresidents(int numberOfActionsAllowedForPresidents) {
+		this.numberOfActionsAllowedForPresidents = numberOfActionsAllowedForPresidents;
+	}
+	public Site getSite() {
+		return site;
+	}
+	public void setSite(Site site) {
+		this.site = site;
+	}
+	public Set<Classroom> getClassrooms() {
+		return classrooms;
+	}
+	public void setClassrooms(Set<Classroom> classrooms) {
+		this.classrooms = classrooms;
+	}
+	public Employee getDepartementHead() {
+		return departementHead;
+	}
+	public void setDepartementHead(Employee departementHead) {
+		this.departementHead = departementHead;
+	}
+	public University getUniversity() {
+		return university;
+	}
+	public void setUniversity(University university) {
+		this.university = university;
 	}
 	
 }

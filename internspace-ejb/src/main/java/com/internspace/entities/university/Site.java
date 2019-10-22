@@ -38,8 +38,6 @@ public class Site implements Serializable {
 	/*
 	 * Associations
 	 */
-	@ManyToOne
-	University university;
 	
 	@ManyToOne
 	@JoinColumn(name = "uni_id")
