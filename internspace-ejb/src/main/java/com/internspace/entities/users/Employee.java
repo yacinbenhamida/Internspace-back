@@ -2,22 +2,26 @@ package com.internspace.entities.users;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.Site;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.internspace.entities.exchanges.Notification;
+import com.internspace.entities.fyp.FYPIntervention;
 
 @Entity
 @Table(name="employee")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Employee extends User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -30,9 +34,9 @@ public class Employee extends User implements Serializable{
 		
 	}
 	
-	String password;
-	String username;
+	@Column(name = "birth_date")
 	Date birthDate;
+	@Enumerated(EnumType.STRING)
 	Role role;
 	
 	/*
@@ -40,11 +44,16 @@ public class Employee extends User implements Serializable{
 	 */
 	
 	// Only use this when role == internshipDirector
-	@OneToOne(mappedBy = "internshipDirector")
+	@OneToOne(optional = true)
 	Site site;
 	
-	@OneToMany(mappedBy="employee")
-	List<Notification> notifications;
+	// Has a no of interventions if the employee is a teacher
+	@OneToMany(mappedBy = "teacher",fetch = FetchType.LAZY)
+	Set<FYPIntervention> interventions;
+	// use this when role == teacher
+	@ManyToOne(optional = true)
+	@JoinColumn(name="department_id")
+	Departement department;
 	/*
 	 * Getters & Setters
 	 */
@@ -66,12 +75,19 @@ public class Employee extends User implements Serializable{
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
 
+	public Set<FYPIntervention> getInterventions() {
+		return interventions;
+	}
+	public void setInterventions(Set<FYPIntervention> interventions) {
+		this.interventions = interventions;
+	}
+	public Departement getDepartment() {
+		return department;
+	}
+	public void setDepartment(Departement department) {
+		this.department = department;
+	}
+	
 }
 

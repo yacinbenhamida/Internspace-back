@@ -11,6 +11,7 @@ import com.internspace.entities.users.Student;
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
@@ -32,31 +33,68 @@ public class Internship implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="internship_id")
 	long id;
-
-	String title;
 	
-	// Compare with University's location to get abroad internships.
-	String location; 
-	
-	/*
-	 * Associations
-	 */
-	
-	@OneToOne(mappedBy = "internship")
+	@OneToOne
+	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
 	
 	@OneToOne(mappedBy = "internship")
 	Student student;
 	
 	@ManyToOne
+	@JoinColumn(name = "company_id")
 	Company company;
 	
 	@ManyToOne
+	@JoinColumn(name = "subject_id")
 	FYPSubject subject;
-
+	
 	/*
 	 * Getters & Setters
 	 */
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public FYPFile getFypFile() {
+		return fypFile;
+	}
+
+	public void setFypFile(FYPFile fypFile) {
+		this.fypFile = fypFile;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public FYPSubject getSubject() {
+		return subject;
+	}
+
+	public void setSubject(FYPSubject subject) {
+		this.subject = subject;
+	}
+
+	
+	
     
 	
 }

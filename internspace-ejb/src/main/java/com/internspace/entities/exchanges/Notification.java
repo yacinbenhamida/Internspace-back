@@ -3,6 +3,7 @@ package com.internspace.entities.exchanges;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +20,8 @@ public class Notification implements Serializable{
 	long id;
 	String content;
 	boolean seen;
-	@ManyToOne
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	Student student;
 	
 	@ManyToOne
@@ -66,6 +68,11 @@ public class Notification implements Serializable{
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+	@Override
+	public String toString() {
+		return "Notification [id=" + id + ", content=" + content + ", seen=" + seen + ", student=" + student
+				+ ", employee=" + employee + "]";
 	}
 	
 	

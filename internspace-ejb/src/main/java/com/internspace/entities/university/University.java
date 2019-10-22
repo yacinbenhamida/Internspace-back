@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,6 +39,14 @@ public class University implements Serializable {
 	String owner;
 	@Column(name="logoUrl")
 	String logoUrl;
+	@Column(name="fyp_class_year")
+	int fypClassYear; // What class year is considered to be final-year-project year? 5 for example...
+	
+	@ManyToOne()
+	@JoinColumn(name="current_universitary_year")
+	UniversitaryYear currentUniversitaryYear; // Each university has its own Current University Year
+	
+	String location; // School's location, useful to retrieve abroad internships...
 	
 	/*
 	 * Associations
@@ -117,5 +127,54 @@ public class University implements Serializable {
 	}
 
 	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getFypClassYear() {
+		return fypClassYear;
+	}
+
+	public void setFypClassYear(int fypClassYear) {
+		this.fypClassYear = fypClassYear;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public UniversitaryYear getCurrentUniversitaryYear() {
+		return currentUniversitaryYear;
+	}
+
+	public void setCurrentUniversitaryYear(UniversitaryYear currentUniversitaryYear) {
+		this.currentUniversitaryYear = currentUniversitaryYear;
+	}
+
+	public Set<Site> getSites() {
+		return sites;
+	}
+
+	public void setSites(Set<Site> sites) {
+		this.sites = sites;
+	}
+
+
 }
 

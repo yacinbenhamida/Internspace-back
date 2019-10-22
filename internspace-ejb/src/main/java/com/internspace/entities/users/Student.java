@@ -1,19 +1,22 @@
 package com.internspace.entities.users;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.internspace.entities.fyp.Internship;
-import com.internspace.entities.university.Classroom;
+import com.internspace.entities.fyp.StudentCategoryPreference;
+import com.internspace.entities.fyp.StudentFYPSubject;
+import com.internspace.entities.university.StudyClass;
+
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.OneToMany;
-
-
-import com.internspace.entities.exchanges.Notification;
 
 @Entity
 @Table(name="student")
@@ -21,22 +24,39 @@ public class Student extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	int classYear;
+	@Column(name="birth_date")
+	Date birthDate;
+	
+	// The student isn't allowed to have a reporter without initially submitting a paper report to the administration
+	@Column(name = "has_submitted_a_report")
+	boolean hasSubmittedAReport;
 	
 	/*
 	 * Associations
 	 */
 
 	@OneToOne
+	@JoinColumn(name = "internship_id")
 	Internship internship;
-	
+
 	@ManyToOne
-	Classroom classroom;
-	String password;
-	String username;
-	Date birthDate;
-	@OneToMany(mappedBy="student")
-	List<Notification> notifications;
+	@JoinColumn(name = "study_class_id")
+	StudyClass studyClass;
+	
+	// Many to Many to Categories using custom association table.
+	@OneToMany(mappedBy="student", fetch = FetchType.LAZY)
+	Set<StudentCategoryPreference> preferedCategories;
+	
+	// Many to Many to Subjects using custom association table.
+	@OneToMany(mappedBy="student", fetch = FetchType.LAZY)
+	Set<StudentFYPSubject> studentSubjects;
+	
+	@Column(name = "is_created", columnDefinition = "boolean default false")
+	Boolean isCreated ;
+	
+	// behs nshouf est ce qui letudiant ynajem y3adi pfe ou nn ( ynajem yconnecti fel platforme ou nn )
+	@Column(name = "is_disabled", columnDefinition = "boolean default false")
+	Boolean isDisabled ;
 	
 	public Student() {
 		// TODO Auto-generated constructor stub
@@ -69,13 +89,72 @@ public class Student extends User {
 		this.birthDate = birthDate;
 	}
 
-	public List<Notification> getNotifications() {
-		return notifications;
+	public boolean isHasSubmittedAreport() {
+		return hasSubmittedAReport;
 	}
 
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
+	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
+		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
+
+	public Boolean getIsCreated() {
+		return isCreated;
+	}
+
+	public void setIsCreated(Boolean isCreated) {
+		this.isCreated = isCreated;
+	}
+
+	public boolean isHasSubmittedAReport() {
+		return hasSubmittedAReport;
+	}
+
+	public void setHasSubmittedAReport(boolean hasSubmittedAReport) {
+		this.hasSubmittedAReport = hasSubmittedAReport;
+	}
+
+	public Internship getInternship() {
+		return internship;
+	}
+
+	public void setInternship(Internship internship) {
+		this.internship = internship;
+	}
+
+	public StudyClass getStudyClass() {
+		return studyClass;
+	}
+
+	public void setStudyClass(StudyClass studyClass) {
+		this.studyClass = studyClass;
+	}
+
+	public Set<StudentCategoryPreference> getPreferedCategories() {
+		return preferedCategories;
+	}
+
+	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
+		this.preferedCategories = preferedCategories;
+	}
+
+	public Set<StudentFYPSubject> getStudentSubjects() {
+		return studentSubjects;
+	}
+
+	public void setStudentSubjects(Set<StudentFYPSubject> studentSubjects) {
+		this.studentSubjects = studentSubjects;
+	}
+
+	public Boolean getIsDisabled() {
+		return isDisabled;
+	}
+
+	public void setIsDisabled(Boolean isDisabled) {
+		this.isDisabled = isDisabled;
+	}
+	
+	
+	
 	
 }
 

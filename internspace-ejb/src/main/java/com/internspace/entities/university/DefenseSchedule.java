@@ -1,7 +1,6 @@
 package com.internspace.entities.university;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,16 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /*
- * Keeps track of whether the classroom is scheduled for a future FYP Defense or not.
- * Useful when trying to split FYP Defenses to classroom by date and hour...
+ * Multiple schedule dates per classroom...
  */
 @Entity
-@Table(name="classroom")
-public class Classroom implements Serializable {
+@Table(name="defense_schedule")
+public class DefenseSchedule implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -28,23 +25,17 @@ public class Classroom implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="classroom_id")
+	@Column(name="ds_id")
 	long id;
 	
-	@Column(name="name")
 	String name;
-	@Column(name="numberOfStudents")
-	int numberOfStudents;
-
+	
 	/*
 	 * Associations
 	 */
 	
 	@ManyToOne
-	Departement departement;
-	
-	@OneToMany(mappedBy = "classroom")
-	Set<DefenseSchedule> schedules;
+	Classroom classroom;
 
 	/*
 	 * Getters & Setters

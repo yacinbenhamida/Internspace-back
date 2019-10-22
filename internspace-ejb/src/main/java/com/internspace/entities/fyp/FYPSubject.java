@@ -4,16 +4,22 @@ import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Table;
+
+import com.internspace.entities.users.Company;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
 @Entity
-@Table(name="subject")
+@Table(name="fyp_subject")
 public class FYPSubject implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -31,19 +37,27 @@ public class FYPSubject implements Serializable {
 	String title = "default";
 	
 	// Apply NLP with fypFile.features
-	@Column(name="content")
+	@Column(name="content", length = 65535, columnDefinition = "text")
 	String content;
 	
 	/*
 	 * Associations
 	 */
 
+	@ManyToOne
+	@JoinColumn(name = "company_id")
+	Company company;
+	
+	// Many to Many to Subjects using custom association table.
+	@OneToMany(mappedBy="subject", fetch = FetchType.LAZY)
+	Set<StudentFYPSubject> studentSubjects;
+
+	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+	Set<Internship> internships;
+
 	@ManyToMany(mappedBy = "subjects")
 	Set<FYPCategory> categories;
 	
-	@OneToMany(mappedBy = "subject")
-	Set<Internship> internships;
-
 	/*
 	 * Getters & Setters
 	 */
@@ -72,11 +86,4 @@ public class FYPSubject implements Serializable {
 		this.content = content;
 	}
 
-	public Set<FYPCategory> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(Set<FYPCategory> categories) {
-		this.categories = categories;
-	}
 }

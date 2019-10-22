@@ -9,9 +9,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Entity(name = "FYP_SHEET_HISTORY")
+@Entity(name = "fyp_sheet_history")
 public class FYPSheetHistory implements Serializable {
 	public enum TypeOfOperation{
 		majorOperation,
@@ -23,7 +24,7 @@ public class FYPSheetHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 	Date editionDate;
 	@Enumerated(EnumType.STRING)
 	TypeOfOperation typeOfOperation;
@@ -34,17 +35,21 @@ public class FYPSheetHistory implements Serializable {
 	String oldIssue;
 	String oldMailPro;
 	String oldMail;
+	String oldKeywords;
+	String oldSubject;
+	int oldCompanyId;
 	@ManyToOne
+	@JoinColumn(name="changed_file_id")
 	FYPFile changedFile;
 	public FYPSheetHistory() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -128,6 +133,30 @@ public class FYPSheetHistory implements Serializable {
 
 	public void setChangedFile(FYPFile changedFile) {
 		this.changedFile = changedFile;
+	}
+
+	public String getOldKeywords() {
+		return oldKeywords;
+	}
+
+	public void setOldKeywords(String oldKeywords) {
+		this.oldKeywords = oldKeywords;
+	}
+
+	public String getOldSubject() {
+		return oldSubject;
+	}
+
+	public void setOldSubject(String oldSubject) {
+		this.oldSubject = oldSubject;
+	}
+
+	public int getOldCompanyId() {
+		return oldCompanyId;
+	}
+
+	public void setOldCompanyId(int oldCompanyId) {
+		this.oldCompanyId = oldCompanyId;
 	}
 	
 	
