@@ -59,6 +59,7 @@ public class FYPFile implements Serializable {
 	
 	@Column(name="canceled" ,columnDefinition = "boolean default false")
 	Boolean isCanceled;
+	
 	@Column(name="final_mark")
 	int finalMark;
 	
@@ -84,18 +85,12 @@ public class FYPFile implements Serializable {
 	
 	@ManyToMany(mappedBy = "fypFiles")
 	Set<FYPCategory> categories;
-
+	
+	
 	/*
 	 * Getters & Setters
 	 */
     
-	public Set<FYPCategory> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(Set<FYPCategory> categories) {
-		this.categories = categories;
-	}
 
 	public long getId() {
 		return id;
@@ -129,42 +124,9 @@ public class FYPFile implements Serializable {
 		this.problematic = problematic;
 	}
 
-
-	public Set<FYPFeature> getFeatures() {
-		return features;
-	}
-
-	public void setFeatures(Set<FYPFeature> features) {
-		this.features = features;
-	}
-
-	public Set<FYPKeyword> getKeywords() {
-		return keywords;
-	}
-
-	public void setKeywords(Set<FYPKeyword> keywords) {
-		this.keywords = keywords;
-	}
-
-	public List<FYPIntervention> getInterventions() {
-		return interventions;
-	}
-
-	public void setInterventions(List<FYPIntervention> interventions) {
-		this.interventions = interventions;
-	}
-
-	public Internship getInternship() {
-		return internship;
-	}
-
-	public void setInternship(Internship internship) {
-		this.internship = internship;
-	}
-
-	public UniversitaryYear getUniversitaryYear() {
+	/*public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
-	}
+	}*/
 
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
@@ -201,6 +163,56 @@ public class FYPFile implements Serializable {
 	public void setIsArchived(Boolean isArchived) {
 		this.isArchived = isArchived;
 	}
+
+	/*public Set<FYPFeature> getFeatures() {
+		return features;
+	}*/
+
+	public void setFeatures(Set<FYPFeature> features) {
+		this.features = features;
+	}
+
+	/*public Set<FYPKeyword> getKeywords() {
+		return keywords;
+	}*/
+
+	public void setKeywords(Set<FYPKeyword> keywords) {
+		this.keywords = keywords;
+	}
+
+	/*public Internship getInternship() {
+		return internship;
+	}*/
+
+	public void setInternship(Internship internship) {
+		this.internship = internship;
+	}
+
+	/*public List<FYPIntervention> getInterventions() {
+		return interventions;
+	}
+
+	public void setInterventions(List<FYPIntervention> interventions) {
+		this.interventions = interventions;
+	}
+
+	public Set<FYPCategory> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<FYPCategory> categories) {
+		this.categories = categories;
+	}
+
+	public UniversitaryYear getUniversitaryYear() {
+		return universitaryYear;
+	}*/
+ 
+	
+	//*************
+	
+	
+	
 	
 	
 	
