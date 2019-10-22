@@ -90,7 +90,6 @@ public class FYPFile implements Serializable {
 	/*
 	 * Getters & Setters
 	 */
-    
 
 	public long getId() {
 		return id;
@@ -124,9 +123,7 @@ public class FYPFile implements Serializable {
 		this.problematic = problematic;
 	}
 
-	/*public UniversitaryYear getUniversitaryYear() {
-		return universitaryYear;
-	}*/
+
 
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
