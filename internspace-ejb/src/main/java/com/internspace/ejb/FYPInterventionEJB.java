@@ -97,4 +97,10 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		}
 		return false;
 	}
+
+	@Override
+	public List<Employee> getAllTeachersByInternshipPreferences() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -46,6 +46,12 @@
     </licenses>
 
     <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv csv importing asset-->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-csv</artifactId>
+	    <version>1.1</version>
+	</dependency>
 <!-- To work with JSON (string-to-JSON & JSON-to-string -->
 		<dependency>
 		   <groupId>org.json</groupId>
