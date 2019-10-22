@@ -4,6 +4,7 @@ import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.fyp.InternshipConvention;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,6 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.json.JSONPropertyIgnore;
+
 
 @Entity
 @Table(name = "company")
@@ -36,20 +40,20 @@ public class Company extends User {
 	 * Associations
 	 */
 
+
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<FYPSubject> subjects;
 
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<Internship> internships;
 
-	@OneToMany(mappedBy = "company",targetEntity = InternshipConvention.class, fetch = FetchType.LAZY)
-	Set<InternshipConvention> internshipConventions;
+	@OneToMany(mappedBy = "company")
+	Set<InternshipConvention> internshipConventions;// = new HashSet<InternshipConvention>();
 
 	/*
 	 * Getters & Setters
 	 */
 
-	
 
 	public void setSubjects(Set<FYPSubject> subjects) {
 		this.subjects = subjects;
@@ -101,8 +105,12 @@ public class Company extends User {
 		this.internships = internships;
 	}
 
-
-
+	/*
+	public Set<InternshipConvention> getInternshipConventions() {
+		return internshipConventions;
+	}
+	 */
+	
 	public void setInternshipConventions(Set<InternshipConvention> internshipConventions) {
 		this.internshipConventions = internshipConventions;
 	}

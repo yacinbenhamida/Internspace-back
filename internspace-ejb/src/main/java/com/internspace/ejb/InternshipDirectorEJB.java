@@ -46,7 +46,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			 if(ls.get(i).getUniversitaryYear().getStartDate()==year)
 				 FiltredLs.add(ls.get(i));
 		 }
-		 FiltredLs.forEach(x->l.addAll(x.getStudents()));
+		 //FiltredLs.forEach(x->l.addAll(x.getStudents()));
 		 for(int i=0;i<l.size();i++) {
 			if(l.get(i).getIsCreated()==false)
 				 rs.add(l.get(i))	 ;
@@ -156,7 +156,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		f.setFileStatus(FYPFileStatus.declined);
 		Internship i = (Internship)em.createQuery("FROM " + Internship.class.getName()  + " i WHERE i.fypFile =:file").setParameter("file", f).getSingleResult();
 		Notification n = new Notification();
-		n.setStudent(i.getStudent());
+		//n.setStudent(i.getStudent());
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
 		em.persist(n);

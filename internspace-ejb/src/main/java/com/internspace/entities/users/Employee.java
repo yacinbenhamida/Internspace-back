@@ -76,9 +76,6 @@ public class Employee extends User implements Serializable{
 		this.birthDate = birthDate;
 	}
 
-	public Set<FYPIntervention> getInterventions() {
-		return interventions;
-	}
 	public void setInterventions(Set<FYPIntervention> interventions) {
 		this.interventions = interventions;
 	}

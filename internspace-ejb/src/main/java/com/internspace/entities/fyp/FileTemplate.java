@@ -108,33 +108,31 @@ public class FileTemplate implements Serializable {
 		this.id = id;
 	}
 
-	public String getTemplateName() {
-		return templateName;
+	public String getTemplateName()
+	{
+		return this.templateName;
 	}
-
+	
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
 	}
 
-	public List<FileTemplateElement> getFyptElements() {
+	public List<FileTemplateElement> getTemplateElements() {
 		return templateElements;
 	}
 
-	public void setFyptElements(List<FileTemplateElement> fyptElements) {
+	public void setTemplateElements(List<FileTemplateElement> templateElements) {
+		this.templateElements = templateElements;
+	}
+
+	public void setXFyptElements(List<FileTemplateElement> fyptElements) {
 		this.templateElements = fyptElements;
 	}
 
-	public boolean isFyp() {
-		return isFyp;
-	}
-
-	public void setFyp(boolean isFyp) {
+	public void setIsFyp(boolean isFyp) {
 		this.isFyp = isFyp;
 	}
 
-	public Employee getEditor() {
-		return editor;
-	}
 
 	public void setEditor(Employee editor) {
 		this.editor = editor;

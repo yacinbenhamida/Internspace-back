@@ -12,5 +12,6 @@ public interface InternshipConventionEJBLocal {
 	
 	public void addInternshipConvention(InternshipConvention inter);
 	public  List<InternshipConvention> getAllInternshipConvention();
+	public int removeConvention(long  id);
 
 }

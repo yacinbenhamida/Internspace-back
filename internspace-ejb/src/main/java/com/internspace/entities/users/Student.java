@@ -64,7 +64,7 @@ public class Student extends User {
 	/*
 	 * Getters & Setters
 	 */
-
+	/*
 	public String getPassword() {
 		return password;
 	}
@@ -93,6 +93,7 @@ public class Student extends User {
 		return hasSubmittedAReport;
 	}
 
+*/
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
@@ -104,7 +105,6 @@ public class Student extends User {
 	public void setIsCreated(Boolean isCreated) {
 		this.isCreated = isCreated;
 	}
-
 	public boolean isHasSubmittedAReport() {
 		return hasSubmittedAReport;
 	}
@@ -112,18 +112,7 @@ public class Student extends User {
 	public void setHasSubmittedAReport(boolean hasSubmittedAReport) {
 		this.hasSubmittedAReport = hasSubmittedAReport;
 	}
-
-	/*public Internship getInternship() {
-		return internship;
-	}*/
-
-	public void setInternship(Internship internship) {
-		this.internship = internship;
-	}
-
-	/*public StudyClass getStudyClass() {
-		return studyClass;
-	}*/
+	/*
 
 	public void setStudyClass(StudyClass studyClass) {
 		this.studyClass = studyClass;
@@ -152,7 +141,6 @@ public class Student extends User {
 	public void setIsDisabled(Boolean isDisabled) {
 		this.isDisabled = isDisabled;
 	}
-	
 	
 	
 	

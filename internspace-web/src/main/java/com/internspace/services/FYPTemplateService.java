@@ -35,13 +35,12 @@ public class FYPTemplateService {
 	@Consumes(MediaType.TEXT_PLAIN)
 	public void createTemplate(
 			@QueryParam(value="TemplateName")String templateName,
-			@QueryParam(value="IsFyp")boolean isFyp)
+			@QueryParam(value="is_fyp")boolean isFyp)
 	{
 		System.out.print("IsFyp: " + isFyp);
 		
 		FileTemplate fileTemplate = new FileTemplate(templateName, isFyp);
 		fileTemplate.setTemplateName(templateName);
-		
 		
 		service.createTemplate(fileTemplate);
 	}
@@ -66,6 +65,7 @@ public class FYPTemplateService {
         if (!fypTemplates.isEmpty()) {
         	// TODO: UGLY, have to secure this...
         	
+        	/*
         	for(FileTemplate template : fypTemplates)
         	{
         		for(FileTemplateElement element: template.getFyptElements())
@@ -74,6 +74,7 @@ public class FYPTemplateService {
         			element.setFypTemplate(null);			
         		}       			
         	}
+        	*/
         	
             return Response.ok(fypTemplates).status(200)
                     .header("Access-Control-Allow-Origin", "*")

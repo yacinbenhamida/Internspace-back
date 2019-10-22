@@ -95,6 +95,7 @@ public class StudyClass implements Serializable {
 		this.universitaryYear = universitaryYear;
 	}
 
+	/*
 	public Set<Student> getStudents() {
 		return students;
 	}
@@ -102,7 +103,7 @@ public class StudyClass implements Serializable {
 	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
-
+*/
 	public Departement getDepartement() {
 		return departement;
 	}

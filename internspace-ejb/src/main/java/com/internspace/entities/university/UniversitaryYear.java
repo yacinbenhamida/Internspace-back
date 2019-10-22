@@ -19,18 +19,19 @@ import com.internspace.entities.fyp.FYPFile;
 
 // This could be set by the administrator of Internspace.
 @Entity
-@Table(name="universitary_year", uniqueConstraints = {@UniqueConstraint(columnNames={"start_date", "end_date"})})
+@Table(name = "universitary_year", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "start_date", "end_date" }) })
 public class UniversitaryYear implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="uy_id")
+	@Column(name = "uy_id")
 	long id;
 
 	@Column(name = "start_date")
@@ -41,23 +42,20 @@ public class UniversitaryYear implements Serializable {
 	/*
 	 * Associations
 	 */
-	
+
 	@OneToMany(mappedBy = "universitaryYear", fetch = FetchType.LAZY)
 	Set<FYPFile> fypFiles = new HashSet<>();
-	
-	
-	@OneToMany(mappedBy = "universitaryYear", fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy = "universitaryYear", fetch = FetchType.LAZY)
 	Set<StudyClass> studyClasses = new HashSet<>();
 
-	
 	@OneToMany(mappedBy = "currentUniversitaryYear", fetch = FetchType.LAZY)
 	Set<University> universities = new HashSet<>();
-	
-	
+
 	/*
 	 * Getters & Setters
 	 */
-	
+
 	public long getId() {
 		return id;
 	}
@@ -82,6 +80,7 @@ public class UniversitaryYear implements Serializable {
 		this.endDate = endDate;
 	}
 
+	/*
 	public Set<StudyClass> getStudyClasses() {
 		return studyClasses;
 	}
@@ -89,7 +88,5 @@ public class UniversitaryYear implements Serializable {
 	public void setStudyClasses(Set<StudyClass> studyClasses) {
 		this.studyClasses = studyClasses;
 	}
-
-
+*/
 }
-
