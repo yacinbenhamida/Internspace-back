@@ -49,9 +49,7 @@ public class Company extends User {
 	 * Getters & Setters
 	 */
 
-	public Set<FYPSubject> getSubjects() {
-		return subjects;
-	}
+	
 
 	public void setSubjects(Set<FYPSubject> subjects) {
 		this.subjects = subjects;
@@ -97,17 +95,13 @@ public class Company extends User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Set<Internship> getInternships() {
-		return internships;
-	}
+
 
 	public void setInternships(Set<Internship> internships) {
 		this.internships = internships;
 	}
 
-	public Set<InternshipConvention> getInternshipConventions() {
-		return internshipConventions;
-	}
+
 
 	public void setInternshipConventions(Set<InternshipConvention> internshipConventions) {
 		this.internshipConventions = internshipConventions;

@@ -64,10 +64,7 @@ public class Departement implements Serializable {
 	
 	@OneToMany(mappedBy = "departement")
 	Set<ClassOption> classOptions;
-	
-	@ManyToOne
-	@JoinColumn(name = "university_id")
-	University university;
+
 	/*
 	 * Getters & Setters
 	 */
@@ -128,11 +125,6 @@ public class Departement implements Serializable {
 	public void setDepartementHead(Employee departementHead) {
 		this.departementHead = departementHead;
 	}
-	public University getUniversity() {
-		return university;
-	}
-	public void setUniversity(University university) {
-		this.university = university;
-	}
+	
 	
 }

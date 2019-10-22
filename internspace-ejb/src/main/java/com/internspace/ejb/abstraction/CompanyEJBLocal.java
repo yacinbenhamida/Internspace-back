@@ -22,6 +22,7 @@ public interface CompanyEJBLocal {
 	void createCompany(Company company);
 	void updateCompany(Company company);
 	void deleteCompany(Company company);
+	List<Company> getAll();
 	
 	/*
 	 * CRUD FYPSubject
