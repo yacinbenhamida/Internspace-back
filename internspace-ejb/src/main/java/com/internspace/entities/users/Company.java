@@ -42,7 +42,7 @@ public class Company extends User {
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<Internship> internships;
 
-	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "company",targetEntity = InternshipConvention.class, fetch = FetchType.LAZY)
 	Set<InternshipConvention> internshipConventions;
 
 	/*
