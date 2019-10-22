@@ -29,7 +29,10 @@ public class Classroom implements Serializable {
 	@Column(name="classroom_id")
 	long id;
 	
+	@Column(name="name")
 	String name;
+	@Column(name="numberOfStudents")
+	int numberOfStudents;
 
 	/*
 	 * Associations
