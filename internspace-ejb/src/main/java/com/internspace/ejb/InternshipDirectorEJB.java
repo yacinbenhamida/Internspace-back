@@ -41,10 +41,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			 if(ls.get(i).getUniversitaryYear().getStartDate()==year)
 				 FiltredLs.add(ls.get(i));
 		 }
-		 FiltredLs.forEach(x->l.addAll(x.getStudents()));
+		 //FiltredLs.forEach(x->l.addAll(x.getStudents()));
 		 for(int i=0;i<l.size();i++) {
-			 if(l.get(i).getIsCreated()==true)
-				 l.remove(i);	 
+			 //if(l.get(i).getIsCreated()==true)
+				// l.remove(i);	 
 		 }
 		 return l;
 	}
@@ -146,7 +146,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		f.setFileStatus(FYPFileStatus.declined);
 		Internship i = f.getInternship();
 		Notification n = new Notification();
-		n.setStudent(i.getStudent());
+		//n.setStudent(i.getStudent());
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
 		em.persist(n);

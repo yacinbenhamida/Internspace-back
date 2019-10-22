@@ -140,10 +140,11 @@ public class FileTemplateElement implements Serializable {
 		this.weight = weight;
 	}
 
+	/*
 	public FileTemplate getFypTemplate() {
 		return fileTemplate;
 	}
-
+	 */
 	public void setFypTemplate(FileTemplate fypTemplate) {
 		this.fileTemplate = fypTemplate;
 	}

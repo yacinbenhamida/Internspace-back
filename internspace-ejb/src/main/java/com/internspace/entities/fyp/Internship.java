@@ -20,35 +20,35 @@ import javax.persistence.Column;
 
 @XmlRootElement
 @Entity
-@Table(name="internship")
+@Table(name = "internship")
 public class Internship implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="internship_id")
+	@Column(name = "internship_id")
 	long id;
-	
+
 	@OneToOne
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
-	
+
 	@OneToOne(mappedBy = "internship")
 	Student student;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	Company company;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "subject_id")
 	FYPSubject subject;
-	
+
 	/*
 	 * Getters & Setters
 	 */
@@ -69,17 +69,18 @@ public class Internship implements Serializable {
 		this.fypFile = fypFile;
 	}
 
-	public Student getStudent() {
-		return student;
-	}
+	//public Student getStudent() {
+	//	return student;
+	//}
 
 	public void setStudent(Student student) {
 		this.student = student;
 	}
 
+	/*
 	public Company getCompany() {
 		return company;
-	}
+	}*/
 
 	public void setCompany(Company company) {
 		this.company = company;
@@ -93,8 +94,4 @@ public class Internship implements Serializable {
 		this.subject = subject;
 	}
 
-	
-	
-    
-	
 }

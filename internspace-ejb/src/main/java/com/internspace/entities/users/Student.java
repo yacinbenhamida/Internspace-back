@@ -60,7 +60,7 @@ public class Student extends User {
 	/*
 	 * Getters & Setters
 	 */
-
+	/*
 	public String getPassword() {
 		return password;
 	}
@@ -109,6 +109,7 @@ public class Student extends User {
 		this.hasSubmittedAReport = hasSubmittedAReport;
 	}
 
+
 	public Internship getInternship() {
 		return internship;
 	}
@@ -141,7 +142,7 @@ public class Student extends User {
 		this.studentSubjects = studentSubjects;
 	}
 	
-	
+		 */
 	
 }
 

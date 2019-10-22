@@ -20,13 +20,16 @@ import com.internspace.entities.users.Student;
 @Stateless
 public class DashboardEJB implements DashboardEJBLocal {
 
-	@PersistenceContext
+	@PersistenceContext()
 	EntityManager em;
 	
 	@Override
 	public List<Student> getStudentsBySite(long siteId) {
 
-		List<Student> students = em.createQuery("from " + Student.class.getName() + " s WHERE s.studyClass.departement.site.id = :siteId", Student.class)
+		List<Student> students = em.createQuery("from " + Student.class.getName() + " s"
+				+ " JOIN FETCH s.studyClass SC "
+				+ " WHERE SC.departement.site.id = :siteId"
+				, Student.class)
 			.setParameter("siteId", siteId)
 			.getResultList();
 
@@ -37,7 +40,17 @@ public class DashboardEJB implements DashboardEJBLocal {
 	public float getStudentsLocalAbroadDistribution(long uniId, boolean abroad) {
 		List<Student> thisYearsStudents = getFypStudentsByUY(uniId, -2, false, false, null, false);
 		
-		float dist = getFypStudentsByUY(uniId, -2, true, !abroad, null, false).size();
+		List<Student> distStudents = getFypStudentsByUY(uniId, -2, true, !abroad, null, false);
+		
+		System.out.println(distStudents);
+		
+		if(thisYearsStudents == null || distStudents == null)
+			return 0f;
+		
+		if(thisYearsStudents.size() == 0)
+			return -1f;
+		
+		float dist = distStudents.size();
 		
 		System.out.println(dist);
 		System.out.println(thisYearsStudents != null ? thisYearsStudents.size(): "X");
@@ -111,6 +124,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 		if(uyStudents == null || distStudents == null)
 			return 0f;
 		
+		if(uyStudents.size() == 0)
+			return -1f;
+		
 		System.out.println(distStudents.size());
 		System.out.println(uyStudents.size());
 		
@@ -120,38 +136,47 @@ public class DashboardEJB implements DashboardEJBLocal {
 	@Override
 	public List<Company> getMostCompanyAcceptingInternsWithUniversity(long uniId, int n) {
 		
-		String queryStr = "FROM " + Company.class.getName() + " C"
-				//+ " JOIN FETCH C.internships INS WHERE INS.student.studyClass.departement.site.university.id = :uniId"
-				+ " WHERE size(C.internships) <> 0"
-				+ " ORDER BY size(C.internships) DESC";
+		String queryStr = "SELECT C FROM " + Company.class.getName() + " C"
+				+ " JOIN FETCH C.internships INS"
+				+ " WHERE INS.student.studyClass.departement.site.university.id = :uniId"
+				//+ " WHERE size(C.internships) <> 0"
+				+ " ORDER BY size(C.internships) DESC"
+				;
+
+		TypedQuery<Company> query = em.createQuery(queryStr, Company.class)
+				.setParameter("uniId", uniId)
+				;
 		
-		TypedQuery<Company> query = em.createQuery(queryStr, Company.class);
-				//.setParameter("uniId", uniId);
 		
 		// Acts like TOP in classical SQL query.
-		List<Company> companies = query.setMaxResults(n).getResultList();
-		companies.stream().forEach(x -> {x.setInternships(null);});
+		//List<Company> companies = query.setMaxResults(n).getResultList();
+		List<Company> companies = query.getResultList();
+		//companies.stream().forEach(x -> {x.setInternships(null);});
 		
 		return companies;
 	}
 
 	@Override
-	public int getInternshipsByCategory(long uniId, long categoryId) {
+	public List<Internship> getInternshipsByCategory(long uniId, long categoryId) {
 		FYPCategory category = em.find(FYPCategory .class, Long.valueOf(categoryId));
-		String queryStr = "FROM " + Internship.class.getName() + " i WHERE"
+		String queryStr = "FROM " + Internship.class.getName() + " i"
+				//+ " JOIN FETCH i.student.studyClass.departement.site.university U"
+				+ " WHERE"
 				+ " i.student.studyClass.departement.site.university.id = :uniId"
 				+ " AND :category MEMBER OF i.subject.categories"
 				;
 		
 		TypedQuery<Internship> query = em.createQuery(queryStr, Internship.class)
 				.setParameter("category", category)
-				.setParameter("uniId", uniId);
-			
+				.setParameter("uniId", uniId)
+				;
 		List<Internship> out = query.getResultList();
 		
+		System.out.println(uniId);
+		System.out.println(categoryId);
 		System.out.println(out);
 		
-		return out.size();
+		return out;
 	}
 	
 	@Override
@@ -196,7 +221,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 		if (uni == null)
 			return null;
 		
-		String queryStr = "FROM " + Student.class.getName() + " s WHERE"
+		String queryStr = "FROM " + Student.class.getName() + " s"
+				+ " JOIN FETCH s.internship INS"
+				+ " WHERE"
 				+ " s.studyClass.classYear = :studyClassYear"
 				+ " AND s.studyClass.departement.site.university.id = :uniId"
 				;
@@ -215,9 +242,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 		
 		// Apply filtering?
 		if (onlyAbroad )
-			queryStr = queryStr + " AND s.internship.subject.location " + onlyAbroad_OP + " :location";
+			queryStr = queryStr + " AND s.internship.company.country " + onlyAbroad_OP + " :location";
 		else if(location != null) // Specific Internship's Subject Location?
-			queryStr = queryStr + " AND s.internship.subject.location " + onlyLocation_OP + " :location";
+			queryStr = queryStr + " AND s.internship.company.country " + onlyLocation_OP + " :location";
 		
 		List<Student> students;
 		TypedQuery<Student> query = em.createQuery(queryStr, Student.class)
