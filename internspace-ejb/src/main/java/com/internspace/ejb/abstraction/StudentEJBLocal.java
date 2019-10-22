@@ -13,9 +13,13 @@ public interface StudentEJBLocal {
 	
 	public void addStudent(Student std);
 	public  List<Student> getAll();
-	public  List<Student> getAllStudentCreated(boolean isCreated);
+	public  List<Student> getAllStudentCreated();
 	public void enregistrer(long id);
 	void acceptPFE(long id);
+	public  List<Student> getAllStudentdisabled();
+	public  List<Student> getAllStudentNodisabled();
+	void sendMail(String text);
+	
 	
 	
 

@@ -46,9 +46,9 @@ public class StudentEJB implements StudentEJBLocal{
 	}
 
 	@Override
-	public List<Student> getAllStudentCreated(boolean isCreated) {
+	public List<Student> getAllStudentCreated() {
 		
-		return em.createQuery("SELECT s from Student s  where s.is_created=:true").setParameter("isCreated", isCreated).getResultList();
+		return em.createQuery("SELECT s from Student s  where s.isCreated=:isCreated").setParameter("isCreated", true).getResultList();
 	}
 
 	@Override
@@ -56,11 +56,41 @@ public class StudentEJB implements StudentEJBLocal{
 	
 		Student s= em.find(Student.class, id);
 		s.setIsDisabled(true);
-		em.persist(s);
+		em.persist(em);
 		em.flush();
 		
 	}
+
+	@Override
+	public List<Student> getAllStudentdisabled() {
+		return em.createQuery("SELECT s from Student s  where s.isDisabled=:isDisabled").setParameter("isDisabled", true).getResultList();
+		
+	}
+
+	@Override
+	public List<Student> getAllStudentNodisabled() {
+		return em.createQuery("SELECT s from Student s  where s.isDisabled=:isDisabled").setParameter("isDisabled", false).getResultList();
+		
+	}
 	
+	
+	@Override
+	public void sendMail(String text) {
+		
+		String subject = "Voici c votre mot de passe " ;
+		String subject1 = "Vous êtes pas autorisé a paser le PFE " ;
+		
+		Mailer mail = new Mailer();
+		List<Student> ls = getAllStudentdisabled();
+		List<Student> ls1 = getAllStudentNodisabled();
+		
+		
+		
+		ls.forEach(x->mail.send(x.getEmail(),text,subject));
+		ls1.forEach(x->mail.send(x.getEmail(),text,subject));
+		
+	}
+
 
 
 	/*@Override

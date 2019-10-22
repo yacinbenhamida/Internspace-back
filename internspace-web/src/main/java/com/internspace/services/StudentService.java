@@ -15,9 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
-import com.internspace.entities.fyp.FYPFile;
-import com.internspace.entities.fyp.InternshipConvention;
-import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+
 import com.internspace.entities.users.Student;
 
 @Path("student")
@@ -52,8 +50,8 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("iscreated")
-	public List<Student> getstudentCreated(@QueryParam(value = "isCreated") boolean isCreated){
-		 return Studentservice.getAllStudentCreated(isCreated);
+	public List<Student> getstudentCreated(){
+		 return Studentservice.getAllStudentCreated();
 	};
 
 	@GET
@@ -70,5 +68,26 @@ public class StudentService {
 		Studentservice.acceptPFE(id);
 	};
 	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("isdisabled")
+	public List<Student> getstudentDisabled(){
+		 return Studentservice.getAllStudentdisabled();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("isnondisabled")
+	public List<Student> getstudentNonDisabled(){
+		 return Studentservice.getAllStudentNodisabled();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("mail")
+	public void sendMail(@QueryParam(value = "text") String text){
+		Studentservice.sendMail(text);
+	};
 
 }
