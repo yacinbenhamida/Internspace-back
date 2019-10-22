@@ -104,5 +104,10 @@ public class CompanyEJB implements CompanyEJBLocal {
 		return false;
 	}
 
+	@Override
+	public List<Company> getAll() {
+		return  em.createQuery("SELECT c from Company c ").getResultList();
+	}
+
 	
 }

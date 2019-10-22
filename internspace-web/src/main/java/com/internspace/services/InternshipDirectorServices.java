@@ -17,6 +17,7 @@ import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FileTemplate;
+import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.users.Student;
 
 @Path("internship")
@@ -57,6 +58,15 @@ public class InternshipDirectorServices {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("allFYPFileByYear")
+	public List<FYPFile>getFYPFileListByYear(@QueryParam(value = "year")int year){
+		 return service.getFYPFileListByYear(year);
+	};
+	
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allFYPFileCountry")
 	public List<FYPFile> FYPFileByCountry(@QueryParam(value = "location") String location){
 		 return service.getFYPFileListByCountry(location);
@@ -77,17 +87,17 @@ public class InternshipDirectorServices {
 		 return service.getFYPFileListCurrentYear(state);
 	};
 	
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("acceptFYPFileAnnulation")
-	public void acceptFYPFileAnnulation(@QueryParam(value = "id") int id){
+	public void acceptFYPFileAnnulation(@QueryParam(value = "id") long id){
 		service.acceptCancelingDemand(id);
 	};
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_XML)
 	@Path("declineFYPFileAnnulation")
-	public void declineFYPFileAnnulation(@QueryParam(value = "id") int id, @QueryParam(value = "text") String text){
+	public void declineFYPFileAnnulation(@QueryParam(value = "id") long id, @QueryParam(value = "text") String text){
 		service.declineCancelingDemand(id, text);
 	};
 	
@@ -98,7 +108,45 @@ public class InternshipDirectorServices {
 		return service.listCancelingDemand();
 	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptFYPFile")
+	public void acceptFYPFile(@QueryParam(value = "id") long id){
+		service.acceptFile(id);
+	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("refuseFYPFile")
+	public void refuseFile(@QueryParam(value = "id") long id, @QueryParam(value = "text") String text){
+		service.refuseFile(id, text);
+	};
 	
+	@PUT
+	@Consumes(MediaType.APPLICATION_XML)
+	@Path("disableAccount")
+	public void disableAccount(@QueryParam(value = "id") long id){
+		service.disableAccount(id);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("allStudents")
+	public List<Student> AllStudents(){
+		return service.getAllStudentsList();
+	};
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("FindStudent")
+	public  Student findStudent ( @QueryParam(value = "id")long id){
+		return service.FindStudent(id);
+	};
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_XML)
+	@Path("ValidateSubmittedAReport")
+	public void ValidateSubmittedAReport(@QueryParam(value = "id") long id){
+		service.ValidateSubmittedAReport(id);
+	};
 }

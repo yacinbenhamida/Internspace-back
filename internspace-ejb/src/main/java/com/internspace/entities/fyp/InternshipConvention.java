@@ -9,6 +9,7 @@ import com.internspace.entities.users.Company;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,9 +34,10 @@ public class InternshipConvention implements Serializable {
 	@Column(name="ic_id")
 	long id;
 
-	String title;
+	
 	Date startDate;
 	Date endDate;
+	
 	
 	/*
 	 * Associations

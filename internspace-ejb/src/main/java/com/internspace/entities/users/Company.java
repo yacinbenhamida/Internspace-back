@@ -99,9 +99,7 @@ public class Company extends User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Set<Internship> getInternships() {
-		return internships;
-	}
+
 
 	public void setInternships(Set<Internship> internships) {
 		this.internships = internships;

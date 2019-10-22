@@ -30,8 +30,10 @@ public class Site implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="site_id")
 	long id;
-	
+	@Column(name="name")
 	String name;
+	@Column(name="address")
+	String address;
 
 	/*
 	 * Associations

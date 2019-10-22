@@ -17,7 +17,7 @@ public interface FYPSheetEJBLocal {
 	public FYPFile getFypFileOfStudent(long studId);
 	public FYPFile getFYPSById(long id);
 	public List<FYPFile> getFYPfilesOfDepartment(long idDept);
-	
+	public List<FYPFile> getFYPSheetsOfTeacher(long idTeacher);
 	// custom methods
 	// returns the fyp sheets that got accepted by the internships director
 	public List<FYPFile> getAllAcceptedFYPSheets();

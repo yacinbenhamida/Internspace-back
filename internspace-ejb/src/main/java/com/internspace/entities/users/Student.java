@@ -54,6 +54,10 @@ public class Student extends User {
 	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated ;
 	
+	// behs nshouf est ce qui letudiant ynajem y3adi pfe ou nn ( ynajem yconnecti fel platforme ou nn )
+	@Column(name = "is_disabled", columnDefinition = "boolean default false")
+	Boolean isDisabled ;
+	
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}
@@ -89,6 +93,7 @@ public class Student extends User {
 		return hasSubmittedAReport;
 	}
 
+*/
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
@@ -100,7 +105,6 @@ public class Student extends User {
 	public void setIsCreated(Boolean isCreated) {
 		this.isCreated = isCreated;
 	}
-
 	public boolean isHasSubmittedAReport() {
 		return hasSubmittedAReport;
 	}
@@ -108,41 +112,37 @@ public class Student extends User {
 	public void setHasSubmittedAReport(boolean hasSubmittedAReport) {
 		this.hasSubmittedAReport = hasSubmittedAReport;
 	}
-
-
-	public Internship getInternship() {
-		return internship;
-	}
-
-	public void setInternship(Internship internship) {
-		this.internship = internship;
-	}
-
-	public StudyClass getStudyClass() {
-		return studyClass;
-	}
+	/*
 
 	public void setStudyClass(StudyClass studyClass) {
 		this.studyClass = studyClass;
 	}
 
-	public Set<StudentCategoryPreference> getPreferedCategories() {
+	/*public Set<StudentCategoryPreference> getPreferedCategories() {
 		return preferedCategories;
-	}
+	}*/
 
 	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
 		this.preferedCategories = preferedCategories;
 	}
 
-	public Set<StudentFYPSubject> getStudentSubjects() {
+	/*public Set<StudentFYPSubject> getStudentSubjects() {
 		return studentSubjects;
-	}
+	}*/
 
 	public void setStudentSubjects(Set<StudentFYPSubject> studentSubjects) {
 		this.studentSubjects = studentSubjects;
 	}
+
+	public Boolean getIsDisabled() {
+		return isDisabled;
+	}
+
+	public void setIsDisabled(Boolean isDisabled) {
+		this.isDisabled = isDisabled;
+	}
 	
-		 */
+	
 	
 }
 
