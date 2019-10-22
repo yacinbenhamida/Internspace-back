@@ -38,7 +38,7 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	@Deprecated
 	@Override
 	public void createElement(FileTemplateElement element) {
-		System.out.println("Adding: " + element + " to " + element.getFypTemplate());
+		//System.out.println("Adding: " + element + " to " + element.getFypTemplate());
 
 		em.persist(element);
 	}

@@ -69,9 +69,9 @@ public class Internship implements Serializable {
 		this.fypFile = fypFile;
 	}
 
-	//public Student getStudent() {
-	//	return student;
-	//}
+	public Student getStudent() {
+		return student;
+	}
 
 	public void setStudent(Student student) {
 		this.student = student;
