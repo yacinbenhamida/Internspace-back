@@ -14,4 +14,7 @@ public interface FYPInterventionEJBLocal {
 	public FYPIntervention assignTeacherToFYPSheetWithRole(long idTeacher,long idFYPS,String role);
 	public FYPIntervention editInterventionActorRole(long fypinterventionId,long idTeacher,String newRole);
 	public List<Employee> getAllTeachersRankedByNumberOfSupervisions();
+	public List<FYPIntervention> getAll();
+	public boolean deleteIntervention(long idInt);
+	public List<Employee> getAllTeachersByInternshipPreferences();
 }
