@@ -45,6 +45,16 @@ public class FYPInterventionService {
 		}
 		return Response.status(Response.Status.NOT_FOUND).entity("norecords").build(); 
 	}
+	@GET
+	@Path("assignMark/{value}/{intId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response assignMarkToIntervention(@PathParam("intId")long idIntervention,@PathParam("value")int value) {
+		FYPIntervention intervention = service.saveMark(value, idIntervention);
+		if(intervention!=null) {
+			return Response.status(Response.Status.OK).entity(intervention).build(); 
+		}
+		return Response.status(Response.Status.NOT_FOUND).entity("no records").build(); 
+	}
 	@PUT
 	@Path("edit/{role}")
 	@Consumes(MediaType.APPLICATION_JSON)

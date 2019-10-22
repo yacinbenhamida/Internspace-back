@@ -41,7 +41,8 @@ public class FYPIntervention implements Serializable{
 	FYPFile internshipSheet;
 	@Column(name="given_mark")
 	int givenMark;
-	
+	@Column(name="actions_remaining")
+	int actionsRemaining;
 	public FYPIntervention() {
 		// TODO Auto-generated constructor stub
 	}
@@ -80,6 +81,12 @@ public class FYPIntervention implements Serializable{
 	}
 	public void setGivenMark(int givenMark) {
 		this.givenMark = givenMark;
+	}
+	public int getActionsRemaining() {
+		return actionsRemaining;
+	}
+	public void setActionsRemaining(int actionsRemaining) {
+		this.actionsRemaining = actionsRemaining;
 	}
 	
 }

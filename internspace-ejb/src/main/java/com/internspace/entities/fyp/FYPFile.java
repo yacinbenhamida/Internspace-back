@@ -50,9 +50,11 @@ public class FYPFile implements Serializable {
 	String title;
 	String description;
 	String problematic;
+	
 	@ManyToOne
 	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
 	FYPFileStatus fileStatus;
@@ -124,6 +126,10 @@ public class FYPFile implements Serializable {
 	}
 
 
+
+	public Internship getInternship() {
+		return internship;
+	}
 
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
