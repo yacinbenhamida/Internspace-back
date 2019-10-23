@@ -99,4 +99,13 @@ public class StudentService {
 	public List<Student> getstudentCin(){
 		 return Studentservice.getAllStudentCIN();
 	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("listmailing")
+	public void sendMaill(@QueryParam(value = "text") String text){
+		Studentservice.sendMail(text);
+	};
+	
 }

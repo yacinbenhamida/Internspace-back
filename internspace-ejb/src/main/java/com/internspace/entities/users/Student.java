@@ -117,7 +117,7 @@ public class Student extends User {
 		this.isAutorised = isAutorised;
 	}
 
-*/
+
 	
 	
 	
@@ -194,4 +194,4 @@ public class Student extends User {
 	
 }
 
-}
+

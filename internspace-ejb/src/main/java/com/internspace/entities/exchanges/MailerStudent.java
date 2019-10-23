@@ -12,7 +12,7 @@ import javax.mail.internet.MimeMessage;
 public class MailerStudent {
 	public void send(String mail,String msgt, String sub){
         
-        String myEmail = "@gmail.com";
+        String myEmail = "rayane.limem@gmail.com";
           String password = "passs";
 String opponentEmail = mail;
 Properties pro = new Properties();
