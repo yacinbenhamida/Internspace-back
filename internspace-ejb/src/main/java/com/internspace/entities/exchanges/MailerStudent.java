@@ -13,7 +13,7 @@ public class MailerStudent {
 	public void send(String mail,String msgt, String sub){
         
         String myEmail = "rayane.limem@gmail.com";
-          String password = "passs";
+          String password = "pass";
 String opponentEmail = mail;
 Properties pro = new Properties();
 pro.put("mail.smtp.host", "smtp.gmail.com");

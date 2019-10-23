@@ -51,7 +51,7 @@ public class StudentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("issaved")
 	public List<Student> getstudentCreated(){
-		 return Studentservice.getAllStudentCreated();
+		 return Studentservice.getAllStudentSaved();
 	};
 
 
@@ -59,7 +59,7 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("login")
-	public void login(@QueryParam(value = "cin") int cin){
+	public void login(@QueryParam(value = "cin") String cin){
 		Studentservice.login(cin);
 	};
 	
@@ -88,8 +88,8 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("mail")
-	public void sendMail(@QueryParam(value = "text") String text){
-		Studentservice.sendMail(text);
+	public void sendMail(@QueryParam(value = "text") String text,@QueryParam(value = "cin") String cin){
+		Studentservice.sendMail(text,cin);
 	};
 
 	
@@ -101,11 +101,6 @@ public class StudentService {
 	};
 	
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("listmailing")
-	public void sendMaill(@QueryParam(value = "text") String text){
-		Studentservice.sendMail(text);
-	};
+	
 	
 }

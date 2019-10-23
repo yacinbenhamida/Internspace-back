@@ -37,6 +37,9 @@ public interface InternshipDirectorEJBLocal {
 	public  void FixActionNumberAsPreValidator(int nb, int id);
 	public  void FixActionNumberAsJuryPresident(int nb, int id);
 	
+	//Le directeur des stages pourra rendre l’étudiant autorisé à passer son PFE.
+	void acceptPFE(long id);
+	
 	
 	
 	

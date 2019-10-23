@@ -36,7 +36,7 @@ public class StudentEJB implements StudentEJBLocal{
 
 
 	@Override
-	public List<Student> getAllStudentCreated() {
+	public List<Student> getAllStudentSaved() {
 		
 		return em.createQuery("SELECT s from Student s  where s.isSaved=:isSaved").setParameter("isSaved", true).getResultList();
 	}
@@ -71,7 +71,7 @@ public class StudentEJB implements StudentEJBLocal{
 	
 	
 	@Override
-	public void sendMail(String text) {
+	public void sendMail(String text,String cin) {
 		
 		String subject = "Voici c votre mot de passe " ;
 		String subject1 = "Vous êtes pas autorisé a paser le PFE " ;
@@ -79,11 +79,29 @@ public class StudentEJB implements StudentEJBLocal{
 		MailerStudent mail = new MailerStudent();
 		List<Student> ls = getAllStudentdisabled();
 		List<Student> ls1 = getAllStudentNodisabled();
+		List<Student> ls2 = getAllStudentSaved();
+		List<Student> ls3 = new ArrayList();
+		List<Student> ls4 = new ArrayList();
+		
+		
+		for(int i=0;i<ls.size();i++) {
+			if(ls.get(i).getCin().equals(cin)) {
+				ls3.add(ls.get(i));
+				ls3.forEach(x->mail.send(x.getEmail(),text,subject));
+			}
+		}
+		
+		for(int i=0;i<ls1.size();i++) {
+			if(ls1.get(i).getCin().equals(cin)) {
+				ls4.add(ls1.get(i));
+				ls4.forEach(x->mail.send(x.getEmail(),text,subject1));
+			}
+		}
 		
 		
 		
-		ls.forEach(x->mail.send(x.getEmail(),text,subject));
-		ls1.forEach(x->mail.send(x.getEmail(),text,subject1));
+		
+		//ls1.forEach(x->mail.send(x.getEmail(),text,subject1));
 		
 	}
 
@@ -94,13 +112,13 @@ public class StudentEJB implements StudentEJBLocal{
 	}
 
 	@Override
-	public void login(int cin) {
+	public void login(String cin) {
 		
 		List<Student> ls =em.createQuery("SELECT s from Student s  ").getResultList();
 		List<Student> lss = new ArrayList();
 		
 		for (int i=0;i<ls.size();i++) {
-			if((int)ls.get(i).getCin()==(int)cin) {
+			if(ls.get(i).getCin().equals(cin)) {
 				System.out.println("ok");
 				ls.get(i).setIsSaved(true);
 				
