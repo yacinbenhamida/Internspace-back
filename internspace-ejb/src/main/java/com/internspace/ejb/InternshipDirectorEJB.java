@@ -82,9 +82,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 	//SELECT * FROM Employee e, Team t WHERE e.Id_team=t.Id_team
-	/*
+	
 	@Override
 	public List<FYPFile> getFYPFileListByCountry(String location) {
+		/*
 		List<Internship> li = new ArrayList();
 		List<FYPFile> lf = new ArrayList();
 		List<Company> lc = em.createQuery("FROM " + Company.class.getName()  + " c WHERE c.country =:location").setParameter("location", location).getResultList();
@@ -94,9 +95,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	      }
 		 li.forEach(x->lf.add(x.getFypFile()));
 		 return lf;
-		
+		*/
+		return null;
 	}
-*/
+
 	@Override
 	public List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state) {
 		List<FYPFile> lf = new ArrayList();
