@@ -12,9 +12,9 @@ public interface TeacherEJBLocal {
 	
 	List<FYPFile> getPendingFYPFiles();
 	boolean PrevalidateFYPFile(FYPFile file);
-	List<FYPFile> getSupervisedFYPfiles(int id);
+	List<FYPFile> getSupervisedFYPfiles(long id);
 
-	List<FYPFile> getprotractoredFYPfiles();
+	List<FYPFile> getprotractoredFYPfiles(long id);
 	FYPFile ValidateMajorModification(FYPFile f);
 	void ProposeFYPCategory(FYPCategory F);
 	

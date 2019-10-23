@@ -47,12 +47,36 @@ public class Site implements Serializable {
 	Set<Departement> departements;
 	
 	// Explicitly check if this employee has InternshipDirector role.
-	@OneToOne(mappedBy = "site")
-	@JoinColumn(name = "internship_director_id")
+	@OneToOne
 	Employee internshipDirector;
+
 	
 	/*
 	 * Getters & Setters
 	 */
+	
+	public String getName() {
+		return name;
+	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
 }

@@ -44,7 +44,7 @@ public class Employee extends User implements Serializable{
 	 */
 	
 	// Only use this when role == internshipDirector
-	@OneToOne(optional = true)
+	@OneToOne(mappedBy = "internshipDirector")
 	Site site;
 	
 	// Has a no of interventions if the employee is a teacher
@@ -85,6 +85,13 @@ public class Employee extends User implements Serializable{
 	public void setDepartment(Departement department) {
 		this.department = department;
 	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	
 	
 }
 

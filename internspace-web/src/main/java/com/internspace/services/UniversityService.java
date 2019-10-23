@@ -23,7 +23,6 @@ public class UniversityService {
 	UniversityEJBLocal universityServices;
 	
 	@POST
-	@Path("add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addUniversity(University university) {
@@ -35,7 +34,6 @@ public class UniversityService {
 	}
 	
 	@PUT
-	@Path("update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateUniversity(University university) {
@@ -47,7 +45,7 @@ public class UniversityService {
 	}
 	
 	@DELETE
-	@Path("delete/{id}")
+	@Path("{id}")
 	public Response deleteUniversity(@PathParam(value="id") long id) {
 		int result = universityServices.deleteUniversity(id);
 		if(result == 1) {

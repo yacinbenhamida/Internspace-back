@@ -50,11 +50,9 @@ public class FYPFile implements Serializable {
 	String title;
 	String description;
 	String problematic;
-	
 	@ManyToOne
 	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
-	
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
 	FYPFileStatus fileStatus;
@@ -62,7 +60,7 @@ public class FYPFile implements Serializable {
 	@Column(name="canceled" ,columnDefinition = "boolean default false")
 	Boolean isCanceled;
 	
-	@Column(name="final_mark")
+	@Column(name="final_mark", columnDefinition="default 0")
 	int finalMark;
 	
 	@Column(name="isArchived" ,columnDefinition = "boolean default false")
@@ -127,10 +125,6 @@ public class FYPFile implements Serializable {
 
 
 
-	public Internship getInternship() {
-		return internship;
-	}
-
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
 	}
@@ -183,9 +177,9 @@ public class FYPFile implements Serializable {
 		this.keywords = keywords;
 	}
 
-	/*public Internship getInternship() {
+	public Internship getInternship() {
 		return internship;
-	}*/
+	}
 
 	public void setInternship(Internship internship) {
 		this.internship = internship;
