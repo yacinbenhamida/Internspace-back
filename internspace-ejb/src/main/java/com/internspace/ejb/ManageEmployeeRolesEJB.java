@@ -39,7 +39,7 @@ public class ManageEmployeeRolesEJB implements ManageEmployeeRolesEJBLocal {
 		Employee e = em.find(Employee.class, idEmployee);
 		Site s = em.find(Site.class, idSite);
 		if(e != null && s != null) {
-			e.setRole(Role.internshipDirector);
+			e.setRole(Role.internshipsDirector);
 			Query query = em.createQuery("UPDATE Site s SET s.internshipDirector=:Employee"
 					+ " WHERE s.id=:idSite ");
 			query.setParameter("Employee", e);
