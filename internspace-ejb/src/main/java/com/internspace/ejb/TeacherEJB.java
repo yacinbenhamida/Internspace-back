@@ -21,9 +21,8 @@ public class TeacherEJB implements TeacherEJBLocal {
 	
 @Override
 	public List<FYPFile> getPendingFYPFiles() {
-		
-		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where status=pending ").getResultList();
-
+		String ch="pending";
+		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.status=:x ").setParameter("x", ch).getResultList();
 	}
 
 @Override
@@ -31,16 +30,14 @@ public class TeacherEJB implements TeacherEJBLocal {
 		return false;	
 	}
 
-@Override
-	public List<FYPFile> getSupervisedFYPfiles(int id) {
-	
-	
-		return em.createQuery("FROM"+ FYPFile.class.getName() + "f where f.fyp_file_id =(SELECT"+ FYPIntervention.class.getName()+".internshipSheet_fyp_file_id FROM"+ FYPIntervention.class.getName()+" n WHERE n.teacher_user_id=:id)").setParameter("id",id).getResultList();
+@Override 
+	public List<FYPFile> getSupervisedFYPfiles(long id) {
+		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor')").setParameter("id",id).getResultList();
 	}
 
 @Override
-	public List<FYPFile> getprotractoredFYPfiles() {
-		return null;
+	public List<FYPFile> getprotractoredFYPfiles(long id) {
+	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'protractor')").setParameter("id",id).getResultList();
 	}
 
 @Override
