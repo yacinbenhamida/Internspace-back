@@ -31,6 +31,9 @@ public class Student extends User {
 	@Column(name = "has_submitted_a_report")
 	boolean hasSubmittedAReport;
 	
+	@Column(name="cin")
+	String cin;
+	
 	/*
 	 * Associations
 	 */

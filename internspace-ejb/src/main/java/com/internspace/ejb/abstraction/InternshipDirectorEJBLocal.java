@@ -31,8 +31,11 @@ public interface InternshipDirectorEJBLocal {
 	public Student FindStudent(long id);
 	public Boolean ValidateSubmittedAReport(long id);
 	public List<FYPFile> WaitingForDefensePlanningList();
-	public FYPFile FilterWaitingForDefensePlanningList(long id);
-	
+	public FYPFile FilterWaitingForDefensePlanningList(String cin, String nom);
+	public  void FixActionNumberAsSupervisor(int nb, int id);
+	public  void FixActionNumberAsProtractor(int nb, int id);
+	public  void FixActionNumberAsPreValidator(int nb, int id);
+	public  void FixActionNumberAsJuryPresident(int nb, int id);
 	
 	
 	

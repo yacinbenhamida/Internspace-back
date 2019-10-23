@@ -161,7 +161,35 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("FilterWaitingForDefensePlanningList")
-	public  FYPFile FilterWaitingForDefensePlanningList (@QueryParam(value = "id") long id){
-		return service.FilterWaitingForDefensePlanningList(id);
+	public  FYPFile FilterWaitingForDefensePlanningList (@QueryParam(value = "cin") String cin, @QueryParam(value = "nom") String nom){
+		return service.FilterWaitingForDefensePlanningList(cin,nom);
+	};
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_XML)
+	@Path("FixActionNumberAsSupervisor")
+	public void FixActionNumberAsSupervisor( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") int id){
+		service.FixActionNumberAsSupervisor(nb, id);
+	};
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_XML)
+	@Path("FixActionNumberAsProtractor")
+	public void FixActionNumberAsProtractor( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") int id){
+		service.FixActionNumberAsProtractor(nb, id);
+	};
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_XML)
+	@Path("FixActionNumberAsPreValidator")
+	public void FixActionNumberAsPreValidator( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") int id){
+		service.FixActionNumberAsPreValidator(nb, id);
+	};
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_XML)
+	@Path("FixActionNumberAsJuryPresident")
+	public void FixActionNumberAsJuryPresident( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") int id){
+		service.FixActionNumberAsJuryPresident(nb, id);
 	};
 }
