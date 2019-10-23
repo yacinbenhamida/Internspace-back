@@ -32,8 +32,10 @@ public class Student extends User {
 	@Column(name = "has_submitted_a_report")
 	boolean hasSubmittedAReport;
 	
-	@Column(name = "cin")
-	int cin;
+
+	@Column(name="cin")
+	String cin;
+
 	
 	/*
 	 * Associations
@@ -181,17 +183,18 @@ public class Student extends User {
 	public void setIsDisabled(Boolean isDisabled) {
 		this.isDisabled = isDisabled;
 	}
-	public long getCin() {
+
+	public String getCin() {
 		return cin;
 	}
-	public void setCin(int cin) {
+
+	public void setCin(String cin) {
 		this.cin = cin;
 	}
 	
 	
 	
-	
-	
 }
-
+	
+	
 
