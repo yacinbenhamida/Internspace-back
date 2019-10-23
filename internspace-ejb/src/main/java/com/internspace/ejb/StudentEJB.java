@@ -1,5 +1,6 @@
 package com.internspace.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,7 @@ import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.exchanges.Mailer;
+import com.internspace.entities.exchanges.MailerStudent;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Student;
@@ -32,24 +34,13 @@ public class StudentEJB implements StudentEJBLocal{
 		
 	}
 
-	@Override
-	public void enregistrer(long id) {
-		
-		Student s = em.find(Student.class, id);
-		s.setIsSaved(true);
-		em.persist(s);
-		em.flush();
-		
-		
-		
-		
-	}
 
 	@Override
 	public List<Student> getAllStudentCreated() {
 		
 		return em.createQuery("SELECT s from Student s  where s.isSaved=:isSaved").setParameter("isSaved", true).getResultList();
 	}
+	
 
 	@Override
 	public void acceptPFE(long id) {
@@ -85,7 +76,7 @@ public class StudentEJB implements StudentEJBLocal{
 		String subject = "Voici c votre mot de passe " ;
 		String subject1 = "Vous êtes pas autorisé a paser le PFE " ;
 		
-		Mailer mail = new Mailer();
+		MailerStudent mail = new MailerStudent();
 		List<Student> ls = getAllStudentdisabled();
 		List<Student> ls1 = getAllStudentNodisabled();
 		
@@ -96,14 +87,56 @@ public class StudentEJB implements StudentEJBLocal{
 		
 	}
 
+	@Override
+	public List<Student> getAllStudentCIN() {
+		return em.createQuery("SELECT cin from Student s  ").getResultList();
+		
+	}
+
+	@Override
+	public void login(int cin) {
+		
+		List<Student> ls =em.createQuery("SELECT s from Student s  ").getResultList();
+		List<Student> lss = new ArrayList();
+		
+		for (int i=0;i<ls.size();i++) {
+			if((int)ls.get(i).getCin()==(int)cin) {
+				System.out.println("ok");
+				ls.get(i).setIsSaved(true);
+				
+				lss.add(ls.get(i));
+			}
+		}
+		
+	}
+
+	
+	
+
 
 
 	/*@Override
-	public void sendMail(int year, String text) {
-		String subject = "rappel pour saisir votre fiche PFE " ;
-		Mailer mail = new Mailer();
-		List<Student> ls = getLateStudentsList(year);
-		ls.forEach(x->mail.send(x.getEmail(),text,subject));
+	public void enregistrer(long cin) {
+		
+		//Student s = em.find(Student.class, cin);
+		//List<Student> ls = new ArrayList();
+		StudentEJB se = new StudentEJB();
+		List<Student> ls  = se.em.createQuery("SELECT cin from Student s  ").getResultList();
+		
+		
+		
+		for(int i=0;i<ls.size();i++) {
+			if(se.getAllStudentCIN().get(i).getCin()==cin) {
+				
+					System.out.println("this student  created"+ls.get(i));
+					se.getAllStudentCIN().get(i).setIsSaved(true);
+					em.persist(se.getAllStudentCIN().get(i));
+					em.flush();
+		
+			}
+		}
+	
+		
 	}*/
 	
 	

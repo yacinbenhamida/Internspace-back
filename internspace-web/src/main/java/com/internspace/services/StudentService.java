@@ -54,11 +54,13 @@ public class StudentService {
 		 return Studentservice.getAllStudentCreated();
 	};
 
+
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("enregistrer")
-	public void enregistrer(@QueryParam(value = "id") long id){
-		Studentservice.enregistrer(id);
+	@Path("login")
+	public void login(@QueryParam(value = "cin") int cin){
+		Studentservice.login(cin);
 	};
 	
 	@GET
@@ -90,4 +92,11 @@ public class StudentService {
 		Studentservice.sendMail(text);
 	};
 
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("lscin")
+	public List<Student> getstudentCin(){
+		 return Studentservice.getAllStudentCIN();
+	};
 }
