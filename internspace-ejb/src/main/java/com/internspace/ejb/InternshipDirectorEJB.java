@@ -90,8 +90,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 	//SELECT * FROM Employee e, Team t WHERE e.Id_team=t.Id_team
+	
 	@Override
 	public List<FYPFile> getFYPFileListByCountry(String location) {
+		/*
 		List<Internship> li = new ArrayList();
 		List<FYPFile> lf = new ArrayList();
 		List<Company> lc = em.createQuery("FROM " + Company.class.getName()  + " c WHERE c.country =:location").setParameter("location", location).getResultList();
@@ -101,7 +103,8 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	      }
 		 li.forEach(x->lf.add(x.getFypFile()));
 		 return lf;
-		
+		*/
+		return null;
 	}
 
 	@Override
@@ -189,6 +192,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public void declineCancelingDemand(long id , String text) {
+		/*
 		FYPFile f = em.find(FYPFile.class, id);
 		String subject = "refus l’annulation d’un stage PFE" ;
 		f.setIsCanceled(false);
@@ -197,6 +201,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		mail.send(i.getStudent().getEmail(),text,subject);
 		em.persist(f);
 		em.flush();
+		*/
 	}
 
 	@Override

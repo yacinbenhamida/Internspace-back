@@ -31,7 +31,6 @@ public class UniversityEJB implements UniversityEJBLocal{
 	@Override
 	public int deleteUniversity(long id) {
 		University u = em.find(University.class, id);
-		System.out.println("Debug : "+u);
 		if(u != null) {
 			em.remove(u);
 			return 1;

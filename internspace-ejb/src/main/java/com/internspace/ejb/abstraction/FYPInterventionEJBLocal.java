@@ -16,5 +16,6 @@ public interface FYPInterventionEJBLocal {
 	public List<Employee> getAllTeachersRankedByNumberOfSupervisions();
 	public List<FYPIntervention> getAll();
 	public boolean deleteIntervention(long idInt);
-	public List<Employee> getAllTeachersByInternshipPreferences();
+	public List<Employee> getTeachersWhoPrefer(String subject);
+	public FYPIntervention saveMark(int markValue, long idIntervention);
 }

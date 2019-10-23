@@ -15,7 +15,6 @@ import javax.persistence.Table;
 
 import org.json.JSONPropertyIgnore;
 
-
 @Entity
 @Table(name = "company")
 public class Company extends User {
@@ -40,12 +39,13 @@ public class Company extends User {
 	 * Associations
 	 */
 
-
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<FYPSubject> subjects;
 
-	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-	Set<Internship> internships;
+	/*
+	 * @OneToMany(mappedBy = "company", fetch = FetchType.LAZY) Set<Internship>
+	 * internships;
+	 */
 
 	@OneToMany(mappedBy = "company")
 	Set<InternshipConvention> internshipConventions;// = new HashSet<InternshipConvention>();
@@ -53,7 +53,6 @@ public class Company extends User {
 	/*
 	 * Getters & Setters
 	 */
-
 
 	public void setSubjects(Set<FYPSubject> subjects) {
 		this.subjects = subjects;
@@ -99,18 +98,14 @@ public class Company extends User {
 		this.phoneNumber = phoneNumber;
 	}
 
-
-
-	public void setInternships(Set<Internship> internships) {
-		this.internships = internships;
-	}
-
 	/*
-	public Set<InternshipConvention> getInternshipConventions() {
-		return internshipConventions;
-	}
+	 * public void setInternships(Set<Internship> internships) { this.internships =
+	 * internships; }
+	 * 
+	 * public Set<InternshipConvention> getInternshipConventions() { return
+	 * internshipConventions; }
 	 */
-	
+
 	public void setInternshipConventions(Set<InternshipConvention> internshipConventions) {
 		this.internshipConventions = internshipConventions;
 	}

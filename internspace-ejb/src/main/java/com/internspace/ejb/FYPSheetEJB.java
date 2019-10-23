@@ -57,7 +57,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public List<FYPFile> getFYPfilesOfDepartment(long idDept) {
-		Query q = service.createQuery("SELECT f from FYPFile f where f.internship.student.studyClass.departement.id = :id")
+		Query q = service.createQuery("SELECT f from FYPFile f,Internship i where f.id = i.fypFile.id "
+				+ "AND i.student.studyClass.departement.id = :id")
 				.setParameter("id", idDept);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();

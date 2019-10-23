@@ -149,8 +149,8 @@ public class DashboardEJB implements DashboardEJBLocal {
 		
 		
 		// Acts like TOP in classical SQL query.
-		//List<Company> companies = query.setMaxResults(n).getResultList();
-		List<Company> companies = query.getResultList();
+		List<Company> companies = query.setMaxResults(n).getResultList();
+		//List<Company> companies = query.getResultList();
 		//companies.stream().forEach(x -> {x.setInternships(null);});
 		
 		return companies;

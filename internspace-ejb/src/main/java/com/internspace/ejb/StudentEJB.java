@@ -1,12 +1,16 @@
 package com.internspace.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
-
+import com.internspace.entities.exchanges.Mailer;
+import com.internspace.entities.exchanges.MailerStudent;
+import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Student;
 
 public class StudentEJB implements StudentEJBLocal{
@@ -29,6 +33,111 @@ public class StudentEJB implements StudentEJBLocal{
 		return em.createQuery("SELECT c from Student c").getResultList();
 		
 	}
+
+
+	@Override
+	public List<Student> getAllStudentCreated() {
+		
+		return em.createQuery("SELECT s from Student s  where s.isSaved=:isSaved").setParameter("isSaved", true).getResultList();
+	}
+	
+
+	@Override
+	public void acceptPFE(long id) {
+	
+		Student s= em.find(Student.class, id);
+		if (s.getIsSaved()==true) {
+		s.setIsAutorised(true);
+		em.persist(s);
+		em.flush();}
+		else
+		{
+			System.out.println("this student is not created");
+		}
+		
+	}
+
+	@Override
+	public List<Student> getAllStudentdisabled() {
+		return em.createQuery("SELECT s from Student s  where s.isAutorised=:isAutorised").setParameter("isAutorised", true).getResultList();
+		
+	}
+
+	@Override
+	public List<Student> getAllStudentNodisabled() {
+		return em.createQuery("SELECT s from Student s  where s.isAutorised=:isAutorised").setParameter("isAutorised", false).getResultList();
+		
+	}
+	
+	
+	@Override
+	public void sendMail(String text) {
+		
+		String subject = "Voici c votre mot de passe " ;
+		String subject1 = "Vous êtes pas autorisé a paser le PFE " ;
+		
+		MailerStudent mail = new MailerStudent();
+		List<Student> ls = getAllStudentdisabled();
+		List<Student> ls1 = getAllStudentNodisabled();
+		
+		
+		
+		ls.forEach(x->mail.send(x.getEmail(),text,subject));
+		ls1.forEach(x->mail.send(x.getEmail(),text,subject1));
+		
+	}
+
+	@Override
+	public List<Student> getAllStudentCIN() {
+		return em.createQuery("SELECT cin from Student s  ").getResultList();
+		
+	}
+
+	@Override
+	public void login(int cin) {
+		
+		List<Student> ls =em.createQuery("SELECT s from Student s  ").getResultList();
+		List<Student> lss = new ArrayList();
+		
+		for (int i=0;i<ls.size();i++) {
+			if((int)ls.get(i).getCin()==(int)cin) {
+				System.out.println("ok");
+				ls.get(i).setIsSaved(true);
+				
+				lss.add(ls.get(i));
+			}
+		}
+		
+	}
+
+	
+	
+
+
+
+	/*@Override
+	public void enregistrer(long cin) {
+		
+		//Student s = em.find(Student.class, cin);
+		//List<Student> ls = new ArrayList();
+		StudentEJB se = new StudentEJB();
+		List<Student> ls  = se.em.createQuery("SELECT cin from Student s  ").getResultList();
+		
+		
+		
+		for(int i=0;i<ls.size();i++) {
+			if(se.getAllStudentCIN().get(i).getCin()==cin) {
+				
+					System.out.println("this student  created"+ls.get(i));
+					se.getAllStudentCIN().get(i).setIsSaved(true);
+					em.persist(se.getAllStudentCIN().get(i));
+					em.flush();
+		
+			}
+		}
+	
+		
+	}*/
 	
 	
 }
