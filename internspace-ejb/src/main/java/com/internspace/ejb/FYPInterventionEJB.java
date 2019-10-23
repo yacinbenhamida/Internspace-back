@@ -26,16 +26,24 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		Query q = manager.createQuery("SELECT i FROM "
 				+ "FYP_INTERVENTION i where i.teacher.id = :id AND i.internshipSheet.id = :idints")
 				.setParameter("id", idTeacher).setParameter("idints", idFYPS);
-		if(teacher != null && sheet != null && q.getResultList().isEmpty()) {
+		if(teacher != null && sheet != null && q.getResultList().isEmpty() && teacher.getDepartment() !=null) {
+			if(sheet.getInternship().getStudent().isHasSubmittedAReport()) {
 				FYPIntervention intervention = new FYPIntervention();
-				intervention.setAssignmentDate(LocalDate.now());
-				intervention.setInternshipSheet(sheet);
-				intervention.setTeacher(teacher);
-				intervention.setTeacherRole(this.convertRole(role));
-				System.out.println(intervention);
-				manager.persist(intervention);
+				switch (role.toString()) {
+					case "juryPresident": intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForPresidents());break;
+					case "preValidator " : 	intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForPreValidators());break;
+					case "protractor" : intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForProtractors());break;
+					case "supervisor" : intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForSupervisors());break;
+				}
+					intervention.setAssignmentDate(LocalDate.now());
+					intervention.setInternshipSheet(sheet);
+					intervention.setTeacher(teacher);
+					intervention.setTeacherRole(this.convertRole(role));
+					System.out.println(intervention);
+					manager.persist(intervention);
 				return manager.find(FYPIntervention.class, intervention.getId());
-		}
+				}
+			}
 		return null;
 	}
 
@@ -49,9 +57,15 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 				+ " HAVING (SELECT COUNT(interv.id) FROM FYP_INTERVENTION interv where interv.id = i.id AND"
 				+ "  interv.teacherRole = :role ) = 0").setParameter("id", fypinterventionId)
 				.setParameter("role", newRole);
-		if(teacher != null && intervention != null && q.getResultList().isEmpty()) {
+		if(teacher != null && intervention != null && q.getResultList().isEmpty() && teacher.getDepartment() != null) {
 				intervention.setAssignmentDate(LocalDate.now());
 				intervention.setTeacherRole(convertRole(newRole));
+				switch (newRole.toString()) {
+					case "juryPresident": intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForPresidents());break;
+					case "preValidator " : 	intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForPreValidators());break;
+					case "protractor" : intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForProtractors());break;
+					case "supervisor" : intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForSupervisors());break;
+				}
 				manager.merge(intervention); 
 				manager.flush();
 				return manager.find(FYPIntervention.class, intervention.getId());
@@ -99,8 +113,24 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 	}
 
 	@Override
-	public List<Employee> getAllTeachersByInternshipPreferences() {
-		// TODO Auto-generated method stub
+	public List<Employee> getTeachersWhoPrefer(String subject) {
+		Query q = manager.createQuery("SELECT f from FYPCategory f ").setParameter("role", TeacherRole.supervisor);
+		if(!q.getResultList().isEmpty()) {
+			return q.getResultList();
+		}
+		return null;
+	}
+
+	@Override
+	public FYPIntervention saveMark(int markValue, long idIntervention) {
+		FYPIntervention intervention = manager.find(FYPIntervention.class, idIntervention);
+			if(intervention!=null) {
+				intervention.setActionsRemaining(intervention.getActionsRemaining()-1);
+				intervention.setGivenMark(markValue);
+				manager.merge(intervention);
+				manager.flush();
+				return intervention;
+			}
 		return null;
 	}
 }

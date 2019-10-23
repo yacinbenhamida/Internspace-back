@@ -12,6 +12,7 @@ import java.util.ListIterator;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.entities.exchanges.Mailer;
@@ -45,7 +46,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			 if(ls.get(i).getUniversitaryYear().getStartDate()==year)
 				 FiltredLs.add(ls.get(i));
 		 }
-		 FiltredLs.forEach(x->l.addAll(x.getStudents()));
+		 //FiltredLs.forEach(x->l.addAll(x.getStudents()));
 		 for(int i=0;i<l.size();i++) {
 			if(l.get(i).getIsCreated()==false)
 				 rs.add(l.get(i))	 ;
@@ -155,7 +156,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		f.setFileStatus(FYPFileStatus.declined);
 		Internship i = (Internship)em.createQuery("FROM " + Internship.class.getName()  + " i WHERE i.fypFile =:file").setParameter("file", f).getSingleResult();
 		Notification n = new Notification();
-		n.setStudent(i.getStudent());
+		//n.setStudent(i.getStudent());
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
 		em.persist(n);
@@ -234,36 +235,58 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public List<FYPFile> WaitingForDefensePlanningList() {
-		List<FYPFile> ls = getAllFYPFileList();
+		
+		// shouf m3a yassin el faza !!!! MAHMOUD
+		 return em.createQuery("SELECT f from FYPFile f where f.finalMark = 0 group by f.id"
+				+ " HAVING (SELECT COUNT(i.id) FROM FYP_INTERVENTION i where i.internshipSheet.id = f.id AND i.givenMark != NULL )=2").getResultList();
+	}
+
+
+	@Override
+	public FYPFile FilterWaitingForDefensePlanningList(long id) {
+		List<FYPFile> xx = WaitingForDefensePlanningList();
+		List<Long> ls = em.createQuery("SELECT s.internship.fypFile.id FROM " + Student.class.getName() + " s"
+				+ " WHERE s.id =:id ").setParameter("id", id).getResultList();
+		if(ls.isEmpty()) {
+			return null;
+		}
+			else {
+		for(int i =0; i<xx.size(); i++) {
+			if(xx.get(i).getId()==ls.get(0))
+				return xx.get(i);
+		}
+		
+		}
+		
+		return null;
+	}
+
+
+	/*List<FYPFile> ls = getAllFYPFileList();
 		List<FYPFile> rs = new ArrayList<FYPFile>();
 		TeacherRole protractor = TeacherRole.protractor;
 		TeacherRole  supervisor = TeacherRole.supervisor;
 		int noteP=0;
-		int noteSup=0;
-		/*for(int i=0; i<ls.size();i++) {
-			List<FYPIntervention> interLS= ls.get(i).getInterventions();
-			for(int j=0; j<interLS.size();j++) {
-				
-				if(interLS.get(j).getTeacherRole()== protractor)
-				{
-					noteP = interLS.get(j).getGivenMark();
-				}
-				if(interLS.get(j).getTeacherRole()== supervisor)
-				{
-					noteSup = interLS.get(j).getGivenMark();
-				}
-				
-			}
-			if(noteSup > 0 && noteP > 0)
-				rs.add(ls.get(i));
-				
-		}*/
-		
-		return rs;
-	}
-
+		int noteSup=0;*/
 	
-
+	/*for(int i=0; i<ls.size();i++) {
+	List<FYPIntervention> interLS= ls.get(i).getInterventions();
+	for(int j=0; j<interLS.size();j++) {
+		
+		if(interLS.get(j).getTeacherRole()== protractor)
+		{
+			noteP = interLS.get(j).getGivenMark();
+		}
+		if(interLS.get(j).getTeacherRole()== supervisor)
+		{
+			noteSup = interLS.get(j).getGivenMark();
+		}
+		
+	}
+	if(noteSup > 0 && noteP > 0)
+		rs.add(ls.get(i));
+		
+}*/
 	
 	
 	

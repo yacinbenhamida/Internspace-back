@@ -39,6 +39,19 @@ public class Student extends User {
 	@JoinColumn(name = "internship_id")
 	Internship internship;
 
+	public Boolean getIsSaved() {
+		return isSaved;
+	}
+	public void setIsSaved(Boolean isSaved) {
+		this.isSaved = isSaved;
+	}
+	public Boolean getIsAutorised() {
+		return isAutorised;
+	}
+	public void setIsAutorised(Boolean isAutorised) {
+		this.isAutorised = isAutorised;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
@@ -53,7 +66,17 @@ public class Student extends User {
 	
 	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated ;
+
+	// l etudiant est enregistrée
+	@Column(name = "is_saved", columnDefinition = "boolean default false")
+	Boolean isSaved ;
 	
+	// l etudiant est autorisée a passer son PFE
+
+	@Column(name = "is_autorised ", columnDefinition = "boolean default false")
+	Boolean isAutorised ;
+	
+
 	// behs nshouf est ce qui letudiant ynajem y3adi pfe ou nn ( ynajem yconnecti fel platforme ou nn )
 	@Column(name = "is_disabled", columnDefinition = "boolean default false")
 	Boolean isDisabled ;
@@ -64,7 +87,7 @@ public class Student extends User {
 	/*
 	 * Getters & Setters
 	 */
-
+	/*
 	public String getPassword() {
 		return password;
 	}
@@ -93,6 +116,7 @@ public class Student extends User {
 		return hasSubmittedAReport;
 	}
 
+*/
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
@@ -104,7 +128,6 @@ public class Student extends User {
 	public void setIsCreated(Boolean isCreated) {
 		this.isCreated = isCreated;
 	}
-
 	public boolean isHasSubmittedAReport() {
 		return hasSubmittedAReport;
 	}
@@ -112,18 +135,7 @@ public class Student extends User {
 	public void setHasSubmittedAReport(boolean hasSubmittedAReport) {
 		this.hasSubmittedAReport = hasSubmittedAReport;
 	}
-
-	/*public Internship getInternship() {
-		return internship;
-	}*/
-
-	public void setInternship(Internship internship) {
-		this.internship = internship;
-	}
-
-	/*public StudyClass getStudyClass() {
-		return studyClass;
-	}*/
+	/*
 
 	public void setStudyClass(StudyClass studyClass) {
 		this.studyClass = studyClass;
@@ -152,7 +164,6 @@ public class Student extends User {
 	public void setIsDisabled(Boolean isDisabled) {
 		this.isDisabled = isDisabled;
 	}
-	
 	
 	
 	
