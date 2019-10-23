@@ -149,9 +149,7 @@ public class University implements Serializable {
 		this.currentUniversitaryYear = currentUniversitaryYear;
 	}
 
-	public Set<Site> getSites() {
-		return sites;
-	}
+
 
 	public void setSites(Set<Site> sites) {
 		this.sites = sites;
