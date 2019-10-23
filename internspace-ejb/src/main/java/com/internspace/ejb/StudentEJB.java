@@ -55,9 +55,14 @@ public class StudentEJB implements StudentEJBLocal{
 	public void acceptPFE(long id) {
 	
 		Student s= em.find(Student.class, id);
+		if (s.getIsCreated()==true) {
 		s.setIsDisabled(true);
-		em.persist(em);
-		em.flush();
+		em.persist(s);
+		em.flush();}
+		else
+		{
+			System.out.println("this student is not created");
+		}
 		
 	}
 
