@@ -82,6 +82,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 	//SELECT * FROM Employee e, Team t WHERE e.Id_team=t.Id_team
+	/*
 	@Override
 	public List<FYPFile> getFYPFileListByCountry(String location) {
 		List<Internship> li = new ArrayList();
@@ -95,7 +96,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		 return lf;
 		
 	}
-
+*/
 	@Override
 	public List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state) {
 		List<FYPFile> lf = new ArrayList();
