@@ -1,6 +1,7 @@
 package com.internspace.entities.university;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.internspace.entities.users.Employee;
 
@@ -30,8 +33,12 @@ public class Departement implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="departement_id")
 	long id;
-	
+	@Column(name="name")
 	String name;
+	@Temporal (TemporalType.DATE)
+	Date yearOfCreation;
+	@Column(name="description")
+	String description;
 	
 	@Column(name = "rapporteur_no_of_actions_allowed")
 	int numberOfActionsAllowedForProtractors; 		//this is edited by the internships director.

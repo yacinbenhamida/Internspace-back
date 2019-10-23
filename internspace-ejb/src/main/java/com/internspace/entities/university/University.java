@@ -39,6 +39,8 @@ public class University implements Serializable {
 	String owner;
 	@Column(name="logoUrl")
 	String logoUrl;
+	@Column(name="location")
+	String location;
 	@Column(name="fyp_class_year")
 	int fypClassYear; // What class year is considered to be final-year-project year? 5 for example...
 	
@@ -46,7 +48,6 @@ public class University implements Serializable {
 	@JoinColumn(name="current_universitary_year")
 	UniversitaryYear currentUniversitaryYear; // Each university has its own Current University Year
 	
-	String location; // School's location, useful to retrieve abroad internships...
 	
 	/*
 	 * Associations
@@ -149,13 +150,6 @@ public class University implements Serializable {
 		this.currentUniversitaryYear = currentUniversitaryYear;
 	}
 
-	public Set<Site> getSites() {
-		return sites;
-	}
-
-	public void setSites(Set<Site> sites) {
-		this.sites = sites;
-	}
 
 
 }
