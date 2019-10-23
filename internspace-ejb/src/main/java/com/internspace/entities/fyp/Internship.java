@@ -1,12 +1,8 @@
 package com.internspace.entities.fyp;
 
-import com.internspace.entities.users.Company;
-
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.internspace.entities.users.Student;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -21,6 +17,7 @@ import javax.persistence.Column;
 @XmlRootElement
 @Entity
 @Table(name = "internship")
+@Deprecated
 public class Internship implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,13 +34,6 @@ public class Internship implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
-
-	@OneToOne(mappedBy = "internship")
-	Student student;
-
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	Company company;
 
 	@ManyToOne
 	@JoinColumn(name = "subject_id")
@@ -69,6 +59,7 @@ public class Internship implements Serializable {
 		this.fypFile = fypFile;
 	}
 
+	/*
 	public Student getStudent() {
 		return student;
 	}
@@ -76,16 +67,17 @@ public class Internship implements Serializable {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
-
+	 */
+	
 	/*
 	public Company getCompany() {
 		return company;
-	}*/
+	}
 
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-
+	*/
 	public FYPSubject getSubject() {
 		return subject;
 	}

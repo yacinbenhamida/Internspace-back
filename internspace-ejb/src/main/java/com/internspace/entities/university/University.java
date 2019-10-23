@@ -18,51 +18,47 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="university")
+@Table(name = "university")
 public class University implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="university_id")
+	@Column(name = "university_id")
 	long id;
-	@Column(name="name")
+	@Column(name = "name")
 	String name;
-	@Temporal (TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	Date openingYear;
-	@Column(name="owner")
+	@Column(name = "owner")
 	String owner;
-	@Column(name="logoUrl")
+	@Column(name = "logo_url")
 	String logoUrl;
-	@Column(name="location")
+	@Column(name = "location")
 	String location;
-	@Column(name="fyp_class_year")
+	@Column(name = "fyp_class_year")
 	int fypClassYear; // What class year is considered to be final-year-project year? 5 for example...
-	
+
 	@ManyToOne()
-	@JoinColumn(name="current_universitary_year")
+	@JoinColumn(name = "current_universitary_year")
 	UniversitaryYear currentUniversitaryYear; // Each university has its own Current University Year
-	
-	
+
 	/*
 	 * Associations
 	 */
-	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="university")
-	private Set<Site> sites;
-	
 
-	
-	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "university")
+	private Set<Site> sites;
+
 	/*
 	 * Getters & Setters
 	 */
-	
+
 	public String getName() {
 		return name;
 	}
@@ -125,7 +121,6 @@ public class University implements Serializable {
 		return true;
 	}
 
-	
 	public int getFypClassYear() {
 		return fypClassYear;
 	}
@@ -150,7 +145,4 @@ public class University implements Serializable {
 		this.currentUniversitaryYear = currentUniversitaryYear;
 	}
 
-
-
 }
-

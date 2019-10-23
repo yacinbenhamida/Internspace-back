@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -40,9 +41,19 @@ public class FYPSubject implements Serializable {
 	@Column(name="content", length = 65535, columnDefinition = "text")
 	String content;
 	
+	@Column(name="max_applicants")
+	int maxApplicants;
+	
+	@Column(name="curr_applicants_count")
+	int curApplicantsCount;
+	
 	/*
 	 * Associations
 	 */
+	
+	@OneToOne
+	@JoinColumn(name = "fyp_file_id")
+	FYPFile fypFile; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
 	@ManyToOne
 	@JoinColumn(name = "company_id")
@@ -51,10 +62,12 @@ public class FYPSubject implements Serializable {
 	// Many to Many to Subjects using custom association table.
 	@OneToMany(mappedBy="subject", fetch = FetchType.LAZY)
 	Set<StudentFYPSubject> studentSubjects;
-
+	
+	/*
 	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
 	Set<Internship> internships;
-
+	 */
+	
 	@ManyToMany(mappedBy = "subjects")
 	Set<FYPCategory> categories;
 	

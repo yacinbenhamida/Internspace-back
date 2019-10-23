@@ -181,6 +181,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public void declineCancelingDemand(long id , String text) {
+		/*
 		FYPFile f = em.find(FYPFile.class, id);
 		String subject = "refus l’annulation d’un stage PFE" ;
 		f.setIsCanceled(false);
@@ -189,6 +190,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		mail.send(i.getStudent().getEmail(),text,subject);
 		em.persist(f);
 		em.flush();
+		*/
 	}
 
 	@Override
