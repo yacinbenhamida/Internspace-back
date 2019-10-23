@@ -51,9 +51,9 @@ public class Internship implements Serializable {
 		this.id = id;
 	}
 
-	public FYPFile getFypFile() {
+	/*public FYPFile getFypFile() {
 		return fypFile;
-	}
+	}*/
 
 	public void setFypFile(FYPFile fypFile) {
 		this.fypFile = fypFile;
