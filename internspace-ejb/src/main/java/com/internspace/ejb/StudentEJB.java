@@ -87,7 +87,7 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		
 		ls.forEach(x->mail.send(x.getEmail(),text,subject));
-		ls1.forEach(x->mail.send(x.getEmail(),text,subject));
+		ls1.forEach(x->mail.send(x.getEmail(),text,subject1));
 		
 	}
 
