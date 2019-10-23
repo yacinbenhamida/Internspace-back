@@ -36,7 +36,7 @@ public class StudentEJB implements StudentEJBLocal{
 	public void enregistrer(long id) {
 		
 		Student s = em.find(Student.class, id);
-		s.setIsCreated(true);
+		s.setIsSaved(true);
 		em.persist(s);
 		em.flush();
 		
@@ -48,15 +48,15 @@ public class StudentEJB implements StudentEJBLocal{
 	@Override
 	public List<Student> getAllStudentCreated() {
 		
-		return em.createQuery("SELECT s from Student s  where s.isCreated=:isCreated").setParameter("isCreated", true).getResultList();
+		return em.createQuery("SELECT s from Student s  where s.isSaved=:isSaved").setParameter("isSaved", true).getResultList();
 	}
 
 	@Override
 	public void acceptPFE(long id) {
 	
 		Student s= em.find(Student.class, id);
-		if (s.getIsCreated()==true) {
-		s.setIsDisabled(true);
+		if (s.getIsSaved()==true) {
+		s.setIsAutorised(true);
 		em.persist(s);
 		em.flush();}
 		else
@@ -68,13 +68,13 @@ public class StudentEJB implements StudentEJBLocal{
 
 	@Override
 	public List<Student> getAllStudentdisabled() {
-		return em.createQuery("SELECT s from Student s  where s.isDisabled=:isDisabled").setParameter("isDisabled", true).getResultList();
+		return em.createQuery("SELECT s from Student s  where s.isAutorised=:isAutorised").setParameter("isAutorised", true).getResultList();
 		
 	}
 
 	@Override
 	public List<Student> getAllStudentNodisabled() {
-		return em.createQuery("SELECT s from Student s  where s.isDisabled=:isDisabled").setParameter("isDisabled", false).getResultList();
+		return em.createQuery("SELECT s from Student s  where s.isAutorised=:isAutorised").setParameter("isAutorised", false).getResultList();
 		
 	}
 	

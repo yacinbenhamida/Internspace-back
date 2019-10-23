@@ -49,7 +49,7 @@ public class StudentService {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("iscreated")
+	@Path("issaved")
 	public List<Student> getstudentCreated(){
 		 return Studentservice.getAllStudentCreated();
 	};
@@ -71,14 +71,14 @@ public class StudentService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("isdisabled")
+	@Path("isautorised")
 	public List<Student> getstudentDisabled(){
 		 return Studentservice.getAllStudentdisabled();
 	};
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("isnondisabled")
+	@Path("isnonautorised")
 	public List<Student> getstudentNonDisabled(){
 		 return Studentservice.getAllStudentNodisabled();
 	};

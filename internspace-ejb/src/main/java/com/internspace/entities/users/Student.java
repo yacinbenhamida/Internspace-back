@@ -39,6 +39,19 @@ public class Student extends User {
 	@JoinColumn(name = "internship_id")
 	Internship internship;
 
+	public Boolean getIsSaved() {
+		return isSaved;
+	}
+	public void setIsSaved(Boolean isSaved) {
+		this.isSaved = isSaved;
+	}
+	public Boolean getIsAutorised() {
+		return isAutorised;
+	}
+	public void setIsAutorised(Boolean isAutorised) {
+		this.isAutorised = isAutorised;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
@@ -53,7 +66,17 @@ public class Student extends User {
 	
 	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated ;
+
+	// l etudiant est enregistrée
+	@Column(name = "is_saved", columnDefinition = "boolean default false")
+	Boolean isSaved ;
 	
+	// l etudiant est autorisée a passer son PFE
+
+	@Column(name = "is_autorised ", columnDefinition = "boolean default false")
+	Boolean isAutorised ;
+	
+
 	// behs nshouf est ce qui letudiant ynajem y3adi pfe ou nn ( ynajem yconnecti fel platforme ou nn )
 	@Column(name = "is_disabled", columnDefinition = "boolean default false")
 	Boolean isDisabled ;
