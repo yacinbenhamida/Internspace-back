@@ -1,46 +1,43 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
-import java.util.Set;
-
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
 @Entity
-@Table(name="keyword")
+@Table(name = "keyword")
 public class FYPKeyword implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
 
 	/*
 	 * Attributes
 	 */
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="keyword_id")
+	@Column(name = "keyword_id")
 	long id;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	String name = "default";
-	
+
 	/*
 	 * Associations
 	 */
 
-	@ManyToMany
-	Set<FYPFile> fypFiles;
-	
+	@ManyToOne
+	FYPFile fypFile;
+
 	/*
 	 * Getters & Setters
 	 */
-	
+
 	public long getId() {
 		return id;
 	}
@@ -57,11 +54,4 @@ public class FYPKeyword implements Serializable {
 		this.name = name;
 	}
 
-	public Set<FYPFile> getFypFiles() {
-		return fypFiles;
-	}
-
-	public void setFypFiles(Set<FYPFile> fypFiles) {
-		this.fypFiles = fypFiles;
-	}
 }

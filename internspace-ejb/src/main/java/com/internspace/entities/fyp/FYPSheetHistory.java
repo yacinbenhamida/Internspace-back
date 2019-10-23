@@ -14,10 +14,10 @@ import javax.persistence.ManyToOne;
 
 @Entity(name = "fyp_sheet_history")
 public class FYPSheetHistory implements Serializable {
-	public enum TypeOfOperation{
-		majorOperation,
-		normalOperation
+	public enum TypeOfOperation {
+		majorOperation, normalOperation
 	}
+
 	/**
 	 * 
 	 */
@@ -25,11 +25,16 @@ public class FYPSheetHistory implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
 	Date editionDate;
+
 	@Enumerated(EnumType.STRING)
 	TypeOfOperation typeOfOperation;
-	int editedById;
+
+	int editedById; // Modifier might be a teacher, student...
+	int oldCompanyId;
 	int oldState;
+
 	String oldTitle;
 	String oldDescription;
 	String oldIssue;
@@ -37,12 +42,12 @@ public class FYPSheetHistory implements Serializable {
 	String oldMail;
 	String oldKeywords;
 	String oldSubject;
-	int oldCompanyId;
+
 	@ManyToOne
-	@JoinColumn(name="changed_file_id")
+	@JoinColumn(name = "changed_file_id")
 	FYPFile changedFile;
+
 	public FYPSheetHistory() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public long getId() {
@@ -60,7 +65,6 @@ public class FYPSheetHistory implements Serializable {
 	public void setEditionDate(Date editionDate) {
 		this.editionDate = editionDate;
 	}
-	
 
 	public TypeOfOperation getTypeOfOperation() {
 		return typeOfOperation;
@@ -101,7 +105,6 @@ public class FYPSheetHistory implements Serializable {
 	public void setOldDescription(String oldDescription) {
 		this.oldDescription = oldDescription;
 	}
-	
 
 	public String getOldIssue() {
 		return oldIssue;
@@ -158,6 +161,5 @@ public class FYPSheetHistory implements Serializable {
 	public void setOldCompanyId(int oldCompanyId) {
 		this.oldCompanyId = oldCompanyId;
 	}
-	
-	
+
 }

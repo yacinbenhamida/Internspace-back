@@ -27,7 +27,8 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 				+ "FYP_INTERVENTION i where i.teacher.id = :id AND i.internshipSheet.id = :idints")
 				.setParameter("id", idTeacher).setParameter("idints", idFYPS);
 		if(teacher != null && sheet != null && q.getResultList().isEmpty() && teacher.getDepartment() !=null) {
-			if(sheet.getInternship().getStudent().isHasSubmittedAReport()) {
+			//.getInternship().getStudent to .getStudent
+			if(sheet.getStudent().isHasSubmittedAReport()) {
 				FYPIntervention intervention = new FYPIntervention();
 				switch (role.toString()) {
 					case "juryPresident": intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForPresidents());break;
@@ -36,7 +37,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 					case "supervisor" : intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForSupervisors());break;
 				}
 					intervention.setAssignmentDate(LocalDate.now());
-					intervention.setInternshipSheet(sheet);
+					//intervention.setInternshipSheet(sheet);
 					intervention.setTeacher(teacher);
 					intervention.setTeacherRole(this.convertRole(role));
 					System.out.println(intervention);
@@ -87,7 +88,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		switch (role) {
 		case "juryPresident": return FYPIntervention.TeacherRole.juryPresident;
 		case "preValidator " : 	return FYPIntervention.TeacherRole.preValidator;
-		case "protractor" : return FYPIntervention.TeacherRole.protractor;
+		case "protractor" : return FYPIntervention.TeacherRole.reporter;
 		case "supervisor" : return FYPIntervention.TeacherRole.supervisor;
 		}
 		return null;

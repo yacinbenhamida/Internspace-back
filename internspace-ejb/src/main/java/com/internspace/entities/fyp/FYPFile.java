@@ -3,9 +3,8 @@ package com.internspace.entities.fyp;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-
 import com.internspace.entities.university.UniversitaryYear;
-
+import com.internspace.entities.users.Student;
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,79 +13,81 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
 /*
  * La fiche PFE (Titre, description, problématique, fonctionnalités, catégorie, mots clé, entreprise). 
- * Exemple de catégorie : .NET, nodeJS, devops, JavaEE. 
+ * Exemple de catégorie : .NET, NodeJS, DevOps, JavaEE. 
  * Une fiche PFE peut appartenir à plusieurs catégories. 
  */
 
 @Entity
-@Table(name="fyp_file")
+@Table(name = "fyp_file")
 public class FYPFile implements Serializable {
 
 	public enum FYPFileStatus {
-		pending,			// Still waiting for InternshipDirector to confirm/decline.
-		confirmed,			// InternshipDirector confirmed this.
-		declined			// InternshipDirector declined this.
+		pending, // Still waiting for InternshipDirector to confirm/decline creation.
+		confirmed, // InternshipDirector confirmed this.
+		declined // InternshipDirector declined this.
 	}
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="fyp_file_id")
+	@Column(name = "fyp_file_id")
 	long id;
-	
+
 	String title;
 	String description;
 	String problematic;
+
 	@ManyToOne
 	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
+
 	@Enumerated(EnumType.STRING)
-	@Column(name="status")
+	@Column(name = "status")
 	FYPFileStatus fileStatus;
-	
-	@Column(name="canceled" ,columnDefinition = "boolean default false")
-	Boolean isCanceled;
-	
-	@Column(name="final_mark", columnDefinition="default 0")
+
+	@Column(name = "final_mark")
 	int finalMark;
-	
-	@Column(name="isArchived" ,columnDefinition = "boolean default false")
+
+	// True = Student wants to cancel.
+	@Column(name = "canceled", columnDefinition = "boolean default false")
+	Boolean isCanceled;
+
+	// True = InternshipDirector accepted the cancel request.
+	@Column(name = "isArchived", columnDefinition = "boolean default false")
 	Boolean isArchived;
-	
+
 	/*
 	 * Associations
 	 */
 
-
-	@ManyToMany(mappedBy = "fypFiles")
-	Set<FYPFeature> features;
-	
-	@ManyToMany(mappedBy = "fypFiles")
-	Set<FYPKeyword> keywords;
-
 	@OneToOne(mappedBy = "fypFile")
-	Internship internship;
-	
-	@OneToMany(mappedBy="internshipSheet")
+	Student student;
+
+	@OneToMany(mappedBy = "fypFile")
+	Set<FYPFeature> features;
+
+	@OneToMany(mappedBy = "fypFile")
 	List<FYPIntervention> interventions;
-	
+
+	@OneToMany(mappedBy = "fypFile")
+	Set<FYPKeyword> keywords; // Useful for NLP
+
 	@ManyToMany(mappedBy = "fypFiles")
 	Set<FYPCategory> categories;
-	
-	
+
 	/*
 	 * Getters & Setters
 	 */
@@ -122,8 +123,6 @@ public class FYPFile implements Serializable {
 	public void setProblematic(String problematic) {
 		this.problematic = problematic;
 	}
-
-
 
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
@@ -161,31 +160,15 @@ public class FYPFile implements Serializable {
 		this.isArchived = isArchived;
 	}
 
-	/*public Set<FYPFeature> getFeatures() {
-		return features;
-	}*/
-
 	public void setFeatures(Set<FYPFeature> features) {
 		this.features = features;
 	}
-
-	/*public Set<FYPKeyword> getKeywords() {
-		return keywords;
-	}*/
 
 	public void setKeywords(Set<FYPKeyword> keywords) {
 		this.keywords = keywords;
 	}
 
-	public Internship getInternship() {
-		return internship;
-	}
-
-	public void setInternship(Internship internship) {
-		this.internship = internship;
-	}
-
-	/*public List<FYPIntervention> getInterventions() {
+	public List<FYPIntervention> getInterventions() {
 		return interventions;
 	}
 
@@ -203,14 +186,22 @@ public class FYPFile implements Serializable {
 
 	public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
-	}*/
- 
-	
-	//*************
-	
-	
-	
-	
-	
-	
+	}
+
+	public Set<FYPFeature> getFeatures() {
+		return features;
+	}
+
+	public Set<FYPKeyword> getKeywords() {
+		return keywords;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
 }

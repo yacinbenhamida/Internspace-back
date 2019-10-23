@@ -32,13 +32,16 @@ public class FYPInterventionService {
 	@Path("ranked")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTeachersByNumberOfSupervisions() {
+		
 		if(service.getAllTeachersRankedByNumberOfSupervisions() != null ) return Response.status(Response.Status.OK).entity(service.getAllTeachersRankedByNumberOfSupervisions()).build();
+		
 		return Response.status(Response.Status.NOT_FOUND).entity("norecords").build();
 	}
 	@GET
 	@Path("assign/{idt}/{idfile}/{role}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response assignTeacherToFYPSheetWithRole(@PathParam("idt")long idTeacher,@PathParam("idfile")long idFYPS,@PathParam("role")String role) {
+		System.out.println(service == null );
 		FYPIntervention intervention = service.assignTeacherToFYPSheetWithRole(idTeacher, idFYPS, role);
 		if(intervention!=null) {
 			return Response.status(Response.Status.OK).entity(intervention).build(); 
