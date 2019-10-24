@@ -14,6 +14,7 @@ import javax.ws.rs.GET;
 
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
@@ -121,7 +122,7 @@ public class DashboardService {
 	@Path("/internship/category")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getInternshipsByCategory(@QueryParam("uni") long uniId, @QueryParam("category") long categoryId) {
-		List<Internship> out = service.getInternshipsByCategory(uniId, categoryId);
+		List<FYPSubject> out = service.getInternshipsByCategory(uniId, categoryId);
 
 		return Response.ok(out).status(200).header("Access-Control-Allow-Origin", "*")
 				// .header("Access-Control-Allow-Headers", "origin, content-type, accept,
