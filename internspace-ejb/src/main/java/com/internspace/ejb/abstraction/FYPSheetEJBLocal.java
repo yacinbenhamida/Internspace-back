@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ejb.Local;
 
+import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 //rchm
 @Local
@@ -25,6 +26,9 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getAllSheetsWithNoMarks();
 	public List<FYPFile> getFYPSheetsWithNoSupervisors();
 	public List<FYPFile> getAllSheets();
+	
+	public void saisirFYPFile(FYPFile file,FYPFeature fyp);
+	public  List<FYPFile> getAll();
 	
 	
 }

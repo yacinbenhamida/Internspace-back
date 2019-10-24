@@ -83,7 +83,7 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("mail")
-	public void sendMail(@QueryParam(value = "text") String text,@QueryParam(value = "cin") String cin){
+	public void sendMaill(@QueryParam(value = "text") String text,@QueryParam(value = "cin") String cin){
 		Studentservice.sendMail(text,cin);
 	};
 
