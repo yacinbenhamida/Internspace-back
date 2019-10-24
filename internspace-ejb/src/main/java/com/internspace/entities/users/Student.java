@@ -31,7 +31,12 @@ public class Student extends User {
 	// paper report to the administration
 	@Column(name = "has_submitted_a_report")
 	boolean hasSubmittedAReport;
+	
 
+	@Column(name="cin")
+	String cin;
+
+	
 	/*
 	 * Associations
 	 */
@@ -114,10 +119,26 @@ public class Student extends User {
 		this.isAutorised = isAutorised;
 	}
 
+
+	
+	
+	
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 
+	public Date getBirthDate() {
+		return birthDate;
+	}
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+	public StudyClass getStudyClass() {
+		return studyClass;
+	}
+	public void setStudyClass(StudyClass studyClass) {
+		this.studyClass = studyClass;
+	}
 	public Boolean getIsCreated() {
 		return isCreated;
 	}
@@ -163,4 +184,17 @@ public class Student extends User {
 		this.isDisabled = isDisabled;
 	}
 
+	public String getCin() {
+		return cin;
+	}
+
+	public void setCin(String cin) {
+		this.cin = cin;
+	}
+	
+	
+	
 }
+	
+	
+

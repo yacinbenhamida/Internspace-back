@@ -55,4 +55,13 @@ public class FYPFeature implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
+
+	public FYPFile getFypFile() {
+		return fypFile;
+	}
+
+	public void setFypFile(FYPFile fypFile) {
+		this.fypFile = fypFile;
+	}
+	
 }

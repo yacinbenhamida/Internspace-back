@@ -24,6 +24,7 @@ import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.Internship;
+import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.users.Company;
@@ -39,6 +40,13 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	public List<Student> getLateStudentsList(int year) {
 		//return em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.classYear =:year AND s.isCreated =false").setParameter("year", year).getResultList();
 		List<StudyClass> ls = em.createQuery("FROM StudyClass").getResultList();
+		String sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
+				+ " WHERE Y.startDate = :year"
+				+ " AND S.isCreated = :mybool"
+				;
+		return em.createQuery(sql, Student.class)
+		.setParameter("year", year).setParameter("mybool", false).getResultList();
+		/*
 		List<StudyClass> FiltredLs = new ArrayList<StudyClass>();
 		List<Student> l = new ArrayList<Student>();
 		List<Student> rs = new ArrayList<Student>();
@@ -46,12 +54,12 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			 if(ls.get(i).getUniversitaryYear().getStartDate()==year)
 				 FiltredLs.add(ls.get(i));
 		 }
-		 //FiltredLs.forEach(x->l.addAll(x.getStudents()));
+		 FiltredLs.forEach(x->l.addAll(x.getStudents()));
 		 for(int i=0;i<l.size();i++) {
 			if(l.get(i).getIsCreated()==false)
 				 rs.add(l.get(i))	 ;
-		 }
-		 return rs;
+		 }*/
+		 //return rs;
 	}
 
 	
@@ -248,10 +256,17 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public FYPFile FilterWaitingForDefensePlanningList(long id) {
+	public FYPFile FilterWaitingForDefensePlanningList(String cin, String nom) {
 		List<FYPFile> xx = WaitingForDefensePlanningList();
-		List<Long> ls = em.createQuery("SELECT s.internship.fypFile.id FROM " + Student.class.getName() + " s"
-				+ " WHERE s.id =:id ").setParameter("id", id).getResultList();
+		List<Long> ls;
+		
+		if(nom==null)
+		ls = em.createQuery("SELECT s.internship.fypFile.id FROM " + Student.class.getName() + " s"
+				+ " WHERE s.cin =:cin ").setParameter("cin", cin).getResultList();
+		else
+			ls = em.createQuery("SELECT s.internship.fypFile.id FROM " + Student.class.getName() + " s"
+					+ " WHERE s.firstName =:name ").setParameter("name", nom).getResultList();
+		
 		if(ls.isEmpty()) {
 			return null;
 		}
@@ -264,6 +279,53 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		}
 		
 		return null;
+	}
+
+
+	@Override
+	public void FixActionNumberAsSupervisor(int nb,int id) {
+		Departement d =em.find(Departement.class, id);
+		d.setNumberOfActionsAllowedForSupervisors(nb);
+		
+	}
+
+
+	@Override
+	public void FixActionNumberAsProtractor(int nb, int id) {
+		// TODO Auto-generated method stub
+		Departement d =em.find(Departement.class, id);
+		d.setNumberOfActionsAllowedForProtractors(nb);
+	}
+
+
+	@Override
+	public void FixActionNumberAsPreValidator(int nb, int id) {
+		// TODO Auto-generated method stub
+		Departement d =em.find(Departement.class, id);
+		d.setNumberOfActionsAllowedForPreValidators(nb);
+	}
+
+
+	@Override
+	public void FixActionNumberAsJuryPresident(int nb, int id) {
+		// TODO Auto-generated method stub
+		Departement d =em.find(Departement.class, id);
+		d.setNumberOfActionsAllowedForPresidents(nb);
+	}
+
+
+	@Override
+	public void acceptPFE(long id) {
+		Student s= em.find(Student.class, id);
+		if (s.getIsSaved()==true) {
+		s.setIsAutorised(true);
+		em.persist(s);
+		em.flush();}
+		else
+		{
+			System.out.println("this student is not created");
+		}
+		
 	}
 
 
