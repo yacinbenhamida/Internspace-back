@@ -87,10 +87,9 @@ public class StudyClass implements Serializable {
 		this.classYear = classYear;
 	}
 
-	public UniversitaryYear getUniversitaryYear() {
+	/*public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
-	}
-
+	}*/
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
 	}
