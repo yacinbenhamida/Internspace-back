@@ -3,10 +3,12 @@ package com.internspace.ejb;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
 import com.internspace.entities.fyp.FYPFile;
@@ -63,7 +65,8 @@ public class StudentEJB implements StudentEJBLocal{
 		String subject = "Voici c votre mot de passe " ;
 		String subject1 = "Vous êtes pas autorisé a paser le PFE " ;
 		
-		MailerStudent mail = new MailerStudent();
+		
+		Mail_API mail = new Mail_API();
 		List<Student> ls = getAllStudentdisabled();
 		List<Student> ls1 = getAllStudentNodisabled();
 		List<Student> ls2 = getAllStudentSaved();
@@ -74,15 +77,27 @@ public class StudentEJB implements StudentEJBLocal{
 		for(int i=0;i<ls.size();i++) {
 			if(ls.get(i).getCin().equals(cin)) {
 				ls3.add(ls.get(i));
-				ls3.forEach(x->mail.send(x.getEmail(),text,subject));
+				//ls3.forEach(x->mail.send(x.getEmail(),text,subject));
+				try {
+					mail.sendMail("rayane.limem@gmail.com", text, subject1);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
-		for(int i=0;i<ls1.size();i++) {
+		/*for(int i=0;i<ls1.size();i++) {
 			if(ls1.get(i).getCin().equals(cin)) {
 				ls4.add(ls1.get(i));
-				ls4.forEach(x->mail.send(x.getEmail(),text,subject1));
-			}
+				try {
+					mail.sendMail(ls1.get(i).getEmail(), text, subject1);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//ls4.forEach(x->mail.send(x.getEmail(),text,subject1));
+			}*/
 		}
 		
 		
@@ -90,7 +105,7 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		//ls1.forEach(x->mail.send(x.getEmail(),text,subject1));
 		
-	}
+	
 
 	@Override
 	public List<Student> getAllStudentCIN() {

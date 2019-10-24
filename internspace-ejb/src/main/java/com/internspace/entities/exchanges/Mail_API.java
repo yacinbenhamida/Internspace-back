@@ -5,18 +5,16 @@ import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class MailerStudent {
+public class Mail_API {
 	public static void sendMail(String to,String subject,String message) throws MessagingException
     {
         String host="smtp.gmail.com";
-        final String user="rayane.limem@gmail.com";//change accordingly
-        final String password="rayanerayouna1996";//change accordingly
+        final String user="rayene.limem@esprit.tn";//change accordingly
+        final String password="183JFT3203";//change accordingly
 
 
         //Get the session object
@@ -48,4 +46,5 @@ public class MailerStudent {
 
 
     }
+
 }
