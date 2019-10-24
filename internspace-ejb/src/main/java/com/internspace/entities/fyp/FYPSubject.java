@@ -41,10 +41,10 @@ public class FYPSubject implements Serializable {
 	@Column(name="content", length = 65535, columnDefinition = "text")
 	String content;
 	
-	@Column(name="max_applicants")
+	@Column(name="max_applicants", columnDefinition = "int default 1")
 	int maxApplicants;
 	
-	@Column(name="curr_applicants_count")
+	@Column(name="curr_applicants_count", columnDefinition = "int default 1")
 	int curApplicantsCount;
 	
 	/*
@@ -52,7 +52,6 @@ public class FYPSubject implements Serializable {
 	 */
 	
 	@OneToOne
-	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
 	@ManyToOne

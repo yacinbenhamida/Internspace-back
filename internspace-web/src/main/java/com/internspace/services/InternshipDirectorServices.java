@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
+import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FileTemplate;
@@ -28,6 +29,8 @@ public class InternshipDirectorServices {
 	
 	@Inject
 	InternshipDirectorEJBLocal service;
+	@Inject
+	StudentEJBLocal Studentservice;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -191,5 +194,12 @@ public class InternshipDirectorServices {
 	@Path("FixActionNumberAsJuryPresident")
 	public void FixActionNumberAsJuryPresident( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") int id){
 		service.FixActionNumberAsJuryPresident(nb, id);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptPFE")
+	public void acceptPFE(@QueryParam(value = "id") long id){
+		service.acceptPFE(id);
 	};
 }

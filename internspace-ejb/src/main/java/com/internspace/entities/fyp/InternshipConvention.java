@@ -90,4 +90,20 @@ public class InternshipConvention implements Serializable {
 		this.company = company;
 	}
 
+	public String getCompanySupervisorEmail() {
+		return companySupervisorEmail;
+	}
+
+	public void setCompanySupervisorEmail(String companySupervisorEmail) {
+		this.companySupervisorEmail = companySupervisorEmail;
+	}
+
+	public InternshipConvention getInternshipConvention() {
+		return internshipConvention;
+	}
+
+	public void setInternshipConvention(InternshipConvention internshipConvention) {
+		this.internshipConvention = internshipConvention;
+	}
+
 }

@@ -51,7 +51,7 @@ public class StudentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("issaved")
 	public List<Student> getstudentCreated(){
-		 return Studentservice.getAllStudentCreated();
+		 return Studentservice.getAllStudentSaved();
 	};
 
 
@@ -59,16 +59,11 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("login")
-	public void login(@QueryParam(value = "cin") int cin){
+	public void login(@QueryParam(value = "cin") String cin){
 		Studentservice.login(cin);
 	};
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("acceptPFE")
-	public void acceptPFE(@QueryParam(value = "id") long id){
-		Studentservice.acceptPFE(id);
-	};
+	
 	
 
 	@GET
@@ -88,8 +83,8 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("mail")
-	public void sendMail(@QueryParam(value = "text") String text){
-		Studentservice.sendMail(text);
+	public void sendMail(@QueryParam(value = "text") String text,@QueryParam(value = "cin") String cin){
+		Studentservice.sendMail(text,cin);
 	};
 
 	
@@ -99,4 +94,8 @@ public class StudentService {
 	public List<Student> getstudentCin(){
 		 return Studentservice.getAllStudentCIN();
 	};
+	
+	
+	
+	
 }

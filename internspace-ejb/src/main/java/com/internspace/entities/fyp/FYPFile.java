@@ -66,7 +66,7 @@ public class FYPFile implements Serializable {
 	Boolean isCanceled;
 
 	// True = InternshipDirector accepted the cancel request.
-	@Column(name = "isArchived", columnDefinition = "boolean default false")
+	@Column(name = "is_archived", columnDefinition = "boolean default false")
 	Boolean isArchived;
 
 	/*
@@ -76,6 +76,10 @@ public class FYPFile implements Serializable {
 	@OneToOne(mappedBy = "fypFile")
 	Student student;
 
+	@OneToOne
+	@JoinColumn(name = "subject")
+	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
+	
 	@OneToMany(mappedBy = "fypFile")
 	Set<FYPFeature> features;
 

@@ -299,6 +299,25 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForPresidents(nb);
 	}
+
+
+
+	@Override
+	public void acceptPFE(long id) {
+		Student s= em.find(Student.class, id);
+		if (s.getIsSaved()==true) {
+		s.setIsAutorised(true);
+		em.persist(s);
+		em.flush();}
+		else
+		{
+			System.out.println("this student is not created");
+		}
+		
+	}
+
+
+	
 	
 	
 	
