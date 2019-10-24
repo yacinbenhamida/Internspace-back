@@ -118,9 +118,6 @@ public class Student extends User {
 	public void setIsAutorised(Boolean isAutorised) {
 		this.isAutorised = isAutorised;
 	}
-
-
-	
 	
 	
 	public void setHasSubmittedAreport(boolean hasSubmittedAreport) {

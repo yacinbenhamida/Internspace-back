@@ -9,11 +9,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.Notification;
@@ -22,6 +25,7 @@ import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileArchive;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.Departement;
@@ -35,6 +39,9 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	
 	@PersistenceContext
 	EntityManager em;
+	
+	@Inject
+	FYPFileArchiveEJBLocal serviceArchive;
 
 	@Override
 	public List<Student> getLateStudentsList(int year) {
@@ -42,24 +49,9 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		List<StudyClass> ls = em.createQuery("FROM StudyClass").getResultList();
 		String sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
 				+ " WHERE Y.startDate = :year"
-				+ " AND S.isCreated = :mybool"
-				;
+				+ " AND S.isCreated = :mybool";
 		return em.createQuery(sql, Student.class)
 		.setParameter("year", year).setParameter("mybool", false).getResultList();
-		/*
-		List<StudyClass> FiltredLs = new ArrayList<StudyClass>();
-		List<Student> l = new ArrayList<Student>();
-		List<Student> rs = new ArrayList<Student>();
-		 for(int i=0;i<ls.size();i++) {
-			 if(ls.get(i).getUniversitaryYear().getStartDate()==year)
-				 FiltredLs.add(ls.get(i));
-		 }
-		 FiltredLs.forEach(x->l.addAll(x.getStudents()));
-		 for(int i=0;i<l.size();i++) {
-			if(l.get(i).getIsCreated()==false)
-				 rs.add(l.get(i))	 ;
-		 }*/
-		 //return rs;
 	}
 
 	
@@ -93,18 +85,18 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	
 	@Override
 	public List<FYPFile> getFYPFileListByCountry(String location) {
-		/*
-		List<Internship> li = new ArrayList();
+		
+		List<FYPSubject> li = new ArrayList();
 		List<FYPFile> lf = new ArrayList();
 		List<Company> lc = em.createQuery("FROM " + Company.class.getName()  + " c WHERE c.country =:location").setParameter("location", location).getResultList();
 		ListIterator<Company> it = lc.listIterator();
 		while(it.hasNext()){  
-			li.addAll(em.createQuery("FROM " + Internship.class.getName()  + " c WHERE c.company =:company").setParameter("company", it.next()).getResultList());
+			li.addAll(em.createQuery("FROM " + FYPSubject.class.getName()  + " c WHERE c.company =:company").setParameter("company", it.next()).getResultList());
 	      }
 		 li.forEach(x->lf.add(x.getFypFile()));
 		 return lf;
-		*/
-		return null;
+		
+	
 	}
 
 	@Override
@@ -165,43 +157,39 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		String subject = "Refus d'une fiche PFE" ;
 		FYPFile f = em.find(FYPFile.class, id);
 		f.setFileStatus(FYPFileStatus.declined);
-		Internship i = (Internship)em.createQuery("FROM " + Internship.class.getName()  + " i WHERE i.fypFile =:file").setParameter("file", f).getSingleResult();
+		Student i = f.getStudent();
 		Notification n = new Notification();
-		//n.setStudent(i.getStudent());
+		n.setStudent(i);
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
 		em.persist(n);
 		em.flush(); 
 		Mailer mail = new Mailer();
-		List<Student> ls =em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.internship =:intern").setParameter("intern", i).getResultList();
-		mail.send(ls.get(1).getEmail(),text,subject);
+		//List<Student> ls =em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.internship =:intern").setParameter("intern", i).getResultList();
+		mail.send(i.getEmail(),text,subject);
 	}
 
 	@Override
 	public void acceptCancelingDemand(long id) {
 		FYPFile f = em.find(FYPFile.class, id);
-		FYPFileArchive Farchive = new FYPFileArchive() ;
 		f.setIsArchived(true);
-		Farchive.setFypFile(f);
-		Farchive.setArchiveDate(new Date());
 		em.persist(f);
-		em.persist(Farchive);
+		serviceArchive.addFileToArchive(f);
 		em.flush();
 		
 	}
 
 	@Override
 	public void declineCancelingDemand(long id , String text) {
-		/*
+		
 		FYPFile f = em.find(FYPFile.class, id);
 		String subject = "refus l’annulation d’un stage PFE" ;
 		f.setIsCanceled(false);
 		Mailer mail = new Mailer();
-		Internship i = (Internship)em.createQuery("FROM " + Internship.class.getName()  + " i WHERE i.fypFile =:file").setParameter("file", f).getSingleResult();
-		mail.send(i.getStudent().getEmail(),text,subject);
+		mail.send(f.getStudent().getEmail(),text,subject);
 		em.persist(f);
 		em.flush();
-		*/
+		
 	}
 
 	@Override
@@ -262,10 +250,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		List<Long> ls;
 		
 		if(nom==null)
-		ls = em.createQuery("SELECT s.internship.fypFile.id FROM " + Student.class.getName() + " s"
+		ls = em.createQuery("SELECT s.fypFile.id FROM " + Student.class.getName() + " s"
 				+ " WHERE s.cin =:cin ").setParameter("cin", cin).getResultList();
 		else
-			ls = em.createQuery("SELECT s.internship.fypFile.id FROM " + Student.class.getName() + " s"
+			ls = em.createQuery("SELECT s.fypFile.id FROM " + Student.class.getName() + " s"
 					+ " WHERE s.firstName =:name ").setParameter("name", nom).getResultList();
 		
 		if(ls.isEmpty()) {
@@ -315,6 +303,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 
+
 	@Override
 	public void acceptPFE(long id) {
 		Student s= em.find(Student.class, id);
@@ -330,31 +319,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 
-	/*List<FYPFile> ls = getAllFYPFileList();
-		List<FYPFile> rs = new ArrayList<FYPFile>();
-		TeacherRole protractor = TeacherRole.protractor;
-		TeacherRole  supervisor = TeacherRole.supervisor;
-		int noteP=0;
-		int noteSup=0;*/
 	
-	/*for(int i=0; i<ls.size();i++) {
-	List<FYPIntervention> interLS= ls.get(i).getInterventions();
-	for(int j=0; j<interLS.size();j++) {
-		
-		if(interLS.get(j).getTeacherRole()== protractor)
-		{
-			noteP = interLS.get(j).getGivenMark();
-		}
-		if(interLS.get(j).getTeacherRole()== supervisor)
-		{
-			noteSup = interLS.get(j).getGivenMark();
-		}
-		
-	}
-	if(noteSup > 0 && noteP > 0)
-		rs.add(ls.get(i));
-		
-}*/
 	
 	
 	

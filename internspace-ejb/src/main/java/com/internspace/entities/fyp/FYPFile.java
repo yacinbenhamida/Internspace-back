@@ -173,7 +173,6 @@ public class FYPFile implements Serializable {
 	}
 
 
-
 	public void setInterventions(List<FYPIntervention> interventions) {
 		this.interventions = interventions;
 	}
@@ -183,10 +182,9 @@ public class FYPFile implements Serializable {
 		this.categories = categories;
 	}
 
-	public UniversitaryYear getUniversitaryYear() {
+	/*public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
-	}
-
+	}*/
 
 
 	public Student getStudent() {

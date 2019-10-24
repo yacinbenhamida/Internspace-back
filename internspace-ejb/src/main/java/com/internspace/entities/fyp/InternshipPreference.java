@@ -15,7 +15,7 @@ import com.internspace.entities.users.Employee;
 
 @Entity
 @Table(name = "internship_preference")
-public class InternShipPreference implements Serializable {
+public class InternshipPreference implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/*
