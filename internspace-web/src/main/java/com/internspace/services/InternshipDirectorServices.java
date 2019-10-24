@@ -107,8 +107,8 @@ public class InternshipDirectorServices {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("annulledFYPFileList")
-	public  List<FYPFile> annulledFYPFileList(){
+	@Path("FYPFileAnnulationDemandeList")
+	public  List<FYPFile> FYPFileAnnulationDemandeList(){
 		return service.listCancelingDemand();
 	};
 	
