@@ -236,9 +236,11 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public List<FYPFile> WaitingForDefensePlanningList() {
-		return em.createQuery("SELECT f from FYPFile f where f.finalMark = 0 group by f.id"
-				+ " HAVING (SELECT COUNT(i.id) FROM fyp_intervention i where i.fypFile.id = f.id AND i.givenMark != 0 )=2").getResultList();
 		
+		// shouf m3a yassin el faza !!!! MAHMOUD
+		 return em.createQuery("SELECT f from FYPFile f where (f.finalMark = 0 OR f.finalMark = NULL) group by f.id"
+				+ " HAVING (SELECT COUNT(i.id) FROM fyp_intervention"
+				+ "  i where i.fypFile.id = f.id AND (i.givenMark != NULL OR i.givenMark = 0) )=2").getResultList();
 	}
 
 

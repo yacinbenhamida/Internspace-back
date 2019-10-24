@@ -87,6 +87,7 @@ public class StudyClass implements Serializable {
 		this.classYear = classYear;
 	}
 
+
 	/*public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
 	}*/
@@ -103,6 +104,7 @@ public class StudyClass implements Serializable {
 		this.students = students;
 	}
 */
+
 	public Departement getDepartement() {
 		return departement;
 	}
