@@ -22,7 +22,7 @@ public class FYPFileEJB implements FYPFileEJBLocal{
 
 	@Override
 	public List<FYPFile> getAll() {
-		return em.createQuery("SELECT f from FYPFile f").getResultList();
+		return em.createQuery("SELECT id from FYPFile f ").getResultList();
 	}
 
 }

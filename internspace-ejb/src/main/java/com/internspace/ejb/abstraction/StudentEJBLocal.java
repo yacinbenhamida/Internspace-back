@@ -16,7 +16,7 @@ public interface StudentEJBLocal {
 	public  List<Student> getAllStudentSaved();
 	
 	public void login(String cin);
-	void acceptPFE(long id);
+	
 	public  List<Student> getAllStudentdisabled();
 	public  List<Student> getAllStudentNodisabled();
 	public  List<Student> getAllStudentCIN();

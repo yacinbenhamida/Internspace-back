@@ -200,6 +200,6 @@ public class InternshipDirectorServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("acceptPFE")
 	public void acceptPFE(@QueryParam(value = "id") long id){
-		Studentservice.acceptPFE(id);
+		service.acceptPFE(id);
 	};
 }

@@ -63,12 +63,7 @@ public class StudentService {
 		Studentservice.login(cin);
 	};
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("acceptPFE")
-	public void acceptPFE(@QueryParam(value = "id") long id){
-		Studentservice.acceptPFE(id);
-	};
+	
 	
 
 	@GET
