@@ -79,8 +79,43 @@ public class FileTemplateElement implements Serializable {
 	}
 
 	/*
+	 * Useful for updating template elements
+	 */
+	public FileTemplateElement(long id, float x_coord, float y_coord, float height, float weight) {
+		super();
+		this.id = id;
+		this.x_coord = x_coord;
+		this.y_coord = y_coord;
+		this.height = height;
+		this.weight = weight;
+	}
+
+	/*
+	 * Helpers
+	 */
+
+	public void resolveSettings(FileTemplateElement elementToCopy) {
+		this.x_coord = elementToCopy.x_coord;
+		this.y_coord = elementToCopy.y_coord;
+		this.height = elementToCopy.height;
+		this.weight = elementToCopy.weight;
+	}
+
+	/*
 	 * Getters & Setters
 	 */
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setFileTemplate(FileTemplate fileTemplate) {
+		this.fileTemplate = fileTemplate;
+	}
 
 	public String getSectionName() {
 		return sectionName;
