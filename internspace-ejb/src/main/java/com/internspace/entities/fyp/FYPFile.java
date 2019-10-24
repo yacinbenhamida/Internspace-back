@@ -168,33 +168,33 @@ public class FYPFile implements Serializable {
 		this.keywords = keywords;
 	}
 
-	public List<FYPIntervention> getInterventions() {
+	/*public List<FYPIntervention> getInterventions() {
 		return interventions;
-	}
+	}*/
 
 	public void setInterventions(List<FYPIntervention> interventions) {
 		this.interventions = interventions;
 	}
 
-	public Set<FYPCategory> getCategories() {
+	/*public Set<FYPCategory> getCategories() {
 		return categories;
-	}
+	}*/
 
 	public void setCategories(Set<FYPCategory> categories) {
 		this.categories = categories;
 	}
 
-	public UniversitaryYear getUniversitaryYear() {
+	/*public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
-	}
+	}*/
 
-	public Set<FYPFeature> getFeatures() {
+	/*public Set<FYPFeature> getFeatures() {
 		return features;
-	}
+	}*/
 
-	public Set<FYPKeyword> getKeywords() {
+	/*public Set<FYPKeyword> getKeywords() {
 		return keywords;
-	}
+	}*/
 
 	public Student getStudent() {
 		return student;

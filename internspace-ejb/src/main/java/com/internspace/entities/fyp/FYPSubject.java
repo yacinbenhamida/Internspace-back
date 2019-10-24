@@ -99,4 +99,13 @@ public class FYPSubject implements Serializable {
 		this.content = content;
 	}
 
+	public FYPFile getFypFile() {
+		return fypFile;
+	}
+
+	public void setFypFile(FYPFile fypFile) {
+		this.fypFile = fypFile;
+	}
+
+	
 }
