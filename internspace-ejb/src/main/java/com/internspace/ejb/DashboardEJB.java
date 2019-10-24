@@ -222,7 +222,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 			return null;
 		
 		String queryStr = "FROM " + Student.class.getName() + " s"
-				+ " JOIN FETCH s.internship INS"
+				//+ " JOIN FETCH s.internship INS"
 				+ " WHERE"
 				+ " s.studyClass.classYear = :studyClassYear"
 				+ " AND s.studyClass.departement.site.university.id = :uniId"
@@ -242,9 +242,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 		
 		// Apply filtering?
 		if (onlyAbroad )
-			queryStr = queryStr + " AND s.internship.company.country " + onlyAbroad_OP + " :location";
+			queryStr = queryStr + " AND s.fypFile.subject.company.country " + onlyAbroad_OP + " :location";
 		else if(location != null) // Specific Internship's Subject Location?
-			queryStr = queryStr + " AND s.internship.company.country " + onlyLocation_OP + " :location";
+			queryStr = queryStr + " AND s.fypFile.subject.company.country " + onlyLocation_OP + " :location";
 		
 		List<Student> students;
 		TypedQuery<Student> query = em.createQuery(queryStr, Student.class)
