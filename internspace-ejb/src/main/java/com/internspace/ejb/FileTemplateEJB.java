@@ -53,8 +53,10 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	@Override
 	public List<FileTemplate> getAllTemplates() {
 		System.out.println("Finding all FYP Templates...");
-		List<FileTemplate> fypTemplates = em.createQuery("from " + FileTemplate.class.getName() + " T"
-				+ " JOIN FETCH T.templateElements", FileTemplate.class).getResultList();
+		List<FileTemplate> fypTemplates = em.createQuery("SELECT distinct T from " + FileTemplate.class.getName() + " T"
+				+ " JOIN FETCH T.templateElements TE"
+				, FileTemplate.class)
+				.getResultList();
 		return fypTemplates;
 	}
 }

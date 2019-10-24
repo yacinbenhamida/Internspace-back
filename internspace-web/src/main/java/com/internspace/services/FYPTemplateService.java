@@ -63,19 +63,6 @@ public class FYPTemplateService {
 	public Response getAll() {
 		List<FileTemplate> fypTemplates = service.getAllTemplates();
         if (!fypTemplates.isEmpty()) {
-        	// TODO: UGLY, have to secure this...
-        	
-        	/*
-        	for(FileTemplate template : fypTemplates)
-        	{
-        		for(FileTemplateElement element: template.getFyptElements())
-        		{
-        			// For cases where we create a template and select it right away...
-        			element.setFypTemplate(null);			
-        		}       			
-        	}
-        	*/
-        	
             return Response.ok(fypTemplates).status(200)
                     .header("Access-Control-Allow-Origin", "*")
                     //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
