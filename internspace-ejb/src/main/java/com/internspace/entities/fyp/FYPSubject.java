@@ -51,7 +51,7 @@ public class FYPSubject implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToOne
+	@OneToOne(mappedBy = "subject")
 	FYPFile fypFile; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
 	@ManyToOne

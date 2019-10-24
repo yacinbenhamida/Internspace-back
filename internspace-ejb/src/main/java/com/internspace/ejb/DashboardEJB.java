@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.university.University;
@@ -130,17 +131,21 @@ public class DashboardEJB implements DashboardEJBLocal {
 		System.out.println(distStudents.size());
 		System.out.println(uyStudents.size());
 		
-		return distStudents.size() / uyStudents.size();
+		float out = (float)distStudents.size() / uyStudents.size(); 
+		System.out.println("getStudentsDistributionByLocationAndUY");
+		System.out.println(out);
+		
+		return out;
 	}
 
 	@Override
 	public List<Company> getMostCompanyAcceptingInternsWithUniversity(long uniId, int n) {
 		
 		String queryStr = "SELECT C FROM " + Company.class.getName() + " C"
-				+ " JOIN FETCH C.internships INS"
-				+ " WHERE INS.student.studyClass.departement.site.university.id = :uniId"
-				//+ " WHERE size(C.internships) <> 0"
-				+ " ORDER BY size(C.internships) DESC"
+				+ " JOIN FETCH C.subjects SB"
+				+ " WHERE SB.fypFile.student.studyClass.departement.site.university.id = :uniId"
+				//+ " WHERE size(C.subjects) <> 0"
+				+ " ORDER BY size(C.subjects) DESC"
 				;
 
 		TypedQuery<Company> query = em.createQuery(queryStr, Company.class)
@@ -157,20 +162,21 @@ public class DashboardEJB implements DashboardEJBLocal {
 	}
 
 	@Override
-	public List<Internship> getInternshipsByCategory(long uniId, long categoryId) {
+	public List<FYPSubject> getInternshipsByCategory(long uniId, long categoryId) {
 		FYPCategory category = em.find(FYPCategory .class, Long.valueOf(categoryId));
-		String queryStr = "FROM " + Internship.class.getName() + " i"
+		
+		String queryStr = "FROM " + FYPSubject.class.getName() + " i"
 				//+ " JOIN FETCH i.student.studyClass.departement.site.university U"
 				+ " WHERE"
-				+ " i.student.studyClass.departement.site.university.id = :uniId"
-				+ " AND :category MEMBER OF i.subject.categories"
+				+ " i.fypFile.student.studyClass.departement.site.university.id = :uniId"
+				+ " AND :category MEMBER OF i.categories"
 				;
 		
-		TypedQuery<Internship> query = em.createQuery(queryStr, Internship.class)
+		TypedQuery<FYPSubject> query = em.createQuery(queryStr, FYPSubject.class)
 				.setParameter("category", category)
 				.setParameter("uniId", uniId)
 				;
-		List<Internship> out = query.getResultList();
+		List<FYPSubject> out = query.getResultList();
 		
 		System.out.println(uniId);
 		System.out.println(categoryId);
