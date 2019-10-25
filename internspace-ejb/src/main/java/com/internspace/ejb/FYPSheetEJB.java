@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
+import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 @Stateless
@@ -124,6 +125,22 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 			return  q.getResultList();
 		}
 		return null ;
+	}
+
+	@Override
+	public void saisirFYPFile(FYPFile file) {
+		System.out.println("Adding: " + file);
+		
+		service.persist(file);
+	
+		
+		
+		
+	}
+
+	@Override
+	public List<FYPFile> getAll() {
+		return service.createQuery("SELECT id from FYPFile f ").getResultList();
 	}
 
 }

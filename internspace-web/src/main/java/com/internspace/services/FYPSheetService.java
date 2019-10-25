@@ -12,8 +12,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
+import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 
 @Path("fypsheet")
@@ -118,5 +120,19 @@ public class FYPSheetService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheets() {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheets()).build();
+	}
+	
+	
+	
+	@POST
+	@Path("create")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response  addFile(FYPFile file) {
+		
+		fypSheetService.saisirFYPFile(file);
+		return Response.status(Status.OK).entity(file).build() ;
+		
+		
 	}
 }

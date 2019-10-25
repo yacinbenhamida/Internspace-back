@@ -1,5 +1,6 @@
 package com.internspace.entities.users;
 
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.fyp.InternshipConvention;
@@ -49,6 +50,9 @@ public class Company extends User {
 
 	@OneToMany(mappedBy = "company")
 	Set<InternshipConvention> internshipConventions;// = new HashSet<InternshipConvention>();
+	
+	@OneToMany(mappedBy = "cmp", fetch = FetchType.LAZY)
+	Set<FYPFile> fypFiles = new HashSet<>();
 
 	/*
 	 * Getters & Setters
