@@ -15,9 +15,10 @@ public interface FileTemplateEJBLocal {
 	 */
 	void createTemplate(FileTemplate template);
 	boolean updateTemplateEditor(FileTemplate template, Employee editor);
-	void removeTemplate(int id);
-	FileTemplate findTemplate(int id);
+	void removeTemplate(long id);
+	FileTemplate findTemplate(long id);
 	List<FileTemplate> findTemplatesByName(String name, int n, boolean useLike);
+	List<FileTemplate> findTemplateVersionsByName(String name);
 	List<FileTemplate> getAllTemplates();
 	
 	/*
