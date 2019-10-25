@@ -43,7 +43,7 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	}
 	
 	@Override
-	public void removeTemplate(int id)
+	public void removeTemplate(long id)
 	{
 		FileTemplate fileTemplate = findTemplate(id);
 		
@@ -53,7 +53,7 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	}
 	
 	@Override
-	public FileTemplate findTemplate(int id)
+	public FileTemplate findTemplate(long id)
 	{
 		return em.find(FileTemplate.class, id);
 	}
@@ -74,6 +74,22 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 		
 		return templates;
 		
+	}
+	
+	@Override
+	public List<FileTemplate> findTemplateVersionsByName(String name)
+	{	
+		String queryStr = "SELECT DISTINCT FT FROM " + FileTemplate.class.getName() + " FT"
+				+ " JOIN FETCH FT.templateElements FTE"
+				+ " WHERE lower(FT.templateName) LIKE '" + name.toLowerCase() + "%'";
+
+		List<FileTemplate> templates = em.createQuery(queryStr, FileTemplate.class)
+				//.setParameter("name", name)
+				.getResultList();
+		
+		templates.stream().forEach(e -> System.out.println(e.getTemplateName()));
+		
+		return templates;
 	}
 	
 	@Deprecated

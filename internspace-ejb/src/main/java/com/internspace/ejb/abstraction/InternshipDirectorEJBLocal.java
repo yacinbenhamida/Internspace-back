@@ -8,6 +8,7 @@ import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.university.StudyClass;
+import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
 @Local
@@ -39,7 +40,7 @@ public interface InternshipDirectorEJBLocal {
 	
 	//Le directeur des stages pourra rendre l’étudiant autorisé à passer son PFE.
 	void acceptPFE(long id);
-	
+	public Employee getInternshipDirectorById(long id);
 	
 	
 	

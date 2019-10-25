@@ -62,10 +62,11 @@ public class FileTemplate implements Serializable {
 		
 	}
 	
-	public FileTemplate (String templateName, boolean isFyp)
+	public FileTemplate (String templateName, boolean isFyp, Employee editor)
 	{	
 		this.templateName = templateName;
 		this.isFyp = isFyp;
+		this.editor = editor;
 		
 		EnumSet<ElementType> elemTypes = EnumSet.allOf(ElementType.class);
 		if (isFyp) // We're creating a final-year-project file template.
@@ -133,7 +134,10 @@ public class FileTemplate implements Serializable {
 		this.isFyp = isFyp;
 	}
 
-
+	public Employee getEditor() {
+		return this.editor;
+	}
+	
 	public void setEditor(Employee editor) {
 		this.editor = editor;
 	}

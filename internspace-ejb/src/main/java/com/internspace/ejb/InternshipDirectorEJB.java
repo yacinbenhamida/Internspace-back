@@ -32,6 +32,7 @@ import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.users.Company;
+import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
 @Stateless
@@ -319,7 +320,18 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 
-	
+	@Override
+	public Employee getInternshipDirectorById(long id)
+	{
+		Employee employee = em.find(Employee.class, id);
+		
+		if(employee != null && !employee.getRole().equals(Employee.Role.internshipsDirector))
+		{
+			return null;
+		}
+		
+		return employee;
+	}
 	
 	
 	
