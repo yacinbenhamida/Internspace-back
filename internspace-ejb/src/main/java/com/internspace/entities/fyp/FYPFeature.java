@@ -30,8 +30,8 @@ public class FYPFeature implements Serializable {
 	@Column(name = "feature_id")
 	long id;
 	
-	@OneToMany(mappedBy = "feat", fetch = FetchType.LAZY)
-	Set<FYPFile> fypFiles = new HashSet<>();
+	/*@OneToMany(mappedBy = "feat", fetch = FetchType.LAZY)
+	Set<FYPFile> fypFiles = new HashSet<>();*/
 
 	@Column(name = "content")
 	String content = "default";
@@ -40,9 +40,9 @@ public class FYPFeature implements Serializable {
 	 * Associations
 	 */
 
-	/*@ManyToOne
+	@ManyToOne
 	@JoinColumn(name = "fyp_file_id")
-	FYPFile fypFile;*/
+	FYPFile fypFile;
 
 	/*
 	 * Getters & Setters
