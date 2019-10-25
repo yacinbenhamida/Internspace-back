@@ -128,11 +128,11 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public void saisirFYPFile(FYPFile file,FYPFeature fyp) {
+	public void saisirFYPFile(FYPFile file) {
 		System.out.println("Adding: " + file);
 		
 		service.persist(file);
-		service.persist(fyp);
+	
 		
 		
 		

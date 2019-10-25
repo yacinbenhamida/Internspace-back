@@ -130,9 +130,9 @@ public class FYPSheetService {
 	@Path("create")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response  addFile(FYPFile file,FYPFeature fyp) {
+	public Response  addFile(FYPFile file) {
 		
-		fypSheetService.saisirFYPFile(file,fyp);
+		fypSheetService.saisirFYPFile(file);
 		return Response.status(Status.OK).entity(file).build() ;
 		
 		

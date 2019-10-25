@@ -1,11 +1,16 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -24,6 +29,9 @@ public class FYPFeature implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "feature_id")
 	long id;
+	
+	@OneToMany(mappedBy = "feat", fetch = FetchType.LAZY)
+	Set<FYPFile> fypFiles = new HashSet<>();
 
 	@Column(name = "content")
 	String content = "default";
@@ -32,9 +40,9 @@ public class FYPFeature implements Serializable {
 	 * Associations
 	 */
 
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name = "fyp_file_id")
-	FYPFile fypFile;
+	FYPFile fypFile;*/
 
 	/*
 	 * Getters & Setters
@@ -56,12 +64,6 @@ public class FYPFeature implements Serializable {
 		this.content = content;
 	}
 
-	public FYPFile getFypFile() {
-		return fypFile;
-	}
-
-	public void setFypFile(FYPFile fypFile) {
-		this.fypFile = fypFile;
-	}
+	
 	
 }

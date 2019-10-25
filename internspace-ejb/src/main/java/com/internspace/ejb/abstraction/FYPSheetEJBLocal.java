@@ -27,7 +27,7 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getFYPSheetsWithNoSupervisors();
 	public List<FYPFile> getAllSheets();
 	
-	public void saisirFYPFile(FYPFile file,FYPFeature fyp);
+	public void saisirFYPFile(FYPFile file);
 	public  List<FYPFile> getAll();
 	
 	
