@@ -17,55 +17,47 @@ import javax.persistence.ManyToOne;
 import javax.persistence.FetchType;
 
 @Entity
-@Table(name="file_template_element")
+@Table(name = "file_template_element")
 public class FileTemplateElement implements Serializable {
-	
+
 	public enum ElementType {
-		title,
-		description,
-		problematic,
-		categories,
-		features,
-		keywords,
-		company,
-		supervisor,
-		rapporteur,
-		// Above are InternshipConvention related...
+		title, description, problematic, categories, features, keywords, company, supervisor, rapporteur,
+		// Below are InternshipConvention related...
 		dateInfo,
 		// company
-		
+
 	}
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Attributes
 	 */
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="fypte_id")
+	@Column(name = "fypte_id")
 	long id;
-	
-	@Column(name="section_name", nullable = true)
+
+	@Column(name = "section_name", nullable = true)
 	String sectionName;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(name="type")
+	@Column(name = "type")
 	ElementType fileTemplateElementType;
-	
+
 	float x_coord;
 
-	float y_coord;	
+	float y_coord;
 
 	float height;
 
 	float weight;
-	
+
 	/*
 	 * Associations
 	 */
-	
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "file_template_id", insertable = true, updatable = true)
 	FileTemplate fileTemplate;
@@ -73,25 +65,58 @@ public class FileTemplateElement implements Serializable {
 	/*
 	 * Construction
 	 */
-	
-	public FileTemplateElement()
-	{
-		
+
+	public FileTemplateElement() {
+
 	}
-	
-	public FileTemplateElement(String sectionName, ElementType fileTemplateElementType, FileTemplate fypTemplate)
-	{
+
+	public FileTemplateElement(String sectionName, ElementType fileTemplateElementType, FileTemplate fypTemplate) {
 		this.sectionName = sectionName;
 		this.fileTemplateElementType = fileTemplateElementType;
 		this.fileTemplate = fypTemplate; // Required to set file_template_id in current table.
-		
-		//...
+
+		// ...
 	}
-	
+
+	/*
+	 * Useful for updating template elements
+	 */
+	public FileTemplateElement(long id, float x_coord, float y_coord, float height, float weight) {
+		super();
+		this.id = id;
+		this.x_coord = x_coord;
+		this.y_coord = y_coord;
+		this.height = height;
+		this.weight = weight;
+	}
+
+	/*
+	 * Helpers
+	 */
+
+	public void resolveSettings(FileTemplateElement elementToCopy) {
+		this.x_coord = elementToCopy.x_coord;
+		this.y_coord = elementToCopy.y_coord;
+		this.height = elementToCopy.height;
+		this.weight = elementToCopy.weight;
+	}
+
 	/*
 	 * Getters & Setters
 	 */
-	
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setFileTemplate(FileTemplate fileTemplate) {
+		this.fileTemplate = fileTemplate;
+	}
+
 	public String getSectionName() {
 		return sectionName;
 	}
@@ -141,13 +166,8 @@ public class FileTemplateElement implements Serializable {
 	}
 
 	/*
-	public FileTemplate getFypTemplate() {
-		return fileTemplate;
-	}
+	 * public FileTemplate getFypTemplate() { return fileTemplate; } public void
+	 * setFypTemplate(FileTemplate fypTemplate) { this.fileTemplate = fypTemplate; }
 	 */
-	public void setFypTemplate(FileTemplate fypTemplate) {
-		this.fileTemplate = fypTemplate;
-	}
-	
-	
+
 }

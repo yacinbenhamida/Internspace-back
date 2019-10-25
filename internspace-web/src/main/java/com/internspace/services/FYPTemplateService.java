@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 // import javax.ws.rs.POST;
@@ -22,7 +23,6 @@ import com.internspace.entities.fyp.FileTemplateElement;
 @Stateless
 public class FYPTemplateService {
 
-	
 	@Inject
 	FileTemplateEJBLocal service;
 	
@@ -45,11 +45,44 @@ public class FYPTemplateService {
 		service.createTemplate(fileTemplate);
 	}
 
-	public void createElement(FileTemplateElement element) {
-		service.createElement(element);
-
+	@GET
+	@Path("/update/element")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateElement(
+			@QueryParam(value="id")long id,
+			@QueryParam(value="x")float x,
+			@QueryParam(value="y")float y,
+			@QueryParam(value="h")float h,
+			@QueryParam(value="w")float w
+			)
+	{
+		FileTemplateElement templateElement;
+		templateElement = new FileTemplateElement(id, x, y, h, w);
+		boolean done = service.updateElement(templateElement);
+		
+		// 422 => Unprocessable Entity
+		Status status = done ? Response.Status.ACCEPTED : Response.Status.EXPECTATION_FAILED;
+        return Response
+        		.status(status)
+        		.build();
 	}
 
+	@GET
+	@Path("/find/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findTemplateByName(
+			@QueryParam(value="name")String name,
+			@QueryParam(value="n")int n,
+			@QueryParam(value="like")boolean useLike)
+	{
+		List<FileTemplate> fypTemplate = service.findTemplatesByName(name, n, useLike);
+        return Response.ok(fypTemplate).status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Max-Age", "1209600")
+                .build();
+	}
+
+	
 	@Path("debug")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String debugString()
@@ -63,24 +96,8 @@ public class FYPTemplateService {
 	public Response getAll() {
 		List<FileTemplate> fypTemplates = service.getAllTemplates();
         if (!fypTemplates.isEmpty()) {
-        	// TODO: UGLY, have to secure this...
-        	
-        	/*
-        	for(FileTemplate template : fypTemplates)
-        	{
-        		for(FileTemplateElement element: template.getFyptElements())
-        		{
-        			// For cases where we create a template and select it right away...
-        			element.setFypTemplate(null);			
-        		}       			
-        	}
-        	*/
-        	
             return Response.ok(fypTemplates).status(200)
                     .header("Access-Control-Allow-Origin", "*")
-                    //.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                    //.header("Access-Control-Allow-Credentials", "true")
-                    //.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                     .header("Access-Control-Max-Age", "1209600")
                     .build();
         } else {

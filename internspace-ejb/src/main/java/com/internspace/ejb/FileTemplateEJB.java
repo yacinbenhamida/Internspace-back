@@ -27,12 +27,53 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	}
 	
 	@Override
-	public void updateTemplateEditor(FileTemplate template, Employee editor) {
+	public boolean updateTemplateEditor(FileTemplate template, Employee editor) {
 		System.out.println("Adding: " + template);
 		// System.out.println("Template Elements count: " + template.getFyptElements().size());	
 		
 		template = em.find(FileTemplate.class, template.getId());
+		
+		if(template == null)
+			return false;
+		
 		template.setEditor(editor);
+		em.persist(template);
+		
+		return true;
+	}
+	
+	@Override
+	public void removeTemplate(int id)
+	{
+		FileTemplate fileTemplate = findTemplate(id);
+		
+	    if (fileTemplate != null) {
+	      em.remove(fileTemplate);
+	    }
+	}
+	
+	@Override
+	public FileTemplate findTemplate(int id)
+	{
+		return em.find(FileTemplate.class, id);
+	}
+	
+	@Override
+	public List<FileTemplate> findTemplatesByName(String name, int n, boolean useLike)
+	{
+		String nameMatching;
+		nameMatching = useLike ? "LIKE '%" + name.toLowerCase() + "%'" : "= '" + name.toLowerCase() + "'";
+		
+		String queryStr = "SELECT DISTINCT FT FROM " + FileTemplate.class.getName() + " FT"
+				+ " JOIN FETCH FT.templateElements FTE"
+				+ " WHERE lower(FT.templateName) " + nameMatching;
+
+		List<FileTemplate> templates = em.createQuery(queryStr, FileTemplate.class).setMaxResults(n).getResultList();
+		
+		templates.stream().forEach(e -> System.out.println(e));
+		
+		return templates;
+		
 	}
 	
 	@Deprecated
@@ -44,17 +85,27 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	}
 
 	@Override
-	public void updateElement(FileTemplateElement element) {
+	public boolean updateElement(FileTemplateElement element) {
 		System.out.println("Updating: " + element);
 		
-		em.persist(element);
+		FileTemplateElement templateElement = em.find(FileTemplateElement.class, element.getId());
+		if(templateElement == null)
+			return false;
+		
+		templateElement.resolveSettings(element);
+		
+		em.persist(templateElement);
+		
+		return true;
 	}
 
 	@Override
 	public List<FileTemplate> getAllTemplates() {
 		System.out.println("Finding all FYP Templates...");
-		List<FileTemplate> fypTemplates = em.createQuery("from " + FileTemplate.class.getName() + " T"
-				+ " JOIN FETCH T.templateElements", FileTemplate.class).getResultList();
+		List<FileTemplate> fypTemplates = em.createQuery("SELECT distinct T from " + FileTemplate.class.getName() + " T"
+				+ " JOIN FETCH T.templateElements TE"
+				, FileTemplate.class)
+				.getResultList();
 		return fypTemplates;
 	}
 }
