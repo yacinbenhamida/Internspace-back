@@ -35,10 +35,11 @@ public class FYPKeyword implements Serializable {
 	/*
 	 * Associations
 	 */
-	@OneToMany(mappedBy = "key", fetch = FetchType.LAZY)
-	Set<FYPFile> fypFiles = new HashSet<>();
-	/*@ManyToOne
-	FYPFile fypFile;*/
+	
+	
+	
+	@ManyToOne
+	FYPFile fypFile;
 
 	/*
 	 * Getters & Setters

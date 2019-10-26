@@ -126,8 +126,8 @@ public class FYPSheetService {
 	
 	@POST
 	@Path("create")
-
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
 	public Response  addFile(FYPFile file) {
 		
 		fypSheetService.saisirFYPFile(file);
