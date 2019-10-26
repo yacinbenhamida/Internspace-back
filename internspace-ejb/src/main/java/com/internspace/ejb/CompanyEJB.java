@@ -58,7 +58,8 @@ public class CompanyEJB implements CompanyEJBLocal {
 	@Override
 	public void updateCompany(Company company) {
 		System.out.println("Updating: " + company);
-		em.persist(company);
+		//em.persist(company);
+		em.persist(em.contains(company) ? company : em.merge(company));
 	}
 
 	@Override

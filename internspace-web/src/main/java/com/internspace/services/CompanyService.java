@@ -13,6 +13,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 
 import com.internspace.ejb.FYPSheetEJB;
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
@@ -56,6 +57,24 @@ public class CompanyService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll() {
 		return Response.status(Status.OK).entity(service.getAll()).build();
+	}
+	
+	@PUT
+	@Path("update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateCompany(Company updateCompany)
+	{
+		if(updateCompany.getId() == 0)
+			return Response.status(Status.BAD_REQUEST).entity("Please provide a valid company ID...").build();
+		
+		Company company = service.findCompany(updateCompany.getId());
+		
+		if(company == null)
+			return Response.status(Status.BAD_REQUEST).entity("Failed to find the company to update. Please provide a valid company ID...").build();
+		
+		service.updateCompany(updateCompany);
+	    
+		return Response.status(Response.Status.OK).entity("Successfully UPDATED Company for ID: " + updateCompany.getId()).build();
 	}
 	
 	@DELETE
