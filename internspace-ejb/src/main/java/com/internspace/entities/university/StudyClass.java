@@ -52,11 +52,7 @@ public class StudyClass implements Serializable {
 	Set<Student> students;
 	
 	@ManyToOne
-	@JoinColumn(name = "departement_id")
-	Departement departement;
-
-	@ManyToOne
-	@JoinColumn(name = "class_option_id")
+	@JoinColumn(name = "class_option_id", nullable = false)
 	ClassOption classOption;
 	
 	/*
@@ -105,13 +101,6 @@ public class StudyClass implements Serializable {
 	}
 */
 
-	public Departement getDepartement() {
-		return departement;
-	}
-
-	public void setDepartement(Departement departement) {
-		this.departement = departement;
-	}
 
 	public ClassOption getClassOption() {
 		return classOption;

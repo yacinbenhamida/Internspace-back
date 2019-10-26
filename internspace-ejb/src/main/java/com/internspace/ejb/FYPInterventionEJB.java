@@ -24,7 +24,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		FYPFile sheet = manager.find(FYPFile.class, idFYPS);
 		//check if the teacher isn't already affected to that fypsheet
 		Query q = manager.createQuery("SELECT i FROM "
-				+ "FYP_INTERVENTION i where i.teacher.id = :id AND i.internshipSheet.id = :idints")
+				+ "fyp_intervention i where i.teacher.id = :id AND i.internshipSheet.id = :idints")
 				.setParameter("id", idTeacher).setParameter("idints", idFYPS);
 		if(teacher != null && sheet != null && q.getResultList().isEmpty() && teacher.getDepartment() !=null) {
 			//.getInternship().getStudent to .getStudent
@@ -54,8 +54,8 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		FYPIntervention intervention = manager.find(FYPIntervention.class, fypinterventionId);
 		//check if that a  teacher with that role isn't already affected
 		Query q = manager.createQuery("SELECT COUNT(i.id) FROM "
-				+ "FYP_INTERVENTION i where i.id = :id group by i.id"
-				+ " HAVING (SELECT COUNT(interv.id) FROM FYP_INTERVENTION interv where interv.id = i.id AND"
+				+ "fyp_intervention i where i.id = :id group by i.id"
+				+ " HAVING (SELECT COUNT(interv.id) FROM fyp_intervention interv where interv.id = i.id AND"
 				+ "  interv.teacherRole = :role ) = 0").setParameter("id", fypinterventionId)
 				.setParameter("role", newRole);
 		if(teacher != null && intervention != null && q.getResultList().isEmpty() && teacher.getDepartment() != null) {
@@ -76,7 +76,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 
 	@Override
 	public List<Employee> getAllTeachersRankedByNumberOfSupervisions() {
-		Query q = manager.createQuery("SELECT i.teacher,COUNT(i.id) as nb from FYP_INTERVENTION i where"
+		Query q = manager.createQuery("SELECT i.teacher,COUNT(i.id) as nb from fyp_intervention i where"
 				+ " i.teacherRole = :role group by i.teacher.id order by nb DESC").setParameter("role", TeacherRole.supervisor);
 		if(!q.getResultList().isEmpty()) {
 			return q.getResultList();
@@ -96,7 +96,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 
 	@Override
 	public List<FYPIntervention> getAll() {
-		Query q = manager.createQuery("SELECT i from FYP_INTERVENTION i ");
+		Query q = manager.createQuery("SELECT i from fyp_intervention i ");
 		if(!q.getResultList().isEmpty()) {
 			return q.getResultList();
 		}

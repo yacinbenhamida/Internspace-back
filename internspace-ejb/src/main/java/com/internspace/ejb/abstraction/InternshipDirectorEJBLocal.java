@@ -6,7 +6,7 @@ import javax.ejb.Local;
 
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
-import com.internspace.entities.fyp.Internship;
+
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;

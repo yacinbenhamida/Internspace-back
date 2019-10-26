@@ -42,11 +42,11 @@ public class StudentFYPSubject implements Serializable{
 	ApplianceStatus applianceStatus;
 	
 	@ManyToOne
-	@JoinColumn(name="student_id", referencedColumnName="user_id", insertable = false, updatable = false)
+	@JoinColumn(name="student_id", nullable = false, referencedColumnName="user_id", insertable = true, updatable = false)
 	Student student;
 	
 	@ManyToOne
-	@JoinColumn(name="subject_id", referencedColumnName="subject_id", insertable = false, updatable = false)
+	@JoinColumn(name="subject_id", nullable = false, referencedColumnName="subject_id", insertable = true, updatable = false)
 	FYPSubject subject;
 
 	/*

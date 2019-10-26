@@ -12,6 +12,7 @@ import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,13 +26,12 @@ public class Student extends User {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "birth_date")
-	Date birthDate;
+	LocalDate birthDate;
 
 	// The student isn't allowed to have a reporter without initially submitting a
 	// paper report to the administration
 	@Column(name = "has_submitted_a_report")
 	boolean hasSubmittedAReport;
-	
 
 	@Column(name="cin")
 	String cin;
@@ -124,10 +124,10 @@ public class Student extends User {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 	public StudyClass getStudyClass() {

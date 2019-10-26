@@ -61,21 +61,15 @@ public class FYPFile implements Serializable {
 	@JoinColumn(name = "featt")
 	FYPFeature feat;*/
 	
-
-	
-
-	
-	@ManyToOne
-	@JoinColumn(name = "cmp")
-	Company cmp;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	FYPFileStatus fileStatus;
 
 	@Column(name = "final_mark")
 	int finalMark;
-
+	@OneToOne(mappedBy="fypFile")
+	Student student;
+	
 	// True = Student wants to cancel.
 	@Column(name = "canceled", columnDefinition = "boolean default false")
 	Boolean isCanceled;
@@ -88,8 +82,6 @@ public class FYPFile implements Serializable {
 	 * Associations
 	 */
 
-	@OneToOne(mappedBy = "fypFile")
-	Student student;
 
 	@OneToOne(optional = true)
 	@JoinColumn(name = "subject")
@@ -178,59 +170,23 @@ public class FYPFile implements Serializable {
 	public void setIsArchived(Boolean isArchived) {
 		this.isArchived = isArchived;
 	}
-
-	
-
-	
-
 	public void setInterventions(List<FYPIntervention> interventions) {
 		this.interventions = interventions;
 	}
 
-
-	
-
-	/*public UniversitaryYear getUniversitaryYear() {
-		return universitaryYear;
-	}*/
-
-
-
-
-	
-
-	public Company getCmp() {
-		return cmp;
-	}
-
-	public void setCmp(Company cmp) {
-		this.cmp = cmp;
-	}
-
-	/*
-	public FYPSubject getSubject() {
-		return subject;
-	}
-	 */
 	
 	public void setSubject(FYPSubject subject) {
 		this.subject = subject;
 	}
 
-	public Student getStudent() {
-		return student;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-
-	public Set<FYPFeature> getFeatures() {
-		return features;
-	}
 
 	public void setFeatures(Set<FYPFeature> features) {
 		this.features = features;
+	}
+
+	
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 
 	

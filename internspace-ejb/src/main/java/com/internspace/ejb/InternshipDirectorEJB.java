@@ -27,7 +27,7 @@ import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FileTemplate;
-import com.internspace.entities.fyp.Internship;
+
 import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.university.UniversitaryYear;

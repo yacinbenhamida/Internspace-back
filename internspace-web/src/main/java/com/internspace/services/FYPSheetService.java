@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,13 +24,36 @@ public class FYPSheetService {
 	@Inject
 	FYPSheetEJBLocal fypSheetService;
 
-	
+		
 	@POST
 	@Path("add")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addFYPSheet(FYPFile file) {
 		FYPFile res = fypSheetService.addFYPSheet(file);
+		if(res!=null) {
+			return Response.status(Response.Status.OK).entity(res).build();
+		}
+		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+	}
+	
+	@PUT
+	@Path("edit")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editFYPSheet(FYPFile file) {
+		FYPFile res = fypSheetService.editFYPSheet(file);
+		if(res!=null) {
+			return Response.status(Response.Status.OK).entity(res).build();
+		}
+		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+	}
+	@PUT
+	@Path("assignSheet/{studentId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response assignFYPSheetToStudent(FYPFile file,@PathParam("studentId")long studentId) {
+		FYPFile res = fypSheetService.assignFYPFileToStudent(file, studentId);
 		if(res!=null) {
 			return Response.status(Response.Status.OK).entity(res).build();
 		}
@@ -124,15 +148,5 @@ public class FYPSheetService {
 	
 	
 	
-	@POST
-	@Path("create")
-	@Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-	public Response  addFile(FYPFile file) {
-		
-		fypSheetService.saisirFYPFile(file);
-		return Response.status(Status.OK).entity(file).build() ;
-		
-		
-	}
+
 }

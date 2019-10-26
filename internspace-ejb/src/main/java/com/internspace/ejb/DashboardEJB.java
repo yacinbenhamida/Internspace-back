@@ -12,7 +12,7 @@ import javax.persistence.TypedQuery;
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
-import com.internspace.entities.fyp.Internship;
+
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.university.University;
 import com.internspace.entities.users.Company;
@@ -84,7 +84,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 			List<Student> students = em.createQuery("FROM " + Student.class.getName() + " s"
 					+ " WHERE s.studyClass.universitaryYear.id = :uniYear"
 					+ " AND s.studyClass.classYear = :studyClassYear"
-					+ " AND s.studyClass.departement.site.university.id = :uniId", Student.class)
+					+ " AND s.studyClass.classOption.departement.site.university.id = :uniId", Student.class)
 					.setParameter("uniYear", uyId)
 					.setParameter("studyClassYear", uni.getFypClassYear())
 					.setParameter("uniId", uniId)
@@ -143,7 +143,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 		
 		String queryStr = "SELECT C FROM " + Company.class.getName() + " C"
 				+ " JOIN FETCH C.subjects SB"
-				+ " WHERE SB.fypFile.student.studyClass.departement.site.university.id = :uniId"
+				+ " WHERE SB.fypFile.student.studyClass.classOption.departement.site.university.id = :uniId"
 				//+ " WHERE size(C.subjects) <> 0"
 				+ " ORDER BY size(C.subjects) DESC"
 				;
@@ -166,9 +166,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 		FYPCategory category = em.find(FYPCategory .class, Long.valueOf(categoryId));
 		
 		String queryStr = "FROM " + FYPSubject.class.getName() + " i"
-				//+ " JOIN FETCH i.student.studyClass.departement.site.university U"
+				//+ " JOIN FETCH i.student.studyClass.classOption.departement.site.university U"
 				+ " WHERE"
-				+ " i.fypFile.student.studyClass.departement.site.university.id = :uniId"
+				+ " i.fypFile.student.studyClass.classOption.departement.site.university.id = :uniId"
 				+ " AND :category MEMBER OF i.categories"
 				;
 		
@@ -231,7 +231,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 				//+ " JOIN FETCH s.internship INS"
 				+ " WHERE"
 				+ " s.studyClass.classYear = :studyClassYear"
-				+ " AND s.studyClass.departement.site.university.id = :uniId"
+				+ " AND s.studyClass.classOption.departement.site.university.id = :uniId"
 				;
 		
 		// Current UY?

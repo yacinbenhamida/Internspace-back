@@ -1,7 +1,6 @@
 package com.internspace.ejb;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -9,14 +8,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
-import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.users.Student;
 @Stateless
 public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@PersistenceContext
 	EntityManager service;
-	
+
 	@Override
 	public FYPFile addFYPSheet(FYPFile file) {
 		service.persist(file);
@@ -47,7 +46,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public FYPFile getFypFileOfStudent(long studId) {
-		Query q = service.createQuery("SELECT f from FYPFile f where f.internship.student.id = :id")
+		Query q = service.createQuery("SELECT f from FYPFile f where f.student.id = :id")
 				.setParameter("id", studId);
 		List<Object> list = q.getResultList();
 		if(!list.isEmpty()) {
@@ -58,8 +57,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public List<FYPFile> getFYPfilesOfDepartment(long idDept) {
-		Query q = service.createQuery("SELECT f from FYPFile f,Internship i where f.id = i.fypFile.id "
-				+ "AND i.student.studyClass.departement.id = :id")
+		Query q = service.createQuery("SELECT f from FYPFile f where  "
+				+ "AND f.student.studyClass.departement.id = :id")
 				.setParameter("id", idDept);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
@@ -78,8 +77,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllSheetsWithNoMarks() {
-		Query q =   service.createQuery("SELECT f from FYPFile f where f.finalMark = NULL group by f.id"
-				+ " HAVING (SELECT COUNT(i.id) FROM FYP_INTERVENTION i where i.internshipSheet.id = f.id AND i.givenMark != NULL )=0");
+		Query q =   service.createQuery("SELECT f from FYPFile f where (f.finalMark = NULL OR f.finalMark = 0 ) group by f.id"
+				+ " HAVING (SELECT COUNT(i.id) FROM FYP_INTERVENTION i where i.internshipSheet.id = f.id AND (i.givenMark != NULL OR f.givenMark != 0) )=0");
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -128,19 +127,19 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public void saisirFYPFile(FYPFile file) {
-		System.out.println("Adding: " + file);
-		
-		service.persist(file);
-	
-		
-		
-		
+	public List<FYPFile> getAll() {
+		return service.createQuery("SELECT f from FYPFile f ").getResultList();
 	}
 
 	@Override
-	public List<FYPFile> getAll() {
-		return service.createQuery("SELECT id from FYPFile f ").getResultList();
+	public FYPFile assignFYPFileToStudent(FYPFile file, long studentId) {
+		Student s = service.find(Student.class, studentId);
+		file.setStudent(s);
+		s.setFypFile(file);
+		service.persist(s);
+		service.persist(file);
+		service.flush();
+		return service.find(FYPFile.class, file.getId());
 	}
 
 }
