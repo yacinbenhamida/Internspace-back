@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
-
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.users.Student;
 
 @Path("student")
@@ -91,7 +91,7 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("lscin")
-	public List<Student> getstudentCin(){
+	public List<FYPFile> getstudentCin(){
 		 return Studentservice.getAllStudentCIN();
 	};
 	

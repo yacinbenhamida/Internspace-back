@@ -51,10 +51,8 @@ public class StudyClass implements Serializable {
 	@OneToMany(mappedBy = "studyClass")
 	Set<Student> students;
 	
-	
-
 	@ManyToOne
-	@JoinColumn(name = "class_option_id")
+	@JoinColumn(name = "class_option_id", nullable = false)
 	ClassOption classOption;
 	
 	/*

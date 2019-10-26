@@ -54,7 +54,7 @@ public interface CompanyEJBLocal {
 	List<StudentFYPSubject> getStudentFypSubjectsOfStudentByStatus(long studentId, ApplianceStatus status, boolean fetchAll);
 	List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken);
 	List<FYPSubject> getSuggestedSubjectsByCategories(List<FYPCategory> categories);
-	//void acceptStudentAppliance(FYPSubject subject, long studentId);
+	void acceptStudentAppliance(long studentId, long subjectId);
 	//boolean subscribe(String username, int password, String companyName);
 	// Returns token
 	//String companyLogin(String username, String password);

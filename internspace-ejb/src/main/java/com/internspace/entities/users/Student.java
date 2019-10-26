@@ -189,9 +189,9 @@ public class Student extends User {
 		this.cin = cin;
 	}
 
-	public FYPFile getFypFile() {
+	/*public FYPFile getFypFile() {
 		return fypFile;
-	}
+	}*/
 
 	public void setFypFile(FYPFile fypFile) {
 		this.fypFile = fypFile;
