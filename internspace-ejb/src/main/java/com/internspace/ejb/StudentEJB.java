@@ -63,7 +63,7 @@ public class StudentEJB implements StudentEJBLocal{
 	public void sendMail(String text,String cin) {
 		
 		String subject = "vous êtes autorisé a passer votre PFE " ;
-		String subject1 = "Vous êtes pas autorisé a paser le PFE " ;
+		String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
 		
 		
 		Mail_API mail = new Mail_API();
@@ -130,6 +130,67 @@ public class StudentEJB implements StudentEJBLocal{
 		}
 		
 	}
+
+	@Override
+	public void mailEtat(String text, String cin) {
+		
+		String subject = "Votre fiche PFE est acceptée " ;
+		String subject1 = "Votre fiche PFE est refusée" ;
+		
+		FYPFileStatus ff = null;
+
+		Mail_API mail = new Mail_API();
+		
+		//ff.confirmed.compareTo(fs);
+		List<Student> ls = getAllStudentdisabled();
+		for(int i=0;i<ls.size();i++) {
+			FYPFileStatus fs = ls.get(i).getFypFile().getFileStatus();
+			
+			
+			if(ls.get(i).getCin().equals(cin)) {
+				System.out.println("changed"+ls.get(i).getFypFile().getFileStatus());
+			  if(ls.get(i).getFypFile().getFileStatus().equals(ff.pending)) {
+				
+				if(ls.get(i).getFypFile().getIsArchived()==true) {
+					ls.get(i).getFypFile().setFileStatus(ff.confirmed);
+					
+					try {
+						mail.sendMail(ls.get(i).getEmail(), text, subject);
+					} catch (MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					System.out.println("changed"+ls.get(i).getFypFile().getIsArchived());
+				}
+				else if(ls.get(i).getFypFile().getIsCanceled()==true)
+				{
+					ls.get(i).getFypFile().setFileStatus(ff.declined);
+					
+					
+					try {
+						mail.sendMail(ls.get(i).getEmail(), text, subject1);
+					} catch (MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					System.out.println("canceled");
+				}
+				
+				
+				
+				
+			}
+			  
+			  
+			  
+			
+			}
+		}
+		}
+		
+	
 
 
 	

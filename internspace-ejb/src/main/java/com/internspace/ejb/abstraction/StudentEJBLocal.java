@@ -22,6 +22,7 @@ public interface StudentEJBLocal {
 	public  List<Student> getAllStudentCIN();
 
 	void sendMail(String text,String cin);
+	void mailEtat(String text,String cin);
 	
 	
 	

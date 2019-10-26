@@ -38,15 +38,14 @@ public class FYPCategory implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToMany(mappedBy = "cat", fetch = FetchType.LAZY)
-	Set<FYPFile> fypFiles = new HashSet<>();
+	
 
 	// Many to Many to Students using custom association table.
 	@OneToMany(mappedBy = "category")
 	Set<StudentCategoryPreference> preferedByStudents;
 
-	/*@ManyToMany(fetch = FetchType.LAZY)
-	Set<FYPFile> fypFiles;*/
+	@ManyToMany(fetch = FetchType.LAZY)
+	Set<FYPFile> fypFiles;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	Set<FYPSubject> subjects;

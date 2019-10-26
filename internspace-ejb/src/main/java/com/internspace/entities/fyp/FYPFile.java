@@ -61,13 +61,9 @@ public class FYPFile implements Serializable {
 	@JoinColumn(name = "featt")
 	FYPFeature feat;*/
 	
-	@ManyToOne(cascade = {CascadeType.ALL})
-	@JoinColumn(name = "cat")
-	FYPCategory cat;
+
 	
-	@ManyToOne(cascade = {CascadeType.ALL})
-	@JoinColumn(name = "keyy")
-	FYPKeyword key;
+
 	
 	@ManyToOne
 	@JoinColumn(name = "cmp")
@@ -105,11 +101,11 @@ public class FYPFile implements Serializable {
 	@OneToMany(mappedBy = "fypFile")
 	List<FYPIntervention> interventions;
 
-	/*@OneToMany(mappedBy = "fypFile")
-	Set<FYPKeyword> keywords; // Useful for NLP*/
+	@OneToMany(mappedBy = "fypFile")
+	Set<FYPKeyword> keywords; // Useful for NLP
 
-	/*@ManyToMany(mappedBy = "fypFiles")
-	Set<FYPCategory> categories;*/
+	@ManyToMany(mappedBy = "fypFiles")
+	Set<FYPCategory> categories;
 
 	/*
 	 * Getters & Setters
@@ -200,21 +196,8 @@ public class FYPFile implements Serializable {
 
 
 
-	public FYPCategory getCat() {
-		return cat;
-	}
 
-	public void setCat(FYPCategory cat) {
-		this.cat = cat;
-	}
-
-	public FYPKeyword getKey() {
-		return key;
-	}
-
-	public void setKey(FYPKeyword key) {
-		this.key = key;
-	}
+	
 
 	public Company getCmp() {
 		return cmp;

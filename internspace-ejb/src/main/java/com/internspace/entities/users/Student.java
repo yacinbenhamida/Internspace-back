@@ -188,6 +188,14 @@ public class Student extends User {
 	public void setCin(String cin) {
 		this.cin = cin;
 	}
+
+	public FYPFile getFypFile() {
+		return fypFile;
+	}
+
+	public void setFypFile(FYPFile fypFile) {
+		this.fypFile = fypFile;
+	}
 	
 	
 	

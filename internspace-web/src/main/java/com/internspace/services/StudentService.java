@@ -95,7 +95,14 @@ public class StudentService {
 		 return Studentservice.getAllStudentCIN();
 	};
 	
-	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("maili")
+	public void mailetat(@QueryParam(value = "text") String text,@QueryParam(value = "cin") String cin){
+		Studentservice.mailEtat(text,cin);
+		
+	};
+
 	
 	
 }

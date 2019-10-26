@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
 @Entity
@@ -40,7 +41,7 @@ public class FYPFeature implements Serializable {
 	 * Associations
 	 */
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
 
@@ -62,6 +63,14 @@ public class FYPFeature implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public FYPFile getFypFile() {
+		return fypFile;
+	}
+
+	public void setFypFile(FYPFile fypFile) {
+		this.fypFile = fypFile;
 	}
 
 	
