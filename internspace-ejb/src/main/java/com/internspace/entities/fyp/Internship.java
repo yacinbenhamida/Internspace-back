@@ -14,9 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
-@XmlRootElement
-@Entity
-@Table(name = "internship")
+// @Entity
+// @Table(name = "internship")
 @Deprecated
 public class Internship implements Serializable {
 
@@ -26,9 +25,9 @@ public class Internship implements Serializable {
 	 * Attributes
 	 */
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "internship_id")
+	// @Id
+	// @GeneratedValue(strategy = GenerationType.IDENTITY)
+	// @Column(name = "internship_id")
 	long id;
 
 	@OneToOne

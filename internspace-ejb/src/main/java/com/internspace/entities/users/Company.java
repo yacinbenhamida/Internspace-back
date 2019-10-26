@@ -2,19 +2,14 @@ package com.internspace.entities.users;
 
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
-import com.internspace.entities.fyp.Internship;
 import com.internspace.entities.fyp.InternshipConvention;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.json.JSONPropertyIgnore;
 
 @Entity
 @Table(name = "company")
@@ -26,8 +21,9 @@ public class Company extends User {
 	 * Attributes
 	 */
 
-	// ... email, last-name and first-name for responsible are the User's (from
-	// Parent)
+	// ... Email, last-name and first-name for responsible are the User's (from Parent)
+	@Column(unique = true)
+	String name;
 	String website;
 	String address;
 	String country;
@@ -43,11 +39,6 @@ public class Company extends User {
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
 	Set<FYPSubject> subjects;
 
-	/*
-	 * @OneToMany(mappedBy = "company", fetch = FetchType.LAZY) Set<Internship>
-	 * internships;
-	 */
-
 	@OneToMany(mappedBy = "company")
 	Set<InternshipConvention> internshipConventions;// = new HashSet<InternshipConvention>();
 	
@@ -55,8 +46,25 @@ public class Company extends User {
 	Set<FYPFile> fypFiles = new HashSet<>();
 
 	/*
+	 * Construction
+	 */
+	
+	public Company()
+	{
+		
+	}
+
+	/*
 	 * Getters & Setters
 	 */
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void setSubjects(Set<FYPSubject> subjects) {
 		this.subjects = subjects;
@@ -101,14 +109,6 @@ public class Company extends User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
-	/*
-	 * public void setInternships(Set<Internship> internships) { this.internships =
-	 * internships; }
-	 * 
-	 * public Set<InternshipConvention> getInternshipConventions() { return
-	 * internshipConventions; }
-	 */
 
 	public void setInternshipConventions(Set<InternshipConvention> internshipConventions) {
 		this.internshipConventions = internshipConventions;

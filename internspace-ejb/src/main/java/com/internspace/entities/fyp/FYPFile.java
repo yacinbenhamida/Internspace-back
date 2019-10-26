@@ -91,7 +91,7 @@ public class FYPFile implements Serializable {
 	@OneToOne(mappedBy = "fypFile")
 	Student student;
 
-	@OneToOne
+	@OneToOne(optional = true)
 	@JoinColumn(name = "subject")
 	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 	
@@ -207,10 +207,12 @@ public class FYPFile implements Serializable {
 		this.cmp = cmp;
 	}
 
+	/*
 	public FYPSubject getSubject() {
 		return subject;
 	}
-
+	 */
+	
 	public void setSubject(FYPSubject subject) {
 		this.subject = subject;
 	}
