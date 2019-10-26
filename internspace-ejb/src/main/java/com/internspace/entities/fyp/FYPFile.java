@@ -66,8 +66,8 @@ public class FYPFile implements Serializable {
 	FYPFileStatus fileStatus;
 
 	@Column(name = "final_mark")
-	int finalMark;
-	@OneToOne(mappedBy="fypFile")
+	int finalMark;	
+	@OneToOne(mappedBy="fypFile",fetch = FetchType.LAZY)
 	Student student;
 	
 	// True = Student wants to cancel.
@@ -185,6 +185,8 @@ public class FYPFile implements Serializable {
 	}
 
 	
+	
+
 	public void setStudent(Student student) {
 		this.student = student;
 	}

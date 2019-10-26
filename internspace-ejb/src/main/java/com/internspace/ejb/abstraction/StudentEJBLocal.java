@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.users.Student;
 
 @Local
@@ -19,7 +19,7 @@ public interface StudentEJBLocal {
 	
 	public  List<Student> getAllStudentdisabled();
 	public  List<Student> getAllStudentNodisabled();
-	public  List<Student> getAllStudentCIN();
+	public  List<FYPFile> getAllStudentCIN();
 
 	void sendMail(String text,String cin);
 	void mailEtat(String text,String cin);

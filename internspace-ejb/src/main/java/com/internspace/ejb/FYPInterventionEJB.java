@@ -14,6 +14,7 @@ import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.users.Employee;
+import com.internspace.entities.users.Student;
 @Stateless
 public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 	@PersistenceContext
@@ -26,9 +27,11 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		Query q = manager.createQuery("SELECT i FROM "
 				+ "fyp_intervention i where i.teacher.id = :id AND i.internshipSheet.id = :idints")
 				.setParameter("id", idTeacher).setParameter("idints", idFYPS);
+		Query fetchStudent = manager.createQuery("select s from Student s where s.fypFile.id = :id").setParameter("id", idFYPS);
+		
 		if(teacher != null && sheet != null && q.getResultList().isEmpty() && teacher.getDepartment() !=null) {
-			//.getInternship().getStudent to .getStudent
-			if(sheet.getStudent().isHasSubmittedAReport()) {
+			Student student = (Student) fetchStudent.getSingleResult();
+			if(student.isHasSubmittedAReport()) {
 				FYPIntervention intervention = new FYPIntervention();
 				switch (role.toString()) {
 					case "juryPresident": intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForPresidents());break;
@@ -37,7 +40,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 					case "supervisor" : intervention.setActionsRemaining(teacher.getDepartment().getNumberOfActionsAllowedForSupervisors());break;
 				}
 					intervention.setAssignmentDate(LocalDate.now());
-					//intervention.setInternshipSheet(sheet);
+					intervention.setFypFile(sheet);
 					intervention.setTeacher(teacher);
 					intervention.setTeacherRole(this.convertRole(role));
 					System.out.println(intervention);

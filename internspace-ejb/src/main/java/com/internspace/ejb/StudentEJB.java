@@ -109,8 +109,8 @@ public class StudentEJB implements StudentEJBLocal{
 	
 
 	@Override
-	public List<Student> getAllStudentCIN() {
-		return em.createQuery("SELECT cin from Student s  ").getResultList();
+	public List<FYPFile> getAllStudentCIN() {
+		return em.createQuery("SELECT fypFile from Student c  where c.isAutorised=:isAutorised").setParameter("isAutorised", true).getResultList();
 		
 	}
 
@@ -133,6 +133,12 @@ public class StudentEJB implements StudentEJBLocal{
 
 	@Override
 	public void mailEtat(String text, String cin) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*@Override
+	public void mailEtat(String text, String cin) {
 		
 		String subject = "Votre fiche PFE est acceptée " ;
 		String subject1 = "Votre fiche PFE est refusée" ;
@@ -143,6 +149,7 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		//ff.confirmed.compareTo(fs);
 		List<Student> ls = getAllStudentdisabled();
+		List<FYPFile> ls1 = getAllStudentCIN();
 		for(int i=0;i<ls.size();i++) {
 			FYPFileStatus fs = ls.get(i).getFypFile().getFileStatus();
 			
@@ -191,7 +198,7 @@ public class StudentEJB implements StudentEJBLocal{
 		}
 		
 	
-
+*/
 
 	
 	
