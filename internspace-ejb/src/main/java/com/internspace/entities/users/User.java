@@ -43,12 +43,31 @@ public class User implements Serializable {
 	// TODO: Add user-relevant associations.
 
 	/*
+	 * Construction
+	 */
+
+	public User()
+	{
+		
+	}
+	
+	public User(String firstName, String lastName, String email, String username, String password) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+	}
+	
+	/*
 	 * Getters & Setters
 	 */
 
 	public long getId() {
 		return id;
 	}
+
 
 	public void setId(long id) {
 		this.id = id;
@@ -76,6 +95,22 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

@@ -3,7 +3,6 @@ package com.internspace.services;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.ejb.Stateless;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -11,11 +10,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 
+import com.internspace.ejb.FYPSheetEJB;
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
-
+import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.users.Company;
 
@@ -25,34 +27,135 @@ public class CompanyService {
 	@Inject
 	CompanyEJBLocal service;
 
-	@GET
-	@Path("/subjects")
+	@Inject
+	FYPSheetEJBLocal service_fypFile;
+	
+	// Company Section
+	
+	@POST
+	@Path("/add")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getStudentsBySite(
-			@QueryParam("company") int companyId,
-			@QueryParam("filter-untaken") boolean filteruntaken) {
-		List<FYPSubject> subjects = service.getFypSubjectsByCompany(companyId, filteruntaken);
+	public Response addComapny(Company company) 
+	{
+		String companyName = company.getName();
+		if(companyName.isEmpty())
+			return Response.status(Status.BAD_REQUEST).entity("Please provide a valid company name...").build();
+		
+		List<Company> companies = service.findCompaniesByName(companyName, 1, false);
+		
+		if(companies == null || companies.size() > 0)
+			return Response.status(Status.BAD_REQUEST).entity("Company with such name already exists: " + companyName).build();
+			
+		service.createCompany(company);
+		
+		return Response.status(Status.OK).entity(company).build();
+	}
 
+	@GET
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAll() {
+		return Response.status(Status.OK).entity(service.getAll()).build();
+	}
+	
+	@DELETE
+	@Path("/delete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteCompany(
+			@QueryParam(value="company")long companyId
+			)
+	{
+		if(companyId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		
+		FYPSubject subject = service.findSubject(companyId);
+		
+		if(subject == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Can't find Company to delete with ID: " + companyId).build();
+		
+		service.deleteSubject(subject);
+		return Response.status(Response.Status.OK).entity("Successfully DELETED Company for ID: " + companyId).build();
+	}
+	
+	// Subjects Section
+
+	@GET
+	@Path("/subjects/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFypSubjectsByCompany(
+			@QueryParam("company") long companyId,
+			@QueryParam("filter-untaken") boolean filteruntaken) {
+		List<FYPSubject> subjects;
+		
+		if(companyId > 0)
+			subjects = service.getFypSubjectsByCompany(companyId, filteruntaken);
+		else
+			subjects = service.getAllSubjects();
+		
 		return Response.ok(subjects).status(200)
 				.header("Access-Control-Allow-Origin", "*")
 				.header("Access-Control-Max-Age", "1209600")
 				.build();
 	}
-
-
+	
 	@POST
-	@Path("add")
+	@Path("/subjects/add")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response  addComapny(Company company) {
-		service.createCompany(company);
-		return Response.status(Status.OK).entity(company).build();
+	public Response addSubject(
+			@QueryParam(value="title")String title
+			,@QueryParam(value="content")String content
+			,@QueryParam(value="max_applicants")int maxApplicants
+			,@QueryParam(value="company")long companyId
+			,@QueryParam(value="fyp_file")long fypFileId
+			) 
+	{
+		// Defaulted to null in case this subject
+		// Is inserted with conjunction to a fyp_file
+		Company company = null; 
+		FYPFile fypFile = null;
+		
+		// Find relevant company if any
+		if(companyId > 0) // Valid input
+		{
+			company = service.findCompany(companyId);
+			
+			if(company == null)
+				System.out.println("Failed to load company for ID: " + companyId);
+		}
+
+		if(fypFileId > 0) // Valid input
+		{
+			fypFile = service_fypFile.getFYFileById(fypFileId);
+
+			if(fypFile == null)
+				System.out.println("Failed to load fypFile for ID: " + fypFileId);
+		}
+		
+		FYPSubject subject = new FYPSubject(company, fypFile, title, content, maxApplicants);
+		service.createSubject(subject);
+		
+		return Response.status(Response.Status.OK).entity("Successfully Inserted a new Subject.").build();
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response  getAll() {
-		return Response.status(Status.OK).entity(service.getAll()).build();
+	@DELETE
+	@Path("/subjects/delete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteSubject(
+			@QueryParam(value="subject")long subjectId
+			)
+	{
+		if(subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		
+		FYPSubject subject = service.findSubject(subjectId);
+		
+		if(subject == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Can't find suject to delete with ID: " + subjectId).build();
+		
+		service.deleteSubject(subject);
+		return Response.status(Response.Status.OK).entity("Successfully DELETED Subject for ID: " + subjectId).build();
 	}
 	
 }

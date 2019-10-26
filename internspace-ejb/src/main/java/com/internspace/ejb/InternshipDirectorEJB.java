@@ -94,7 +94,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		while(it.hasNext()){  
 			li.addAll(em.createQuery("FROM " + FYPSubject.class.getName()  + " c WHERE c.company =:company").setParameter("company", it.next()).getResultList());
 	      }
-		 li.forEach(x->lf.add(x.getFypFile()));
+		 //li.forEach(x->lf.add(x.getFypFile())); // Na7it l get khatr yrajaali f fypFile eli aando getSubject eli yrajaa f fypFile :( | achraf
 		 return lf;
 		
 	
