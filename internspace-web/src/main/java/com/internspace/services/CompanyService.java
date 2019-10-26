@@ -293,7 +293,7 @@ public class CompanyService {
 	
 	@GET
 	@Path("/subjects/toggle_appliance")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response studentToggleApplianceToSubject(
 			@QueryParam(value="student")long studentId
 			,@QueryParam(value="subject")long subjectId
@@ -313,8 +313,7 @@ public class CompanyService {
 	
 	@GET
 	@Path("/subjects/accept")
-	@Consumes(MediaType.APPLICATION_JSON)
-
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response acceptStudentAppliance(
 			@QueryParam(value = "student") long studentId,
 			@QueryParam(value = "subject") long subjectId) 
@@ -322,7 +321,7 @@ public class CompanyService {
 		if (studentId == 0 || subjectId == 0)
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
-		
+
 		boolean success = service.acceptStudentAppliance(studentId, subjectId);
 		
 		String outputMsg = "Successfully accepted students' appliance.";

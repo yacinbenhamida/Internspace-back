@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.security.auth.Subject;
 
@@ -242,7 +243,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 		List<StudentFYPSubject> out = null;
 		
 		String queryStr = "SELECT SFS FROM " + StudentFYPSubject.class.getName() + " SFS"
-				+ " LEFT JOIN FETCH SFS.subject S"
+				+ " JOIN FETCH SFS.subject S"
 				+ " WHERE S.id = :subjectId"
 				;
 		
@@ -256,8 +257,6 @@ public class CompanyEJB implements CompanyEJBLocal {
 			query.setParameter("status", status);
 
 		out = query.getResultList();
-		System.out.println("Printing FOUND STUFF");
-		out.stream().forEach(e -> System.out.println(e.getId()));
 		
 		return out;
 	}
@@ -267,7 +266,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 		List<StudentFYPSubject> out = null;
 		
 		String queryStr = "SELECT SFS FROM " + StudentFYPSubject.class.getName() + " SFS"
-				+ " LEFT JOIN FETCH SFS.student S"
+				+ " JOIN FETCH SFS.student S"
 				+ " WHERE S.id = :subjectId"
 				;
 		
@@ -308,42 +307,36 @@ public class CompanyEJB implements CompanyEJBLocal {
 	@Override
 	public boolean acceptStudentAppliance(long studentId, long subjectId) {
 		
-		System.out.println("00000");
-		
 		ApplianceStatus status = ApplianceStatus.none;
 		StudentFYPSubject SFS = getStudentToSubject(studentId, subjectId);
 		
 		if(SFS == null)
 			return false;
 		
-		System.out.println("BBBBBBBBBBBBBB");
-		
-		
 		status = SFS.getApplianceStatus();
 		
-		EnumSet<ApplianceStatus> canChangeStatus = EnumSet.allOf(ApplianceStatus.class);
+		EnumSet<ApplianceStatus> canChangeStatus;
 				
 		canChangeStatus = EnumSet.of(
 				ApplianceStatus.pending
 				// ...
 				);
 
-		System.out.println("111111111");
-		
 		// Means we can accept
 		if(canChangeStatus.contains(status))
 		{
-			System.out.println("2222222222");
-			
-			SFS.setApplianceStatus(ApplianceStatus.accepted);
-			
 			FYPSubject subject = em.find(FYPSubject.class, subjectId);
 			
 			List<StudentFYPSubject> acceptedSFSs = getStudentFypSubjectsOfSubjectByStatus(subjectId, ApplianceStatus.accepted, false);
 			
+			// We set after fetching
+			SFS.setApplianceStatus(ApplianceStatus.accepted);
+			
 			int curApplicantsCount = acceptedSFSs != null ? acceptedSFSs.size() : 0;
 			int maxApplicants = subject.getMaxApplicants();
 
+			System.out.println("cur: " + curApplicantsCount + " | max: " + maxApplicants);
+			
 			System.out.println("curApplicantsCount: " + curApplicantsCount);
 			
 			boolean canAccept = curApplicantsCount < maxApplicants;
@@ -355,19 +348,18 @@ public class CompanyEJB implements CompanyEJBLocal {
 				SFS.setApplianceStatus(status);
 				em.persist(SFS);
 				
-				boolean shouldRejectAllOthers = curApplicantsCount + 1 < maxApplicants;
-				
-				System.out.println("..........: " + SFS.getId());
+				boolean shouldRejectAllOthers = curApplicantsCount + 1 >= maxApplicants;
 				
 				// Shall we just reject everyone else?
 				if(shouldRejectAllOthers)
 				{
-					String queryStr = "UPDATE " + StudentFYPSubject.class.getName() + "SFS "
-							+ " SET SFS.applianceStatus = rejected"
+					String queryStr = "UPDATE " + StudentFYPSubject.class.getName() + " SFS "
+							+ " SET SFS.applianceStatus = '" + ApplianceStatus.refused + "'"
 							+ " WHERE SFS.subject.id = :subjectId"
-							+ " AND SFS.applianceStatus = pending";
+							+ " AND SFS.applianceStatus = '" + ApplianceStatus.pending + "'";
 					
-					TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class);
+					Query query = em.createQuery(queryStr)
+							.setParameter("subjectId", subjectId);
 					
 					int updatedCount = query.executeUpdate();
 				}
@@ -377,7 +369,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 			
 			return false;
 		}
-		
+
 		return false;
 	}
 
