@@ -32,8 +32,6 @@ public class Student extends User {
 	// paper report to the administration
 	@Column(name = "has_submitted_a_report")
 	boolean hasSubmittedAReport;
-	
-
 
 	@Column(name="cin")
 	String cin;
