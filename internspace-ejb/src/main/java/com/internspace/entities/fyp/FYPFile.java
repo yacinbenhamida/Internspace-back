@@ -65,9 +65,7 @@ public class FYPFile implements Serializable {
 	
 
 	
-	@ManyToOne
-	@JoinColumn(name = "cmp")
-	Company cmp;
+
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
@@ -199,13 +197,7 @@ public class FYPFile implements Serializable {
 
 	
 
-	public Company getCmp() {
-		return cmp;
-	}
 
-	public void setCmp(Company cmp) {
-		this.cmp = cmp;
-	}
 
 	/*
 	public FYPSubject getSubject() {
@@ -216,6 +208,7 @@ public class FYPFile implements Serializable {
 	public void setSubject(FYPSubject subject) {
 		this.subject = subject;
 	}
+
 
 	public Student getStudent() {
 		return student;

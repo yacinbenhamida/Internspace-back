@@ -7,7 +7,7 @@ import javax.ejb.Local;
 
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
-import com.internspace.entities.fyp.Internship;
+
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 

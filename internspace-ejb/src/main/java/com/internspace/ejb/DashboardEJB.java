@@ -12,7 +12,7 @@ import javax.persistence.TypedQuery;
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
-import com.internspace.entities.fyp.Internship;
+
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.university.University;
 import com.internspace.entities.users.Company;

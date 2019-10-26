@@ -35,7 +35,7 @@ public class User implements Serializable {
 	protected String email;
 	protected String username;
 	protected String password;
-
+	
 	/*
 	 * Associations
 	 */
@@ -112,5 +112,6 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 
 }

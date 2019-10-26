@@ -41,9 +41,7 @@ public class Company extends User {
 
 	@OneToMany(mappedBy = "company")
 	Set<InternshipConvention> internshipConventions;// = new HashSet<InternshipConvention>();
-	
-	@OneToMany(mappedBy = "cmp", fetch = FetchType.LAZY)
-	Set<FYPFile> fypFiles = new HashSet<>();
+
 
 	/*
 	 * Construction

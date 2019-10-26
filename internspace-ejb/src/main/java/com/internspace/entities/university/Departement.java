@@ -65,9 +65,7 @@ public class Departement implements Serializable {
 	@JoinColumn(name = "departement_head_id")
 	Employee departementHead;
 	
-	@ManyToOne
-	@JoinColumn(name="university_id")
-	University university;
+	
 	
 	// Explicitly check if this employee has the Teacher role.
 	@OneToMany(mappedBy = "department")
@@ -134,12 +132,7 @@ public class Departement implements Serializable {
 	public void setDepartementHead(Employee departementHead) {
 		this.departementHead = departementHead;
 	}
-	public University getUniversity() {
-		return university;
-	}
-	public void setUniversity(University university) {
-		this.university = university;
-	}
+
 	
 	
 }
