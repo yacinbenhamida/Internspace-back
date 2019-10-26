@@ -46,7 +46,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public FYPFile getFypFileOfStudent(long studId) {
-		Query q = service.createQuery("SELECT f from FYPFile f where f.student.id = :id")
+		Query q = service.createQuery("SELECT f from FYPFile fa, Student s where s.id = :id AND fa.id = s.fypFile.id")
 				.setParameter("id", studId);
 		List<Object> list = q.getResultList();
 		if(!list.isEmpty()) {
@@ -57,8 +57,9 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public List<FYPFile> getFYPfilesOfDepartment(long idDept) {
-		Query q = service.createQuery("SELECT f from FYPFile f where  "
-				+ "AND f.student.studyClass.departement.id = :id")
+		Query q = service.createQuery("SELECT fa from FYPFile fa, Student f where "
+				+ "fa.id = f.fypFile.id AND  "
+				+ "f.studyClass.classOption.departement.id = :id")
 				.setParameter("id", idDept);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
