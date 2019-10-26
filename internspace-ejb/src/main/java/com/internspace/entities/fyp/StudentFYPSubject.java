@@ -84,4 +84,17 @@ public class StudentFYPSubject implements Serializable{
 		this.applianceStatus = applianceStatus;
 	}
 	
+	// CUSTOM
+	
+	public long getStudentId()
+	{
+		return student.getId();
+	}
+	
+	
+	public long getSubjectId()
+	{
+		return subject.getId();
+	}
+	
 }

@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.security.auth.Subject;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
@@ -245,7 +246,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 				+ " WHERE S.id = :subjectId"
 				;
 		
-		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.status = :status";
+		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.applianceStatus = :status";
 		
 		TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class)
 				.setParameter("subjectId", subjectId)
@@ -255,6 +256,8 @@ public class CompanyEJB implements CompanyEJBLocal {
 			query.setParameter("status", status);
 
 		out = query.getResultList();
+		System.out.println("Printing FOUND STUFF");
+		out.stream().forEach(e -> System.out.println(e.getId()));
 		
 		return out;
 	}
@@ -268,7 +271,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 				+ " WHERE S.id = :subjectId"
 				;
 		
-		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.status = :status";
+		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.applianceStatus = :status";
 		
 		TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class)
 				.setParameter("subjectId", studentId)
@@ -300,6 +303,82 @@ public class CompanyEJB implements CompanyEJBLocal {
 		TypedQuery<FYPSubject> query = em.createQuery(queryStr, FYPSubject.class);
 		
 		return query.getResultList();
+	}
+
+	@Override
+	public boolean acceptStudentAppliance(long studentId, long subjectId) {
+		
+		System.out.println("00000");
+		
+		ApplianceStatus status = ApplianceStatus.none;
+		StudentFYPSubject SFS = getStudentToSubject(studentId, subjectId);
+		
+		if(SFS == null)
+			return false;
+		
+		System.out.println("BBBBBBBBBBBBBB");
+		
+		
+		status = SFS.getApplianceStatus();
+		
+		EnumSet<ApplianceStatus> canChangeStatus = EnumSet.allOf(ApplianceStatus.class);
+				
+		canChangeStatus = EnumSet.of(
+				ApplianceStatus.pending
+				// ...
+				);
+
+		System.out.println("111111111");
+		
+		// Means we can accept
+		if(canChangeStatus.contains(status))
+		{
+			System.out.println("2222222222");
+			
+			SFS.setApplianceStatus(ApplianceStatus.accepted);
+			
+			FYPSubject subject = em.find(FYPSubject.class, subjectId);
+			
+			List<StudentFYPSubject> acceptedSFSs = getStudentFypSubjectsOfSubjectByStatus(subjectId, ApplianceStatus.accepted, false);
+			
+			int curApplicantsCount = acceptedSFSs != null ? acceptedSFSs.size() : 0;
+			int maxApplicants = subject.getMaxApplicants();
+
+			System.out.println("curApplicantsCount: " + curApplicantsCount);
+			
+			boolean canAccept = curApplicantsCount < maxApplicants;
+			
+			// This should always be true. front end has to check each subject's accepted
+			if(canAccept)
+			{
+				status = ApplianceStatus.accepted;
+				SFS.setApplianceStatus(status);
+				em.persist(SFS);
+				
+				boolean shouldRejectAllOthers = curApplicantsCount + 1 < maxApplicants;
+				
+				System.out.println("..........: " + SFS.getId());
+				
+				// Shall we just reject everyone else?
+				if(shouldRejectAllOthers)
+				{
+					String queryStr = "UPDATE " + StudentFYPSubject.class.getName() + "SFS "
+							+ " SET SFS.applianceStatus = rejected"
+							+ " WHERE SFS.subject.id = :subjectId"
+							+ " AND SFS.applianceStatus = pending";
+					
+					TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class);
+					
+					int updatedCount = query.executeUpdate();
+				}
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		return false;
 	}
 
 }

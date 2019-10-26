@@ -15,7 +15,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 
-import com.internspace.ejb.FYPSheetEJB;
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
@@ -265,7 +264,7 @@ public class CompanyService {
 		
 		boolean success = service.tryApplyOnSubject(subjectId, studentId);
 		
-		String outputMsg = "Succussfully applied.";
+		String outputMsg = "Successfully applied.";
 		if(!success)
 			outputMsg = "Failed to apply, you might be already applied, accepted or rejected ";
 		
@@ -285,7 +284,7 @@ public class CompanyService {
 		
 		boolean success = service.tryUnapplyOnSubject(subjectId, studentId);
 		
-		String outputMsg = "Succussfully unapplied.";
+		String outputMsg = "Successfully unapplied.";
 		if(!success)
 			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected ";
 		
@@ -305,9 +304,31 @@ public class CompanyService {
 		
 		boolean success = service.studentToggleAppliance(studentId, subjectId);
 		
-		String outputMsg = "Succussfully unapplied.";
+		String outputMsg = "Successfully unapplied.";
 		if(!success)
 			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected ";
+		
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+	}
+	
+	@GET
+	@Path("/subjects/accept")
+	@Consumes(MediaType.APPLICATION_JSON)
+
+	public Response acceptStudentAppliance(
+			@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "subject") long subjectId) 
+	{
+		if (studentId == 0 || subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
+		
+		boolean success = service.acceptStudentAppliance(studentId, subjectId);
+		
+		String outputMsg = "Successfully accepted students' appliance.";
+		
+		if(!success)
+			outputMsg = "Failed to accept, it might be already none, rejected or the appliance count is maximal.";
 		
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}
