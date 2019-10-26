@@ -43,7 +43,7 @@ public class CompanyService {
 		
 		List<Company> companies = service.findCompaniesByName(companyName, 1, false);
 		
-		if(companies == null || companies.size() > 0)
+		if(companies != null && companies.size() > 0)
 			return Response.status(Status.BAD_REQUEST).entity("Company with such name already exists: " + companyName).build();
 			
 		service.createCompany(company);
@@ -68,14 +68,36 @@ public class CompanyService {
 		if(companyId == 0)
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		
-		FYPSubject subject = service.findSubject(companyId);
+		Company company = service.findCompany(companyId);
 		
-		if(subject == null)
+		if(company == null)
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Can't find Company to delete with ID: " + companyId).build();
 		
-		service.deleteSubject(subject);
+		service.deleteCompany(company);
 		return Response.status(Response.Status.OK).entity("Successfully DELETED Company for ID: " + companyId).build();
+	}
+	
+	@DELETE
+	@Path("/delete/name")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteCompanyByName(
+			@QueryParam(value="company")String companyName
+			)
+	{
+		if(companyName.isEmpty())
+			return Response.status(Status.BAD_REQUEST).entity("Please provide a valid company name...").build();
+		
+		List<Company> companies = service.findCompaniesByName(companyName, 1, false);
+		
+		if(companies == null || companies.size() == 0)
+			return Response.status(Status.BAD_REQUEST).entity("Company with such name doens't exist: " + companyName).build();
+			
+		Company company = companies.get(0);
+		
+		service.deleteCompanyById(company.getId()); 
+		
+		return Response.status(Response.Status.OK).entity("Successfully DELETED Company by name for ID: " + company.getId()).build();
 	}
 	
 	// Subjects Section
