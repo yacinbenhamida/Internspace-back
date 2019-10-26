@@ -20,60 +20,71 @@ import javax.persistence.GenerationType;
 import javax.persistence.Column;
 
 @Entity
-@Table(name="fyp_subject")
+@Table(name = "fyp_subject")
 public class FYPSubject implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/*
 	 * Attributes
 	 */
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="subject_id")
+	@Column(name = "subject_id")
 	long id;
-	
-	@Column(name="title")
+
+	@Column(name = "title")
 	String title = "default";
-	
+
 	// Apply NLP with fypFile.features
-	@Column(name="content", length = 65535, columnDefinition = "text")
+	@Column(name = "content", length = 65535, columnDefinition = "text")
 	String content;
-	
-	@Column(name="max_applicants", columnDefinition = "int default 1")
+
+	@Column(name = "max_applicants", columnDefinition = "int default 1")
 	int maxApplicants;
-	
-	@Column(name="curr_applicants_count", columnDefinition = "int default 1")
+
+	@Column(name = "curr_applicants_count", columnDefinition = "int default 1")
 	int curApplicantsCount;
-	
+
 	/*
 	 * Associations
 	 */
-	
-	@OneToOne
+
+	@OneToOne(mappedBy = "subject")
 	FYPFile fypFile; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
 	@ManyToOne
 	@JoinColumn(name = "company_id")
 	Company company;
-	
+
 	// Many to Many to Subjects using custom association table.
-	@OneToMany(mappedBy="subject", fetch = FetchType.LAZY)
-	Set<StudentFYPSubject> studentSubjects;
-	
-	/*
 	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-	Set<Internship> internships;
-	 */
-	
+	Set<StudentFYPSubject> studentSubjects;
+
 	@ManyToMany(mappedBy = "subjects")
 	Set<FYPCategory> categories;
-	
+
+	/*
+	 * Construction
+	 */
+
+	public FYPSubject() {
+
+	}
+
+	public FYPSubject(Company company, FYPFile fypFile, String title, String content, int maxApplicants) {
+		this.company = company;
+		this.fypFile = fypFile;
+		this.title = title;
+		this.content = content;
+		this.maxApplicants = maxApplicants;
+	}
+
 	/*
 	 * Getters & Setters
 	 */
-	
+
 	public long getId() {
 		return id;
 	}
@@ -98,13 +109,11 @@ public class FYPSubject implements Serializable {
 		this.content = content;
 	}
 
-	public FYPFile getFypFile() {
-		return fypFile;
-	}
-
+	/*
+	 * public FYPFile getFypFile() { return fypFile; }
+	 */
 	public void setFypFile(FYPFile fypFile) {
 		this.fypFile = fypFile;
 	}
 
-	
 }

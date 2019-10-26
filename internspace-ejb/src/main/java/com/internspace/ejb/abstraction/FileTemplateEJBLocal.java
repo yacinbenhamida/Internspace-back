@@ -14,14 +14,18 @@ public interface FileTemplateEJBLocal {
 	 * Template CRUD
 	 */
 	void createTemplate(FileTemplate template);
-	void updateTemplateEditor(FileTemplate template, Employee editor);
+	boolean updateTemplateEditor(FileTemplate template, Employee editor);
+	void removeTemplate(long id);
+	FileTemplate findTemplate(long id);
+	List<FileTemplate> findTemplatesByName(String name, int n, boolean useLike);
+	List<FileTemplate> findTemplateVersionsByName(String name);
 	List<FileTemplate> getAllTemplates();
 	
 	/*
 	 * Template Elements' CRUD
 	 */
 	void createElement(FileTemplateElement element);
-	void updateElement(FileTemplateElement element);
+	boolean updateElement(FileTemplateElement element);
 	
 	/*
 	 * Advanced

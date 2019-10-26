@@ -1,10 +1,15 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -30,9 +35,10 @@ public class FYPKeyword implements Serializable {
 	/*
 	 * Associations
 	 */
-
-	@ManyToOne
-	FYPFile fypFile;
+	@OneToMany(mappedBy = "key", fetch = FetchType.LAZY)
+	Set<FYPFile> fypFiles = new HashSet<>();
+	/*@ManyToOne
+	FYPFile fypFile;*/
 
 	/*
 	 * Getters & Setters

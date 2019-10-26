@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import com.internspace.entities.university.UniversitaryYear;
+import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -17,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
 /*
@@ -53,6 +56,22 @@ public class FYPFile implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
+	
+	/*@ManyToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "featt")
+	FYPFeature feat;*/
+	
+	@ManyToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "cat")
+	FYPCategory cat;
+	
+	@ManyToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "keyy")
+	FYPKeyword key;
+	
+	@ManyToOne
+	@JoinColumn(name = "cmp")
+	Company cmp;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
@@ -76,21 +95,21 @@ public class FYPFile implements Serializable {
 	@OneToOne(mappedBy = "fypFile")
 	Student student;
 
-	@OneToOne
+	@OneToOne(optional = true)
 	@JoinColumn(name = "subject")
 	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 	
-	@OneToMany(mappedBy = "fypFile")
+	@OneToMany(mappedBy = "fypFile",fetch = FetchType.EAGER)
 	Set<FYPFeature> features;
 
 	@OneToMany(mappedBy = "fypFile")
 	List<FYPIntervention> interventions;
 
-	@OneToMany(mappedBy = "fypFile")
-	Set<FYPKeyword> keywords; // Useful for NLP
+	/*@OneToMany(mappedBy = "fypFile")
+	Set<FYPKeyword> keywords; // Useful for NLP*/
 
-	@ManyToMany(mappedBy = "fypFiles")
-	Set<FYPCategory> categories;
+	/*@ManyToMany(mappedBy = "fypFiles")
+	Set<FYPCategory> categories;*/
 
 	/*
 	 * Getters & Setters
@@ -164,28 +183,56 @@ public class FYPFile implements Serializable {
 		this.isArchived = isArchived;
 	}
 
-	public void setFeatures(Set<FYPFeature> features) {
-		this.features = features;
-	}
+	
 
-	public void setKeywords(Set<FYPKeyword> keywords) {
-		this.keywords = keywords;
-	}
-
+	
 
 	public void setInterventions(List<FYPIntervention> interventions) {
 		this.interventions = interventions;
 	}
 
 
-	public void setCategories(Set<FYPCategory> categories) {
-		this.categories = categories;
-	}
+	
 
 	/*public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
 	}*/
 
+
+
+	public FYPCategory getCat() {
+		return cat;
+	}
+
+	public void setCat(FYPCategory cat) {
+		this.cat = cat;
+	}
+
+	public FYPKeyword getKey() {
+		return key;
+	}
+
+	public void setKey(FYPKeyword key) {
+		this.key = key;
+	}
+
+	public Company getCmp() {
+		return cmp;
+	}
+
+	public void setCmp(Company cmp) {
+		this.cmp = cmp;
+	}
+
+	/*
+	public FYPSubject getSubject() {
+		return subject;
+	}
+	 */
+	
+	public void setSubject(FYPSubject subject) {
+		this.subject = subject;
+	}
 
 	public Student getStudent() {
 		return student;
@@ -194,5 +241,15 @@ public class FYPFile implements Serializable {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
+
+	public Set<FYPFeature> getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(Set<FYPFeature> features) {
+		this.features = features;
+	}
+
+	
 
 }

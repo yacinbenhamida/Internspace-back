@@ -32,6 +32,7 @@ import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.users.Company;
+import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
 @Stateless
@@ -93,7 +94,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		while(it.hasNext()){  
 			li.addAll(em.createQuery("FROM " + FYPSubject.class.getName()  + " c WHERE c.company =:company").setParameter("company", it.next()).getResultList());
 	      }
-		 li.forEach(x->lf.add(x.getFypFile()));
+		 //li.forEach(x->lf.add(x.getFypFile())); // Na7it l get khatr yrajaali f fypFile eli aando getSubject eli yrajaa f fypFile :( | achraf
 		 return lf;
 		
 	
@@ -319,7 +320,18 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 
-	
+	@Override
+	public Employee getInternshipDirectorById(long id)
+	{
+		Employee employee = em.find(Employee.class, id);
+		
+		if(employee != null && !employee.getRole().equals(Employee.Role.internshipsDirector))
+		{
+			return null;
+		}
+		
+		return employee;
+	}
 	
 	
 	

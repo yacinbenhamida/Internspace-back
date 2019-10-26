@@ -62,7 +62,7 @@ public class StudentEJB implements StudentEJBLocal{
 	@Override
 	public void sendMail(String text,String cin) {
 		
-		String subject = "Voici c votre mot de passe " ;
+		String subject = "vous êtes autorisé a passer votre PFE " ;
 		String subject1 = "Vous êtes pas autorisé a paser le PFE " ;
 		
 		
@@ -79,25 +79,26 @@ public class StudentEJB implements StudentEJBLocal{
 				ls3.add(ls.get(i));
 				//ls3.forEach(x->mail.send(x.getEmail(),text,subject));
 				try {
-					mail.sendMail("rayane.limem@gmail.com", text, subject1);
+					mail.sendMail(ls.get(i).getEmail(), text, subject);
 				} catch (MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-		}
+			}}
 		
-		/*for(int i=0;i<ls1.size();i++) {
-			if(ls1.get(i).getCin().equals(cin)) {
-				ls4.add(ls1.get(i));
+		
+		for(int j=0;j<ls1.size();j++) {
+			if(ls1.get(j).getCin().equals(cin)) {
+				ls4.add(ls1.get(j));
 				try {
-					mail.sendMail(ls1.get(i).getEmail(), text, subject1);
+					mail.sendMail(ls1.get(j).getEmail(), text, subject1);
 				} catch (MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				//ls4.forEach(x->mail.send(x.getEmail(),text,subject1));
-			}*/
+			}
+		}
 		}
 		
 		
