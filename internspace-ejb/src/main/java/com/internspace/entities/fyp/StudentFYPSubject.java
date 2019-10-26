@@ -20,6 +20,7 @@ import com.internspace.entities.users.Student;
 public class StudentFYPSubject implements Serializable{
 
 	public enum ApplianceStatus {
+		none, // When there isn't a row matching student and subject
 		pending,
 		refused,
 		accepted,
@@ -48,4 +49,39 @@ public class StudentFYPSubject implements Serializable{
 	@JoinColumn(name="subject_id", referencedColumnName="subject_id", insertable = false, updatable = false)
 	FYPSubject subject;
 
+	/*
+	 * Construction
+	 */
+	
+	public StudentFYPSubject()
+	{
+		
+	}
+
+	public StudentFYPSubject(Student student, FYPSubject subject)
+	{
+		this.student = student;
+		this.subject = subject;
+	}
+	
+	/*
+	 * Getters & Setters
+	 */
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public ApplianceStatus getApplianceStatus() {
+		return applianceStatus;
+	}
+
+	public void setApplianceStatus(ApplianceStatus applianceStatus) {
+		this.applianceStatus = applianceStatus;
+	}
+	
 }

@@ -44,9 +44,15 @@ public class FYPSubject implements Serializable {
 	@Column(name = "max_applicants", columnDefinition = "int default 1")
 	int maxApplicants;
 
+	// This won't be the best option because
+	// When we update max applicants, we might want to change
+	// Cur applicants count, which would lead to
+	// Conspiracy with ground-truth
+	/*
 	@Column(name = "curr_applicants_count", columnDefinition = "int default 1")
 	int curApplicantsCount;
-
+	 */
+	
 	/*
 	 * Associations
 	 */
@@ -91,6 +97,14 @@ public class FYPSubject implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public int getMaxApplicants() {
+		return maxApplicants;
+	}
+
+	public void setMaxApplicants(int maxApplicants) {
+		this.maxApplicants = maxApplicants;
 	}
 
 	public String getTitle() {

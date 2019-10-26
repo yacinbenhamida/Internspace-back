@@ -19,6 +19,7 @@ public interface CompanyEJBLocal {
 	/*
 	 * CRUD Company
 	 */
+	
 	void createCompany(Company company);
 	List<Company> getAll();
 	Company findCompany(long companyId);
@@ -30,6 +31,7 @@ public interface CompanyEJBLocal {
 	/*
 	 * CRUD FYPSubject
 	 */
+	
 	void createSubject(FYPSubject subject);
 	List<FYPSubject> getAllSubjects();
 	List<FYPSubject> getFypSubjectsByCompany(long companyId, boolean filterUntaken);
@@ -41,10 +43,17 @@ public interface CompanyEJBLocal {
 	/*
 	 * Advanced
  	 */
+	
+	// Subject appliance
+	StudentFYPSubject getStudentToSubject(long studentId, long subjectId);
+	boolean studentToggleAppliance(long studentId, long subjectId);
+	boolean tryApplyOnSubject(long studentId, long subjectId);
+	boolean tryUnapplyOnSubject(long studentId, long subjectId);
+
+	List<StudentFYPSubject> getStudentFypSubjectsOfSubjectByStatus(long subjectId, ApplianceStatus status, boolean fetchAll);
+	List<StudentFYPSubject> getStudentFypSubjectsOfStudentByStatus(long studentId, ApplianceStatus status, boolean fetchAll);
 	List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken);
 	List<FYPSubject> getSuggestedSubjectsByCategories(List<FYPCategory> categories);
-	List<StudentFYPSubject> getStudentFypSubjectsByStatus(ApplianceStatus status, boolean fetchAll);
-	boolean tryApplyOnSubject(FYPSubject subject, long studentId);
 	//void acceptStudentAppliance(FYPSubject subject, long studentId);
 	//boolean subscribe(String username, int password, String companyName);
 	// Returns token

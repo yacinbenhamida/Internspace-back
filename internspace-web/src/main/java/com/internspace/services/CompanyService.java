@@ -121,25 +121,6 @@ public class CompanyService {
 	
 	// Subjects Section
 
-	@GET
-	@Path("/subjects/all")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFypSubjectsByCompany(
-			@QueryParam("company") long companyId,
-			@QueryParam("filter-untaken") boolean filteruntaken) {
-		List<FYPSubject> subjects;
-		
-		if(companyId > 0)
-			subjects = service.getFypSubjectsByCompany(companyId, filteruntaken);
-		else
-			subjects = service.getAllSubjects();
-		
-		return Response.ok(subjects).status(200)
-				.header("Access-Control-Allow-Origin", "*")
-				.header("Access-Control-Max-Age", "1209600")
-				.build();
-	}
-	
 	@POST
 	@Path("/subjects/add")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -164,11 +145,11 @@ public class CompanyService {
 			if(company == null)
 				System.out.println("Failed to load company for ID: " + companyId);
 		}
-
+		
 		if(fypFileId > 0) // Valid input
 		{
 			fypFile = service_fypFile.getFYFileById(fypFileId);
-
+			
 			if(fypFile == null)
 				System.out.println("Failed to load fypFile for ID: " + fypFileId);
 		}
@@ -178,7 +159,60 @@ public class CompanyService {
 		
 		return Response.status(Response.Status.OK).entity("Successfully Inserted a new Subject.").build();
 	}
-
+	
+	@GET
+	@Path("/subjects/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllSubjects() {
+		return Response.ok(service.getAllSubjects()).status(200)
+				.header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Max-Age", "1209600")
+				.build();
+	}
+	
+	@GET
+	@Path("/subjects/allbycompany")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFypSubjectsByCompany(
+			@QueryParam("company") long companyId,
+			@QueryParam("filter-untaken") boolean filteruntaken) {
+		List<FYPSubject> subjects;
+		
+		if(companyId > 0)
+			subjects = service.getFypSubjectsByCompany(companyId, filteruntaken);
+		else
+			subjects = service.getAllSubjects();
+		
+		return Response.ok(subjects).status(200)
+				.header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Max-Age", "1209600")
+				.build();
+	}
+	
+	@PUT
+	@Path("/subjects/update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateSubject(FYPSubject updateSubject)
+	{
+		if(updateSubject.getId() == 0)
+			return Response.status(Status.BAD_REQUEST).entity("Please provide a valid Subject ID...").build();
+		
+		FYPSubject subject = service.findSubject(updateSubject.getId());
+		
+		if(subject == null)
+			return Response.status(Status.BAD_REQUEST).entity("Failed to find the Subject to update. Please provide a valid Subject ID...").build();
+		
+		subject.setTitle(updateSubject.getTitle());
+		subject.setContent(updateSubject.getContent());
+		
+		// Only change apply max appliacants when new value > cur applicants
+		//if(subject.get)
+		
+		service.updateSubject(subject);
+	    
+		return Response.status(Response.Status.OK).entity("Successfully UPDATED Subject for ID: " + updateSubject.getId()).build();
+	}
+	
 	@DELETE
 	@Path("/subjects/delete")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -197,6 +231,59 @@ public class CompanyService {
 		
 		service.deleteSubject(subject);
 		return Response.status(Response.Status.OK).entity("Successfully DELETED Subject for ID: " + subjectId).build();
+	}
+	
+	// Advanced
+	
+	@GET
+	@Path("/subjects/apply")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response studentApplyToSubject(
+			@QueryParam(value="student")long studentId
+			,@QueryParam(value="subject")long subjectId
+			)
+	{
+		boolean success = service.tryApplyOnSubject(subjectId, studentId);
+		
+		String outputMsg = "Succussfully applied.";
+		if(!success)
+			outputMsg = "Failed to apply, you might be already applied, accepted or rejected ";
+		
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+	}
+	
+	@GET
+	@Path("/subjects/unapply")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response studentUnapplyToSubject(
+			@QueryParam(value="student")long studentId
+			,@QueryParam(value="subject")long subjectId
+			)
+	{
+		boolean success = service.tryUnapplyOnSubject(subjectId, studentId);
+		
+		String outputMsg = "Succussfully unapplied.";
+		if(!success)
+			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected ";
+		
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+	}
+	
+	@GET
+	@Path("/subjects/toggle_appliance")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response studentToggleApplianceToSubject(
+			@QueryParam(value="student")long studentId
+			,@QueryParam(value="subject")long subjectId
+			)
+	{
+		boolean success = service.studentToggleAppliance(studentId, subjectId);
+		
+		String outputMsg = "Succussfully unapplied.";
+		if(!success)
+			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected ";
+		
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}
 	
 }

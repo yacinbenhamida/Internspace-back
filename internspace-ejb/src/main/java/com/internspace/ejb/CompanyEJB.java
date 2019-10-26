@@ -1,6 +1,7 @@
 package com.internspace.ejb;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -13,8 +14,10 @@ import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.StudentFYPSubject;
+import com.internspace.entities.fyp.FileTemplateElement.ElementType;
 import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
 import com.internspace.entities.users.Company;
+import com.internspace.entities.users.Student;
 
 @Stateless
 public class CompanyEJB implements CompanyEJBLocal {
@@ -90,7 +93,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 	@Override
 	public void updateSubject(FYPSubject subject) {
 		System.out.println("Updating: " + subject);
-		em.persist(subject);
+		em.persist(em.contains(subject) ? subject : em.merge(subject));
 	}
 
 	@Override
@@ -106,7 +109,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 	
 	@Override
 	public List<FYPSubject> getFypSubjectsByCompany(long companyId, boolean filterUntaken) {
-		List<FYPSubject> out = new ArrayList<FYPSubject>();
+		List<FYPSubject> out = null;
 		
 		String queryStr = "SELECT s FROM " + FYPSubject.class.getName() + " s"
 				+ " LEFT JOIN FETCH s.studentSubjects ss"
@@ -130,6 +133,157 @@ public class CompanyEJB implements CompanyEJBLocal {
 	}
 
 	@Override
+	public StudentFYPSubject getStudentToSubject(long studentId, long subjectId)
+	{
+		String queryStr = "SELECT SFS FROM " + StudentFYPSubject.class.getName() + " SFS"
+				+ " JOIN FETCH SFS.student ST JOIN FETCH SFS.subject SB"
+				+ " WHERE"
+				+ " ST.id = :studentId"
+				+ " AND SB.id = :subjectId"
+				//+ " AND SFS.status = :status"
+				;
+				
+		TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class)
+				.setParameter("studentId", studentId)
+				.setParameter("subjectId", subjectId)
+				;
+		
+		List<StudentFYPSubject> SFSs = query.getResultList();
+		
+		ApplianceStatus res = ApplianceStatus.none;
+		
+		if(SFSs != null && SFSs.size() > 0)
+			return SFSs.get(0);
+		
+		return null;
+	}
+	
+	@Override
+	public boolean studentToggleAppliance(long studentId, long subjectId) {
+		boolean success = tryApplyOnSubject(studentId, subjectId);
+		
+		if(!success)
+			success = tryUnapplyOnSubject(studentId, subjectId);
+		
+		return success;
+	}
+	
+	@Override
+	public boolean tryApplyOnSubject(long studentId, long subjectId) {
+		
+		ApplianceStatus status = ApplianceStatus.none;
+		StudentFYPSubject SFS = getStudentToSubject(studentId, subjectId);
+		
+		if(SFS != null)
+			status = SFS.getApplianceStatus();
+		
+		EnumSet<ApplianceStatus> canChangeStatus = EnumSet.allOf(ApplianceStatus.class);
+				
+		canChangeStatus = EnumSet.of(
+				ApplianceStatus.none
+				// ...
+				);
+		
+		// Means we can change
+		if(canChangeStatus.contains(status))
+		{
+			if(SFS == null) // Create a row
+			{
+				SFS = new StudentFYPSubject(
+					em.find(Student.class, studentId),
+					em.find(FYPSubject.class, subjectId)
+					);
+			}
+			
+			SFS.setApplianceStatus(ApplianceStatus.pending);
+			
+			em.persist(SFS);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean tryUnapplyOnSubject(long studentId, long subjectId) {
+		
+		ApplianceStatus status = ApplianceStatus.none;
+		StudentFYPSubject SFS = getStudentToSubject(studentId, subjectId);
+		
+		if(SFS == null)
+			return false;
+		
+		status = SFS.getApplianceStatus();
+		
+		EnumSet<ApplianceStatus> canChangeStatus = EnumSet.allOf(ApplianceStatus.class);
+				
+		canChangeStatus = EnumSet.of(
+				ApplianceStatus.pending
+				// ...
+				);
+		
+		// Means we can change
+		if(canChangeStatus.contains(status))
+		{
+			SFS.setApplianceStatus(ApplianceStatus.none);
+			
+			em.persist(SFS);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public List<StudentFYPSubject> getStudentFypSubjectsOfSubjectByStatus(long subjectId, ApplianceStatus status, boolean fetchAll) {
+		List<StudentFYPSubject> out = null;
+		
+		String queryStr = "SELECT SFS FROM " + StudentFYPSubject.class.getName() + " SFS"
+				+ " LEFT JOIN FETCH SFS.subject S"
+				+ " WHERE S.id = :subjectId"
+				;
+		
+		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.status = :status";
+		
+		TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class)
+				.setParameter("subjectId", subjectId)
+				;
+		
+		if(!fetchAll)
+			query.setParameter("status", status);
+
+		out = query.getResultList();
+		
+		return out;
+	}
+
+	@Override
+	public List<StudentFYPSubject> getStudentFypSubjectsOfStudentByStatus(long studentId, ApplianceStatus status, boolean fetchAll) {
+		List<StudentFYPSubject> out = null;
+		
+		String queryStr = "SELECT SFS FROM " + StudentFYPSubject.class.getName() + " SFS"
+				+ " LEFT JOIN FETCH SFS.student S"
+				+ " WHERE S.id = :subjectId"
+				;
+		
+		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.status = :status";
+		
+		TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class)
+				.setParameter("subjectId", studentId)
+				;
+		
+		if(!fetchAll)
+			query.setParameter("status", status);
+		
+		out = query.getResultList();
+		
+		return out;
+	}
+
+	
+	@Override
 	public List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken) {
 		return null;
 	}
@@ -139,15 +293,6 @@ public class CompanyEJB implements CompanyEJBLocal {
 		return null;
 	}
 
-	@Override
-	public List<StudentFYPSubject> getStudentFypSubjectsByStatus(ApplianceStatus status, boolean fetchAll) {
-		return null;
-	}
-
-	@Override
-	public boolean tryApplyOnSubject(FYPSubject subject, long studentId) {
-		return false;
-	}
 
 	@Override
 	public List<FYPSubject> getAllSubjects() {
@@ -156,4 +301,5 @@ public class CompanyEJB implements CompanyEJBLocal {
 		
 		return query.getResultList();
 	}
+
 }
