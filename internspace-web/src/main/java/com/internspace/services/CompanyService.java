@@ -20,6 +20,7 @@ import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
+import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.users.Company;
 
 @Path("company")
@@ -236,6 +237,22 @@ public class CompanyService {
 	// Advanced
 	
 	@GET
+	@Path("/subjects/sfs")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentToSubject(
+			@QueryParam(value="student")long studentId
+			,@QueryParam(value="subject")long subjectId
+			)
+	{
+		StudentFYPSubject SFS = service.getStudentToSubject(studentId, subjectId);
+		
+		if(SFS == null)
+			return Response.status(Response.Status.BAD_REQUEST).entity("No match.").build();
+			
+		return Response.status(Response.Status.OK).entity(SFS).build();
+	}
+	
+	@GET
 	@Path("/subjects/apply")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response studentApplyToSubject(
@@ -243,6 +260,9 @@ public class CompanyService {
 			,@QueryParam(value="subject")long subjectId
 			)
 	{
+		if(studentId == 0 || subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Check ID inputs, got (" + studentId + "," + subjectId +")").build();
+		
 		boolean success = service.tryApplyOnSubject(subjectId, studentId);
 		
 		String outputMsg = "Succussfully applied.";
@@ -260,6 +280,9 @@ public class CompanyService {
 			,@QueryParam(value="subject")long subjectId
 			)
 	{
+		if(studentId == 0 || subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Check ID inputs, got (" + studentId + "," + subjectId +")").build();
+		
 		boolean success = service.tryUnapplyOnSubject(subjectId, studentId);
 		
 		String outputMsg = "Succussfully unapplied.";
@@ -277,6 +300,9 @@ public class CompanyService {
 			,@QueryParam(value="subject")long subjectId
 			)
 	{
+		if(studentId == 0 || subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Check ID inputs, got (" + studentId + "," + subjectId +")").build();
+		
 		boolean success = service.studentToggleAppliance(studentId, subjectId);
 		
 		String outputMsg = "Succussfully unapplied.";
