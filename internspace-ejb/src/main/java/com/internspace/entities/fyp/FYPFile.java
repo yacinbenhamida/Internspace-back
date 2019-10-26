@@ -57,9 +57,9 @@ public class FYPFile implements Serializable {
 	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
 	
-	@ManyToOne(cascade = {CascadeType.ALL})
+	/*@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "featt")
-	FYPFeature feat;
+	FYPFeature feat;*/
 	
 	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "cat")
@@ -99,9 +99,9 @@ public class FYPFile implements Serializable {
 	@JoinColumn(name = "subject")
 	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 	
-	/*@OneToMany(mappedBy = "fypFile",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "fypFile",fetch = FetchType.EAGER)
 	Set<FYPFeature> features;
-*/
+
 	@OneToMany(mappedBy = "fypFile")
 	List<FYPIntervention> interventions;
 
@@ -199,13 +199,6 @@ public class FYPFile implements Serializable {
 	}*/
 
 
-	public FYPFeature getFeat() {
-		return feat;
-	}
-
-	public void setFeat(FYPFeature feat) {
-		this.feat = feat;
-	}
 
 	public FYPCategory getCat() {
 		return cat;
@@ -247,6 +240,14 @@ public class FYPFile implements Serializable {
 
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+	public Set<FYPFeature> getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(Set<FYPFeature> features) {
+		this.features = features;
 	}
 
 	
