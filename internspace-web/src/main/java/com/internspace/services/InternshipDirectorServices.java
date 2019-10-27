@@ -17,9 +17,11 @@ import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FileTemplate;
 
 import com.internspace.entities.university.StudyClass;
+import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
 @Path("internship")
@@ -201,5 +203,19 @@ public class InternshipDirectorServices {
 	@Path("acceptPFE")
 	public void acceptPFE(@QueryParam(value = "id") long id){
 		service.acceptPFE(id);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("AdrCompany")
+	public List<Company> CompanyAdr(){
+		return service.GetNameAndCountry(51);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("MyList")
+	public List<FYPSubject> myList(){
+		return service.StudentWithVerifiedCompanys();
 	};
 }

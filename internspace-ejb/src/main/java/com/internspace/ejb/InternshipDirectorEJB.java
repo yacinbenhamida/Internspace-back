@@ -1,5 +1,8 @@
 package com.internspace.ejb;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +37,7 @@ import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
+import com.internspace.entities.users.User;
 
 @Stateless
 public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
@@ -158,7 +162,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		String subject = "Refus d'une fiche PFE" ;
 		FYPFile f = em.find(FYPFile.class, id);
 		f.setFileStatus(FYPFileStatus.declined);
-		Student i = f.getStudent();
+		Student i = (Student) em.createQuery("FROM Student s WHERE s.fypFile = :file").setParameter("file", f).getSingleResult();
 		Notification n = new Notification();
 		n.setStudent(i);
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
@@ -187,7 +191,8 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		String subject = "refus l’annulation d’un stage PFE" ;
 		f.setIsCanceled(false);
 		Mailer mail = new Mailer();
-		mail.send(f.getStudent().getEmail(),text,subject);
+		Student i = (Student) em.createQuery("FROM Student s WHERE s.fypFile = :file").setParameter("file", f).getSingleResult();
+		mail.send(i.getEmail(),text,subject);
 		em.persist(f);
 		em.flush();
 		
@@ -332,6 +337,43 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		
 		return employee;
 	}
+
+	
+	
+	//pour verifier l'existance de la company
+	@Override
+	public List<Company>GetNameAndCountry(long id){
+		List<Company> c =em.createQuery("SELECT country, name FROM Company C WHERE C.id =:id").setParameter("id", id).getResultList();
+		 //Company c = (Company)ls.get(0);
+		String command = "python /Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py";
+		//String [] params= {c.getName(),c.getCountry()};
+		
+		/*Process p = null;
+			try {
+				p = Runtime.getRuntime().exec(command + params );
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			BufferedReader stdInput = new BufferedReader(new 
+	                InputStreamReader(p.getInputStream()));
+			System.out.println(stdInput); */
+			//return (List<String>) stdInput;
+		System.out.println("hello"+c);
+		 return c;
+			
+	
+		
+	}
+
+
+	@Override
+	public List<FYPSubject> StudentWithVerifiedCompanys() {
+		return em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='confirmed'").getResultList();
+		//"SELECT f.fypFile , f.company , f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus='confirmed'"
+	}
+	
+	
 	
 	
 	
