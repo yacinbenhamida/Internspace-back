@@ -87,7 +87,7 @@ public class FYPFile implements Serializable {
 	@JoinColumn(name = "subject")
 	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 	
-	@OneToMany(mappedBy = "fypFile",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "fypFile",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	Set<FYPFeature> features;
 
 	@OneToMany(mappedBy = "fypFile" , cascade = CascadeType.ALL,fetch = FetchType.EAGER)
@@ -186,6 +186,10 @@ public class FYPFile implements Serializable {
 
 	
 	
+
+	public Set<FYPFeature> getFeatures() {
+		return features;
+	}
 
 	public void setStudent(Student student) {
 		this.student = student;
