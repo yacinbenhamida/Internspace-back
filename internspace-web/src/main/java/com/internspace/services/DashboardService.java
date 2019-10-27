@@ -149,5 +149,20 @@ public class DashboardService {
 				// HEAD")
 				.header("Access-Control-Max-Age", "1209600").build();
 	}
+	
+	@GET
+	@Path("/company/category/evolution")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getInternshipEvolutionPerUYByCategory(
+			@QueryParam("uni") long uniId,
+			@QueryParam("category") long categoryId
+			)
+	{
+		Map<Long, List<FYPSubject>> out = service.getInternshipEvolutionPerUYByCategory(uniId, categoryId);
+		
+		return Response.ok(out).status(200).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Max-Age", "1209600").build();
+
+	}
 
 }

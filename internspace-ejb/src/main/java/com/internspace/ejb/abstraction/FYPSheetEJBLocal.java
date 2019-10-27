@@ -7,6 +7,7 @@ import javax.ejb.Local;
 
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.users.Employee;
 //rchm
 @Local
 public interface FYPSheetEJBLocal {

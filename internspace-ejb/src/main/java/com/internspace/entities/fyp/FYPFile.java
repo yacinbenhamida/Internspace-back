@@ -90,7 +90,7 @@ public class FYPFile implements Serializable {
 	@OneToMany(mappedBy = "fypFile",fetch = FetchType.EAGER)
 	Set<FYPFeature> features;
 
-	@OneToMany(mappedBy = "fypFile")
+	@OneToMany(mappedBy = "fypFile" , cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	List<FYPIntervention> interventions;
 
 	@OneToMany(mappedBy = "fypFile")
@@ -189,6 +189,10 @@ public class FYPFile implements Serializable {
 
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+	public List<FYPIntervention> getInterventions() {
+		return interventions;
 	}
 
 	

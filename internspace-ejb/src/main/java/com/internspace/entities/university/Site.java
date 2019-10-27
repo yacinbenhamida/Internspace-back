@@ -48,6 +48,7 @@ public class Site implements Serializable {
 	
 	// Explicitly check if this employee has InternshipDirector role.
 	@OneToOne
+	@JoinColumn(name = "internship_director_id")
 	Employee internshipDirector;
 
 	
