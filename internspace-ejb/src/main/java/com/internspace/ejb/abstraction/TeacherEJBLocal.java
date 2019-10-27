@@ -11,11 +11,11 @@ import com.internspace.entities.fyp.FYPFile;
 public interface TeacherEJBLocal {
 	
 	List<FYPFile> getPendingFYPFiles();
-	boolean PrevalidateFYPFile(FYPFile file);
+	void PrevalidateFYPFile(long  file);
 	List<FYPFile> getSupervisedFYPfiles(long id);
 
 	List<FYPFile> getprotractoredFYPfiles(long id);
-	FYPFile ValidateMajorModification(FYPFile f);
+	FYPFile ValidateMajorModification(long  f);
 	void ProposeFYPCategory(FYPCategory F);
 	
 	

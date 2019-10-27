@@ -329,7 +329,8 @@ public class CompanyEJB implements CompanyEJBLocal {
 			
 			List<StudentFYPSubject> acceptedSFSs = getStudentFypSubjectsOfSubjectByStatus(subjectId, ApplianceStatus.accepted, false);
 			
-			// SFS.setApplianceStatus(ApplianceStatus.accepted);
+			// We set after fetching
+			SFS.setApplianceStatus(ApplianceStatus.accepted);
 			
 			int curApplicantsCount = acceptedSFSs != null ? acceptedSFSs.size() : 0;
 			int maxApplicants = subject.getMaxApplicants();
@@ -343,7 +344,6 @@ public class CompanyEJB implements CompanyEJBLocal {
 			// This should always be true. front end has to check each subject's accepted
 			if(canAccept)
 			{
-				// We set after fetching
 				status = ApplianceStatus.accepted;
 				SFS.setApplianceStatus(status);
 				em.persist(SFS);
@@ -366,43 +366,11 @@ public class CompanyEJB implements CompanyEJBLocal {
 				
 				return true;
 			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean refuseStudentAppliance(long studentId, long subjectId, String reason)
-	{
-		ApplianceStatus status = ApplianceStatus.none;
-		StudentFYPSubject SFS = getStudentToSubject(studentId, subjectId);
-		
-		if(SFS == null)
+			
 			return false;
-		
-		status = SFS.getApplianceStatus();
-		
-		EnumSet<ApplianceStatus> canChangeStatus;
-				
-		canChangeStatus = EnumSet.of(
-				ApplianceStatus.pending
-				// ...
-				);
-
-		// Means we can accept
-		if(canChangeStatus.contains(status))
-		{
-			FYPSubject subject = em.find(FYPSubject.class, subjectId);
-			
-			SFS.setApplianceStatus(ApplianceStatus.refused);
-			SFS.setRefusalReason(reason);
-			
-			em.persist(SFS);
-			
-			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 }

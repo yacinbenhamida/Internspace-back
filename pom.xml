@@ -114,7 +114,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+  <dependency>
+	<groupId>com.paypal.sdk</groupId>
+	<artifactId>rest-api-sdk</artifactId>
+	<version>LATEST</version>
+</dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -138,5 +142,6 @@
             </plugins>
         </pluginManagement>
     </build>
+  
 
 </project>

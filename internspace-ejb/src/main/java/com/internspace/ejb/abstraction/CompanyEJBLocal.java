@@ -55,7 +55,6 @@ public interface CompanyEJBLocal {
 	List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken);
 	List<FYPSubject> getSuggestedSubjectsByCategories(List<FYPCategory> categories);
 	boolean acceptStudentAppliance(long studentId, long subjectId);
-	boolean refuseStudentAppliance(long studentId, long subjectId, String reason);
 	//boolean subscribe(String username, int password, String companyName);
 	// Returns token
 	//String companyLogin(String username, String password);
