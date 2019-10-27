@@ -366,8 +366,6 @@ public class CompanyEJB implements CompanyEJBLocal {
 				
 				return true;
 			}
-			
-			return false;
 		}
 
 		return false;

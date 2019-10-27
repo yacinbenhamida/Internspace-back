@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
@@ -35,7 +36,23 @@ public class Student extends User {
 
 	@Column(name="cin")
 	String cin;
-
+	
+	@Column(name = "is_created", columnDefinition = "boolean default false")
+	Boolean isCreated;
+	
+	// l etudiant est enregistrée
+	@Column(name = "is_saved", columnDefinition = "boolean default false")
+	Boolean isSaved;
+	
+	// l etudiant est autorisée a passer son PFE
+	
+	@Column(name = "is_autorised ", columnDefinition = "boolean default false")
+	Boolean isAutorised;
+	
+	// behs nshouf est ce qui letudiant ynajem y3adi pfe ou nn ( ynajem yconnecti
+	// fel platforme ou nn )
+	@Column(name = "is_disabled", columnDefinition = "boolean default false")
+	Boolean isDisabled;
 	
 	/*
 	 * Associations
@@ -50,11 +67,13 @@ public class Student extends User {
 	@OneToOne
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
+	
+	@OneToOne(mappedBy = "student")
+	InternshipConvention internshipConvention;
 
 	@ManyToOne
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
-
 	// Many to Many to Categories using custom association table.
 	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
 	Set<StudentCategoryPreference> preferedCategories;
@@ -62,24 +81,7 @@ public class Student extends User {
 	// Many to Many to Subjects using custom association table.
 	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
 	Set<StudentFYPSubject> studentSubjects;
-
-	@Column(name = "is_created", columnDefinition = "boolean default false")
-	Boolean isCreated;
-
-	// l etudiant est enregistrée
-	@Column(name = "is_saved", columnDefinition = "boolean default false")
-	Boolean isSaved;
-
-	// l etudiant est autorisée a passer son PFE
-
-	@Column(name = "is_autorised ", columnDefinition = "boolean default false")
-	Boolean isAutorised;
-
-	// behs nshouf est ce qui letudiant ynajem y3adi pfe ou nn ( ynajem yconnecti
-	// fel platforme ou nn )
-	@Column(name = "is_disabled", columnDefinition = "boolean default false")
-	Boolean isDisabled;
-
+	
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}
