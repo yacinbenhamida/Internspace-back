@@ -27,8 +27,11 @@ public class Company extends User {
 	String website;
 	String address;
 	String country;
+	// This is the principal supervisor email.
+	// This will be used by InternshipConvention if not inserted in there.
+	// Can ignore this.
 	@Column(name = "supervisor_email")
-	String supervisorEmail;
+	String supervisorEmail; 
 	@Column(name = "phone_number")
 	String phoneNumber;
 

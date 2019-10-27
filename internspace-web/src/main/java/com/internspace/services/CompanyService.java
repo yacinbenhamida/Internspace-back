@@ -20,6 +20,7 @@ import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
+import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
 import com.internspace.entities.users.Company;
 
 @Path("company")
@@ -171,6 +172,20 @@ public class CompanyService {
 	}
 	
 	@GET
+	@Path("/subjects/find")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findSubject(@QueryParam("subject") long subjectId) {
+		
+		FYPSubject subject = service.findSubject(subjectId);
+		
+		if(subject == null)
+			return Response.status(Status.BAD_REQUEST).entity("Failed to find the Subject to update. Please provide a valid Subject ID...").build();
+		
+		return Response.status(Status.BAD_REQUEST)
+				.entity(subject).build();
+	}
+	
+	@GET
 	@Path("/subjects/allbycompany")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFypSubjectsByCompany(
@@ -252,6 +267,46 @@ public class CompanyService {
 	}
 	
 	@GET
+	@Path("subjects/sfs/bysubject")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentFypSubjectsOfSubjectByStatus(
+			@QueryParam(value="subject")long subjectId
+			,@QueryParam(value="status")ApplianceStatus status
+			,@QueryParam(value="fetch-all")boolean fetchAll
+			)
+	{
+		if(subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Check ID inputs, got (" + subjectId +")").build();
+		
+		List<StudentFYPSubject> SFSs = service.getStudentFypSubjectsOfSubjectByStatus(subjectId, status, fetchAll);
+		
+		if(SFSs == null || SFSs.size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("No matching").build();
+		
+		return Response.status(Response.Status.OK).entity(SFSs).build();
+	}
+	
+	@GET
+	@Path("subjects/sfs/bystudent")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentFypSubjectsOfStudentByStatus(
+			@QueryParam(value="student")long studentId
+			,@QueryParam(value="status")ApplianceStatus status
+			,@QueryParam(value="fetch-all")boolean fetchAll
+			)
+	{
+		if(studentId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Check ID inputs, got (" + studentId +")").build();
+		
+		List<StudentFYPSubject> SFSs = service.getStudentFypSubjectsOfStudentByStatus(studentId, status, fetchAll);
+		
+		if(SFSs == null || SFSs.size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("No matching").build();
+		
+		return Response.status(Response.Status.OK).entity(SFSs).build();
+	}
+	
+	@GET
 	@Path("/subjects/apply")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response studentApplyToSubject(
@@ -330,6 +385,32 @@ public class CompanyService {
 			outputMsg = "Failed to accept, it might be already none, rejected or the appliance count is maximal.";
 		
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+	}
+	
+	@GET
+	@Path("/subjects/refuse")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response refuseStudentAppliance(
+			@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "subject") long subjectId,
+			@QueryParam(value = "reason") String reason) 
+	{
+		if (studentId == 0 || subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
+		
+		// Appropriate refusal text
+		reason = (reason == null || reason.isEmpty()) ? StudentFYPSubject.defaultReason : reason;
+		
+		boolean success = service.refuseStudentAppliance(studentId, subjectId, reason);
+		
+		String outputMsg = "Successfully refused students' appliance.";
+		
+		if(!success)
+			outputMsg = "Failed to accept, it might be already none, accepted or matching doesn't exist.";
+		
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+		
 	}
 	
 }

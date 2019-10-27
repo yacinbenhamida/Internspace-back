@@ -38,7 +38,7 @@ public class StudyClass implements Serializable {
 	String name;
 	
 	@Column(name = "class_year")
-	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5éme année...
+	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5ème année...
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "universitary_year_id")

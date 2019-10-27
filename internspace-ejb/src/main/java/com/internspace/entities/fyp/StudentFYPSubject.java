@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.internspace.entities.users.Student;
 
@@ -19,6 +20,9 @@ import com.internspace.entities.users.Student;
 @Table(name="student_fyp_subject")
 public class StudentFYPSubject implements Serializable{
 
+	@Transient
+	public static final String defaultReason = "Your profile didn\'t match the subject\'s position requirements, we got your profile for future opportunities.";
+	
 	public enum ApplianceStatus {
 		none, // When there isn't a row matching student and subject
 		pending,
@@ -49,6 +53,10 @@ public class StudentFYPSubject implements Serializable{
 	@JoinColumn(name="subject_id", nullable = false, referencedColumnName="subject_id", insertable = true, updatable = false)
 	FYPSubject subject;
 
+	// To be shown to the student as a reason of the appliance refusal
+	@Column(name = "refusal_reason", columnDefinition = "varchar(255) default '" + "Your profile didn\\'t match the subject\\'s position requirements, we got your profile for future opportunities." + "'")
+	String refusalReason;
+	
 	/*
 	 * Construction
 	 */
@@ -83,18 +91,13 @@ public class StudentFYPSubject implements Serializable{
 	public void setApplianceStatus(ApplianceStatus applianceStatus) {
 		this.applianceStatus = applianceStatus;
 	}
-	
-	// CUSTOM
-	
-	public long getStudentId()
-	{
-		return student.getId();
+
+	public String getRefusalReason() {
+		return refusalReason;
 	}
-	
-	
-	public long getSubjectId()
-	{
-		return subject.getId();
+
+	public void setRefusalReason(String refusalReason) {
+		this.refusalReason = refusalReason;
 	}
 	
 }

@@ -29,7 +29,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 
 		List<Student> students = em.createQuery("from " + Student.class.getName() + " s"
 				+ " JOIN FETCH s.studyClass SC "
-				+ " WHERE SC.departement.site.id = :siteId"
+				+ " WHERE SC.classOption.departement.site.id = :siteId"
 				, Student.class)
 			.setParameter("siteId", siteId)
 			.getResultList();
