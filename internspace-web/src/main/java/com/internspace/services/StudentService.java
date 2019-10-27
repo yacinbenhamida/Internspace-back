@@ -16,6 +16,8 @@ import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
 @Path("student")
@@ -70,7 +72,7 @@ public class StudentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("isautorised")
 	public List<Student> getstudentDisabled(){
-		 return Studentservice.getAllStudentdisabled();
+		 return Studentservice.getAllStudentAutorised();
 	};
 	
 	@GET
@@ -92,7 +94,14 @@ public class StudentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("lscin")
 	public List<FYPFile> getstudentCin(){
-		 return Studentservice.getAllStudentCIN();
+		 return Studentservice.getAllStudentFile();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("ci")
+	public List<FYPFile> getstudentCinfile(@QueryParam(value = "cin") String cin){
+		 return Studentservice.getAllStudentFileCin(cin);
 	};
 	
 	@GET
@@ -102,7 +111,21 @@ public class StudentService {
 		Studentservice.mailEtat(text,cin);
 		
 	};
-
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("si")
+	public List<Student> getstudent(@QueryParam(value = "cin") String cin){
+		 return Studentservice.getAllStudentCin(cin);
+	};
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("directeur")
+	public List<Employee> getDirector(@QueryParam(value = "cin") String cin){
+		 return Studentservice.getDirector(cin);
+	};
+
 	
 }
