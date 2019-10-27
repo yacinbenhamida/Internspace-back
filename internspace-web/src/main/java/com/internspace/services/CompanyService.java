@@ -171,6 +171,20 @@ public class CompanyService {
 	}
 	
 	@GET
+	@Path("/subjects/find")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findSubject(@QueryParam("subject") long subjectId) {
+		
+		FYPSubject subject = service.findSubject(subjectId);
+		
+		if(subject == null)
+			return Response.status(Status.BAD_REQUEST).entity("Failed to find the Subject to update. Please provide a valid Subject ID...").build();
+		
+		return Response.status(Status.BAD_REQUEST)
+				.entity(subject).build();
+	}
+	
+	@GET
 	@Path("/subjects/allbycompany")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFypSubjectsByCompany(
@@ -330,6 +344,32 @@ public class CompanyService {
 			outputMsg = "Failed to accept, it might be already none, rejected or the appliance count is maximal.";
 		
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+	}
+	
+	@GET
+	@Path("/subjects/refuse")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response refuseStudentAppliance(
+			@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "subject") long subjectId,
+			@QueryParam(value = "reason") String reason) 
+	{
+		if (studentId == 0 || subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
+		
+		// Appropriate refusal text
+		reason = (reason == null || reason.isEmpty()) ? StudentFYPSubject.defaultReason : reason;
+		
+		boolean success = service.refuseStudentAppliance(studentId, subjectId, reason);
+		
+		String outputMsg = "Successfully refused students' appliance.";
+		
+		if(!success)
+			outputMsg = "Failed to accept, it might be already none, accepted or matching doesn't exist.";
+		
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+		
 	}
 	
 }
