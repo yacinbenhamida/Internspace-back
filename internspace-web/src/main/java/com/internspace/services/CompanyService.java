@@ -20,6 +20,7 @@ import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
+import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
 import com.internspace.entities.users.Company;
 
 @Path("company")
@@ -263,6 +264,46 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST).entity("No match.").build();
 			
 		return Response.status(Response.Status.OK).entity(SFS).build();
+	}
+	
+	@GET
+	@Path("subjects/sfs/bysubject")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentFypSubjectsOfSubjectByStatus(
+			@QueryParam(value="subject")long subjectId
+			,@QueryParam(value="status")ApplianceStatus status
+			,@QueryParam(value="fetch-all")boolean fetchAll
+			)
+	{
+		if(subjectId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Check ID inputs, got (" + subjectId +")").build();
+		
+		List<StudentFYPSubject> SFSs = service.getStudentFypSubjectsOfSubjectByStatus(subjectId, status, fetchAll);
+		
+		if(SFSs == null || SFSs.size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("No matching").build();
+		
+		return Response.status(Response.Status.OK).entity(SFSs).build();
+	}
+	
+	@GET
+	@Path("subjects/sfs/bystudent")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentFypSubjectsOfStudentByStatus(
+			@QueryParam(value="student")long studentId
+			,@QueryParam(value="status")ApplianceStatus status
+			,@QueryParam(value="fetch-all")boolean fetchAll
+			)
+	{
+		if(studentId == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Check ID inputs, got (" + studentId +")").build();
+		
+		List<StudentFYPSubject> SFSs = service.getStudentFypSubjectsOfStudentByStatus(studentId, status, fetchAll);
+		
+		if(SFSs == null || SFSs.size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("No matching").build();
+		
+		return Response.status(Response.Status.OK).entity(SFSs).build();
 	}
 	
 	@GET
