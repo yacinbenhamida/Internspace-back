@@ -11,6 +11,7 @@ import com.internspace.entities.exchanges.Notification;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 
 
 
@@ -26,8 +27,12 @@ public class TeacherEJB implements TeacherEJBLocal {
 	}
 
 @Override
-	public boolean PrevalidateFYPFile(FYPFile file) {
-		return false;	
+	public void  PrevalidateFYPFile( long id ) {
+	FYPFile f = em.find(FYPFile.class, id);
+	f.setIsPrevalidated(Boolean.TRUE);
+	em.merge(f);
+	em.flush();
+	
 	}
 
 @Override 
@@ -41,8 +46,10 @@ public class TeacherEJB implements TeacherEJBLocal {
 	}
 
 @Override
-	public FYPFile ValidateMajorModification(FYPFile f) {
-		if (f.getFileStatus().equals("pending"))
+	public FYPFile ValidateMajorModification(long id ) {
+	FYPFile f = em.find(FYPFile.class, id);
+		
+	if (f.getFileStatus().equals("pending"))
 		{
 		em.merge(f);
 		em.flush();
@@ -52,7 +59,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 	}
 @Override
 	public void ProposeFYPCategory(FYPCategory F) {
-		System.out.println("adding category");
+
 em.persist(F);		
 	}
 

@@ -77,6 +77,14 @@ public class FYPFile implements Serializable {
 	// True = InternshipDirector accepted the cancel request.
 	@Column(name = "is_archived", columnDefinition = "boolean default false")
 	Boolean isArchived;
+	
+	// True = Teacher prevalidate the FypFile.
+		@Column(name = "is_prevalidated", columnDefinition = "boolean default false")
+		Boolean isPrevalidated;public Boolean getIsPrevalidated() {
+			return isPrevalidated;
+		}public void setIsPrevalidated(Boolean isPrevalidated) {
+			this.isPrevalidated = isPrevalidated;
+		}
 
 	/*
 	 * Associations
@@ -190,6 +198,7 @@ public class FYPFile implements Serializable {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
+
 
 	
 
