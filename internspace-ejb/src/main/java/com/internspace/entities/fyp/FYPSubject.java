@@ -44,6 +44,9 @@ public class FYPSubject implements Serializable {
 	@Column(name = "max_applicants", columnDefinition = "int default 1")
 	int maxApplicants;
 
+	// This is useful to, for example, make a subject in Canada offered by a Tunisian company
+	String country;
+	
 	// This won't be the best option because
 	// When we update max applicants, we might want to change
 	// Cur applicants count, which would lead to

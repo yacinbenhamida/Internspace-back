@@ -3,6 +3,8 @@ package com.internspace.entities.fyp;
 import java.io.Serializable;
 import java.util.Date;
 import com.internspace.entities.users.Company;
+import com.internspace.entities.users.Student;
+
 import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -51,8 +53,8 @@ public class InternshipConvention implements Serializable {
 	Company company;
 
 	@OneToOne
-	@JoinColumn(name = "student")
-	InternshipConvention internshipConvention;
+	@JoinColumn(name = "student_id")
+	Student student;
 
 	/*
 	 * Getters & Setters
@@ -96,14 +98,6 @@ public class InternshipConvention implements Serializable {
 
 	public void setCompanySupervisorEmail(String companySupervisorEmail) {
 		this.companySupervisorEmail = companySupervisorEmail;
-	}
-
-	public InternshipConvention getInternshipConvention() {
-		return internshipConvention;
-	}
-
-	public void setInternshipConvention(InternshipConvention internshipConvention) {
-		this.internshipConvention = internshipConvention;
 	}
 
 }
