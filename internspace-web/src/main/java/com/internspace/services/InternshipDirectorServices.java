@@ -69,14 +69,13 @@ public class InternshipDirectorServices {
 		 return service.getFYPFileListByYear(year);
 	};
 	
-	
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allFYPFileCountry")
 	public List<FYPFile> FYPFileByCountry(@QueryParam(value = "location") String location){
 		 return service.getFYPFileListByCountry(location);
 	};
+	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -145,8 +144,8 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("FindStudent")
-	public  Student findStudent ( @QueryParam(value = "id")long id){
-		return service.FindStudent(id);
+	public  Student findStudent ( @QueryParam(value = "cin")String cin){
+		return service.FindStudent(cin);
 	};
 	
 	@PUT
@@ -200,22 +199,32 @@ public class InternshipDirectorServices {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("acceptPFE")
-	public void acceptPFE(@QueryParam(value = "id") long id){
-		service.acceptPFE(id);
-	};
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("AdrCompany")
-	public List<Company> CompanyAdr(){
+	public Company CompanyAdr(){
 		return service.GetNameAndCountry(51);
 	};
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("MyList")
+	@Path("FullInfoOfStudent")
 	public List<FYPSubject> myList(){
-		return service.StudentWithVerifiedCompanys();
+		return service.FullStudentInfoWithVerifiedCompanys();
 	};
+	
+	
+	
+	
+	/*******************************
+	* Not the work of Mahmoud !!!! *
+	********************************/
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptPFE")
+	public void acceptPFE(@QueryParam(value = "id") long id){
+		service.acceptPFE(id);
+	};
+	
+	
 }

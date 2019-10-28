@@ -191,9 +191,9 @@ public class FYPFile implements Serializable {
 		this.student = student;
 	}
 
-	public List<FYPIntervention> getInterventions() {
+	/*public List<FYPIntervention> getInterventions() {
 		return interventions;
-	}
+	}*/
 
 	
 
