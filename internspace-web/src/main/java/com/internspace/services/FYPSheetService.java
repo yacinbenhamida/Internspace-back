@@ -153,5 +153,16 @@ public class FYPSheetService {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheetsPending()).build();
 	}
 	
+	@PUT
+	@Path("editpending")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editFYPSheetPending(FYPFile file) {
+		FYPFile res = fypSheetService.editFYPSheetPending(file);
+		if(res!=null) {
+			return Response.status(Response.Status.OK).entity(res).build();
+		}
+		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+	}
 
 }

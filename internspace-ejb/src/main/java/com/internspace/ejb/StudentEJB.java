@@ -13,6 +13,7 @@ import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
@@ -213,13 +214,15 @@ public class StudentEJB implements StudentEJBLocal{
 	public List<Employee> getDirector(String cin) {
 		//List <String> list = new ArrayList();
 		List<FYPFile> ls = getAllStudentFileCin(cin);
-		for(int i=0;i<ls.size();i++) {
+	
+				for(int i=0;i<ls.size();i++) {
 			if(ls.get(i).getIsArchived()) {
 				
 				/*************************************************************************************
 				* getInterventions() ta3mél boucle infini f listing mte3 FYPFile .. make it with SQL *
 				*************************************************************************************/
-				List<FYPIntervention> lf = ls.get(i).getInterventions();
+				List<FYPIntervention> lf  = em.createQuery("SELECT c.interventions from "+ FYPFile.class.getName()+" c  where c.student.isAutorised=:isAutorised AND c.student.cin=:cin ").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
+				//List<FYPIntervention> lf = ls.get(i).getInterventions();
 				for(int j=0;j<lf.size();j++) {
 					/*String name = lf.get(j).getTeacher().getUsername();
 					String email = lf.get(j).getTeacher().getEmail();
