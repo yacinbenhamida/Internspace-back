@@ -13,6 +13,8 @@ import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
 public class StudentEJB implements StudentEJBLocal{
@@ -47,7 +49,7 @@ public class StudentEJB implements StudentEJBLocal{
 	
 
 	@Override
-	public List<Student> getAllStudentdisabled() {
+	public List<Student> getAllStudentAutorised() {
 		return em.createQuery("SELECT s from Student s  where s.isAutorised=:isAutorised").setParameter("isAutorised", true).getResultList();
 		
 	}
@@ -67,7 +69,7 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		
 		Mail_API mail = new Mail_API();
-		List<Student> ls = getAllStudentdisabled();
+		List<Student> ls = getAllStudentAutorised();
 		List<Student> ls1 = getAllStudentNodisabled();
 		List<Student> ls2 = getAllStudentSaved();
 		List<Student> ls3 = new ArrayList();
@@ -109,7 +111,7 @@ public class StudentEJB implements StudentEJBLocal{
 	
 
 	@Override
-	public List<FYPFile> getAllStudentCIN() {
+	public List<FYPFile> getAllStudentFile() {
 		return em.createQuery("SELECT fypFile from Student c  where c.isAutorised=:isAutorised").setParameter("isAutorised", true).getResultList();
 		
 	}
@@ -131,13 +133,15 @@ public class StudentEJB implements StudentEJBLocal{
 		
 	}
 
+	
+
 	@Override
-	public void mailEtat(String text, String cin) {
-		// TODO Auto-generated method stub
+	public List<FYPFile> getAllStudentFileCin(String cin) {
+		return em.createQuery("SELECT fypFile from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
 		
 	}
 
-	/*@Override
+	@Override
 	public void mailEtat(String text, String cin) {
 		
 		String subject = "Votre fiche PFE est acceptée " ;
@@ -148,35 +152,37 @@ public class StudentEJB implements StudentEJBLocal{
 		Mail_API mail = new Mail_API();
 		
 		//ff.confirmed.compareTo(fs);
-		List<Student> ls = getAllStudentdisabled();
-		List<FYPFile> ls1 = getAllStudentCIN();
-		for(int i=0;i<ls.size();i++) {
-			FYPFileStatus fs = ls.get(i).getFypFile().getFileStatus();
+		List<Student> ls = getAllStudentAutorised();
+		List<FYPFile> ls1 = getAllStudentFile();
+		List<FYPFile> lc =  getAllStudentFileCin(cin);
+		List<Student> ls11 = getAllStudentCin(cin);
+		
+		for(int i=0;i<lc.size();i++) {
+			FYPFileStatus fs = lc.get(i).getFileStatus();
 			
-			
-			if(ls.get(i).getCin().equals(cin)) {
-				System.out.println("changed"+ls.get(i).getFypFile().getFileStatus());
-			  if(ls.get(i).getFypFile().getFileStatus().equals(ff.pending)) {
+		
+				System.out.println("changed"+lc.get(i).getFileStatus());
+			  if(lc.get(i).getFileStatus().equals(ff.pending)) {
 				
-				if(ls.get(i).getFypFile().getIsArchived()==true) {
-					ls.get(i).getFypFile().setFileStatus(ff.confirmed);
+				if(lc.get(i).getIsArchived()==true) {
+					lc.get(i).setFileStatus(ff.confirmed);
 					
 					try {
-						mail.sendMail(ls.get(i).getEmail(), text, subject);
+						mail.sendMail(ls11.get(i).getEmail(), text, subject);
 					} catch (MessagingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
-					System.out.println("changed"+ls.get(i).getFypFile().getIsArchived());
+					System.out.println("changed"+lc.get(i).getIsArchived());
 				}
-				else if(ls.get(i).getFypFile().getIsCanceled()==true)
+				else if(lc.get(i).getIsCanceled()==true)
 				{
-					ls.get(i).getFypFile().setFileStatus(ff.declined);
+					lc.get(i).setFileStatus(ff.declined);
 					
 					
 					try {
-						mail.sendMail(ls.get(i).getEmail(), text, subject1);
+						mail.sendMail(ls11.get(i).getEmail(), text, subject1);
 					} catch (MessagingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -188,7 +194,7 @@ public class StudentEJB implements StudentEJBLocal{
 				
 				
 				
-			}
+			
 			  
 			  
 			  
@@ -196,9 +202,46 @@ public class StudentEJB implements StudentEJBLocal{
 			}
 		}
 		}
+
+	@Override
+	public List<Student> getAllStudentCin(String cin) {
+		return em.createQuery("SELECT c from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
+		
+	}
+
+	@Override
+	public List<Employee> getDirector(String cin) {
+		//List <String> list = new ArrayList();
+		List<FYPFile> ls = getAllStudentFileCin(cin);
+		for(int i=0;i<ls.size();i++) {
+			if(ls.get(i).getIsArchived()) {
+				
+				/*************************************************************************************
+				* getInterventions() ta3mél boucle infini f listing mte3 FYPFile .. make it with SQL *
+				*************************************************************************************/
+				List<FYPIntervention> lf = ls.get(i).getInterventions();
+				for(int j=0;j<lf.size();j++) {
+					/*String name = lf.get(j).getTeacher().getUsername();
+					String email = lf.get(j).getTeacher().getEmail();
+					
+					list.add(name);
+					list.add(email);*/
+					return em.createQuery("SELECT c.teacher.firstName,c.teacher.email from "+ FYPIntervention.class.getName()+" c  ").getResultList();
+					
+					//return list;
+					
+				}
+				
+				//List<FYPIntervention> lf = em.createQuery("SELECT c.id from FYPIntervention c  where c.fypFile=:id").setParameter("id", ls.get(i).getId()).getResultList();
+				
+			}
+		}
+		//return em.createQuery("SELECT c.teacher.firstName,c.teacher.email from "+ FYPIntervention.class.getName()+" c  ").getResultList();
+		return null;
+	}
 		
 	
-*/
+
 
 	
 	

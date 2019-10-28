@@ -29,7 +29,7 @@ public class DashboardEJB implements DashboardEJBLocal {
 
 		List<Student> students = em.createQuery("from " + Student.class.getName() + " s"
 				+ " JOIN FETCH s.studyClass SC "
-				+ " WHERE SC.departement.site.id = :siteId"
+				+ " WHERE SC.classOption.departement.site.id = :siteId"
 				, Student.class)
 			.setParameter("siteId", siteId)
 			.getResultList();
@@ -165,6 +165,9 @@ public class DashboardEJB implements DashboardEJBLocal {
 	public List<FYPSubject> getInternshipsByCategory(long uniId, long categoryId) {
 		FYPCategory category = em.find(FYPCategory .class, Long.valueOf(categoryId));
 		
+		if(category == null)
+			return null;
+		
 		String queryStr = "FROM " + FYPSubject.class.getName() + " i"
 				//+ " JOIN FETCH i.student.studyClass.classOption.departement.site.university U"
 				+ " WHERE"
@@ -277,6 +280,53 @@ public class DashboardEJB implements DashboardEJBLocal {
 		return students;
  	}
 
+	@Override
+	public Map<Long, List<FYPSubject>> getInternshipEvolutionPerUYByCategory(long uniId, long categoryId)
+	{
+		Map<Long, List<FYPSubject>> out = new HashMap<Long, List<FYPSubject>>();
+		
+		University uni = em.find(University.class, Long.valueOf(uniId));
 
+		if (uni == null)
+			return null;
+		
+		List<UniversitaryYear> uys = em.createQuery("FROM " + UniversitaryYear.class.getName(), UniversitaryYear.class)
+				.getResultList();
+		
+		for(UniversitaryYear e : uys)
+		{
+			long uyId = e.getId();
+
+			System.out.println("uniYear: " + uyId + " | studyClassYear: " + uni.getFypClassYear() + " | uniId: " + uniId);
+			
+			FYPCategory category = em.find(FYPCategory .class, Long.valueOf(categoryId));
+			
+			if(category == null)
+				continue;
+			
+			// Get all relevant to the university, in which they can perform a FYP, in that UY
+			List<FYPSubject> subjects = em.createQuery("SELECT S FROM " + FYPSubject.class.getName() + " S"
+					+ " WHERE S.fypFile.student.studyClass.universitaryYear.id = :uniYear"
+					+ " AND S.fypFile.student.studyClass.classYear = :studyClassYear"
+					+ " AND S.fypFile.student.studyClass.classOption.departement.site.university.id = :uniId"
+					+ " AND :category MEMBER OF S.categories", FYPSubject.class)
+					.setParameter("uniYear", uyId)
+					.setParameter("studyClassYear", uni.getFypClassYear())
+					.setParameter("uniId", uniId)
+					.setParameter("category", category)
+					.getResultList();
+			
+			float allCount = subjects.size();
+			
+			System.out.println("got allCount: " + allCount);
+			
+			if (allCount == 0)
+				continue;
+			
+			out.put(uyId, subjects);
+		}
+
+		return out;
+	}
 
 }

@@ -1,20 +1,18 @@
 package com.internspace.ejb;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
-import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.StudentFYPSubject;
-import com.internspace.entities.fyp.FileTemplateElement.ElementType;
 import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
@@ -150,8 +148,6 @@ public class CompanyEJB implements CompanyEJBLocal {
 		
 		List<StudentFYPSubject> SFSs = query.getResultList();
 		
-		ApplianceStatus res = ApplianceStatus.none;
-		
 		if(SFSs != null && SFSs.size() > 0)
 			return SFSs.get(0);
 		
@@ -241,11 +237,11 @@ public class CompanyEJB implements CompanyEJBLocal {
 		List<StudentFYPSubject> out = null;
 		
 		String queryStr = "SELECT SFS FROM " + StudentFYPSubject.class.getName() + " SFS"
-				+ " LEFT JOIN FETCH SFS.subject S"
+				+ " JOIN FETCH SFS.subject S"
 				+ " WHERE S.id = :subjectId"
 				;
 		
-		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.status = :status";
+		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.applianceStatus = :status";
 		
 		TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class)
 				.setParameter("subjectId", subjectId)
@@ -264,11 +260,11 @@ public class CompanyEJB implements CompanyEJBLocal {
 		List<StudentFYPSubject> out = null;
 		
 		String queryStr = "SELECT SFS FROM " + StudentFYPSubject.class.getName() + " SFS"
-				+ " LEFT JOIN FETCH SFS.student S"
+				+ " JOIN FETCH SFS.student S"
 				+ " WHERE S.id = :subjectId"
 				;
 		
-		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.status = :status";
+		queryStr = fetchAll ? queryStr : queryStr + " AND SFS.applianceStatus = :status";
 		
 		TypedQuery<StudentFYPSubject> query = em.createQuery(queryStr, StudentFYPSubject.class)
 				.setParameter("subjectId", studentId)
@@ -282,9 +278,37 @@ public class CompanyEJB implements CompanyEJBLocal {
 		return out;
 	}
 
+	@Override
+	public List<FYPCategory> getAllCategories()
+	{
+		return em.createQuery("FROM " + FYPCategory.class.getName() + " C", FYPCategory.class).getResultList();
+	}
 	
 	@Override
+	public List<FYPCategory> getStudentPreferedCategories(long studentId)
+	{
+		// First get the categories for this student
+		String queryStr = "SELECT C FROM " 
+				+ FYPCategory.class.getName() + " C"
+				+ " JOIN FETCH C.preferedByStudents PBS"
+				+ " JOIN FETCH PBS.student S"
+				+ " WHERE S.id = :studentId"
+				;
+		
+		List<FYPCategory> categories = em.createQuery(queryStr, FYPCategory.class)
+				.setParameter("studentId", studentId)
+				.getResultList()
+				;
+		
+		categories.stream().forEach((c -> System.out.println(c.getName())));
+		
+		return categories;
+	}
+	
+	// Found no matching, check if the student ID is valid, has valid categories or if there are any subjects in the database...
+	@Override
 	public List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken) {
+		
 		return null;
 	}
 
@@ -302,4 +326,104 @@ public class CompanyEJB implements CompanyEJBLocal {
 		return query.getResultList();
 	}
 
+	@Override
+	public boolean acceptStudentAppliance(long studentId, long subjectId) {
+		
+		ApplianceStatus status = ApplianceStatus.none;
+		StudentFYPSubject SFS = getStudentToSubject(studentId, subjectId);
+		
+		if(SFS == null)
+			return false;
+		
+		status = SFS.getApplianceStatus();
+		
+		EnumSet<ApplianceStatus> canChangeStatus;
+				
+		canChangeStatus = EnumSet.of(
+				ApplianceStatus.pending
+				// ...
+				);
+
+		// Means we can accept
+		if(canChangeStatus.contains(status))
+		{
+			FYPSubject subject = em.find(FYPSubject.class, subjectId);
+			
+			List<StudentFYPSubject> acceptedSFSs = getStudentFypSubjectsOfSubjectByStatus(subjectId, ApplianceStatus.accepted, false);
+			
+			// SFS.setApplianceStatus(ApplianceStatus.accepted);
+			
+			int curApplicantsCount = acceptedSFSs != null ? acceptedSFSs.size() : 0;
+			int maxApplicants = subject.getMaxApplicants();
+
+			System.out.println("cur: " + curApplicantsCount + " | max: " + maxApplicants);
+			
+			System.out.println("curApplicantsCount: " + curApplicantsCount);
+			
+			boolean canAccept = curApplicantsCount < maxApplicants;
+			
+			// This should always be true. front end has to check each subject's accepted
+			if(canAccept)
+			{
+				// We set after fetching
+				status = ApplianceStatus.accepted;
+				SFS.setApplianceStatus(status);
+				em.persist(SFS);
+				
+				boolean shouldRejectAllOthers = curApplicantsCount + 1 >= maxApplicants;
+				
+				// Shall we just reject everyone else?
+				if(shouldRejectAllOthers)
+				{
+					String queryStr = "UPDATE " + StudentFYPSubject.class.getName() + " SFS "
+							+ " SET SFS.applianceStatus = '" + ApplianceStatus.refused + "'"
+							+ " WHERE SFS.subject.id = :subjectId"
+							+ " AND SFS.applianceStatus = '" + ApplianceStatus.pending + "'";
+					
+					Query query = em.createQuery(queryStr)
+							.setParameter("subjectId", subjectId);
+					
+					int updatedCount = query.executeUpdate();
+					System.out.println("updatedCount: " + updatedCount);
+				}
+				
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean refuseStudentAppliance(long studentId, long subjectId, String reason)
+	{
+		ApplianceStatus status = ApplianceStatus.none;
+		StudentFYPSubject SFS = getStudentToSubject(studentId, subjectId);
+		
+		if(SFS == null)
+			return false;
+		
+		status = SFS.getApplianceStatus();
+		
+		EnumSet<ApplianceStatus> canChangeStatus;
+				
+		canChangeStatus = EnumSet.of(
+				ApplianceStatus.pending
+				// ...
+				);
+
+		// Means we can accept
+		if(canChangeStatus.contains(status))
+		{
+			SFS.setApplianceStatus(ApplianceStatus.refused);
+			SFS.setRefusalReason(reason);
+			
+			em.persist(SFS);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

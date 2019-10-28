@@ -17,9 +17,11 @@ import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FileTemplate;
 
 import com.internspace.entities.university.StudyClass;
+import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
 @Path("internship")
@@ -67,14 +69,13 @@ public class InternshipDirectorServices {
 		 return service.getFYPFileListByYear(year);
 	};
 	
-	
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allFYPFileCountry")
 	public List<FYPFile> FYPFileByCountry(@QueryParam(value = "location") String location){
 		 return service.getFYPFileListByCountry(location);
 	};
+	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -143,8 +144,8 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("FindStudent")
-	public  Student findStudent ( @QueryParam(value = "id")long id){
-		return service.FindStudent(id);
+	public  Student findStudent ( @QueryParam(value = "cin")String cin){
+		return service.FindStudent(cin);
 	};
 	
 	@PUT
@@ -198,8 +199,32 @@ public class InternshipDirectorServices {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("AdrCompany")
+	public Company CompanyAdr(){
+		return service.GetNameAndCountry(51);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("FullInfoOfStudent")
+	public List<FYPSubject> myList(){
+		return service.FullStudentInfoWithVerifiedCompanys();
+	};
+	
+	
+	
+	
+	/*******************************
+	* Not the work of Mahmoud !!!! *
+	********************************/
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("acceptPFE")
 	public void acceptPFE(@QueryParam(value = "id") long id){
 		service.acceptPFE(id);
 	};
+	
+	
 }

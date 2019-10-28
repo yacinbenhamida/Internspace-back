@@ -28,6 +28,6 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getFYPSheetsWithNoSupervisors();
 	public List<FYPFile> getAllSheets();
 	public List<FYPFile> getAll();
-	
+	public List<FYPFile> getAllSheetsPending();
 	
 }

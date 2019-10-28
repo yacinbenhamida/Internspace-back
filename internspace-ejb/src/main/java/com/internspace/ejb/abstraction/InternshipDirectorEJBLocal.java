@@ -6,8 +6,9 @@ import javax.ejb.Local;
 
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
-
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.university.StudyClass;
+import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
@@ -29,7 +30,7 @@ public interface InternshipDirectorEJBLocal {
 	List<FYPFile> listCancelingDemand();
 	public boolean disableAccount(long id);
 	public List<Student> getAllStudentsList();
-	public Student FindStudent(long id);
+	public Student FindStudent(String cin);
 	public Boolean ValidateSubmittedAReport(long id);
 	public List<FYPFile> WaitingForDefensePlanningList();
 	public FYPFile FilterWaitingForDefensePlanningList(String cin, String nom);
@@ -37,10 +38,15 @@ public interface InternshipDirectorEJBLocal {
 	public  void FixActionNumberAsProtractor(int nb, int id);
 	public  void FixActionNumberAsPreValidator(int nb, int id);
 	public  void FixActionNumberAsJuryPresident(int nb, int id);
+	public Company GetNameAndCountry (long id);
+	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys();
 	
+	//partie teb3a rayén
 	//Le directeur des stages pourra rendre l’étudiant autorisé à passer son PFE.
 	void acceptPFE(long id);
 	public Employee getInternshipDirectorById(long id);
+	
+	
 	
 	
 	
