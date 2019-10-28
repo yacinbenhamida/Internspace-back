@@ -22,14 +22,16 @@ public class NotificationService {
 	@Inject
 	NotificationEJBLocal service;
 	
-	@POST
-	@Path("add")
+	@GET
+	@Path("add/{from}/{to}/{content}/{direction}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveNotification(Notification n) {
-		Notification result = service.addNotification(n);
+	public Response saveNotification(@PathParam("from") long idFrom,
+			@PathParam("to") long idTo, @PathParam("content") String content
+			,@PathParam("direction") String direction) {
+		Notification result = service.addNotification(idFrom,idTo,content,direction);
 		if(result != null) {
-			return Response.status(Response.Status.OK).entity(n).build();
+			return Response.status(Response.Status.OK).entity(result).build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
 	}

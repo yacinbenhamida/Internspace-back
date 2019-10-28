@@ -3,6 +3,8 @@ package com.internspace.entities.exchanges;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +15,9 @@ import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 @Entity(name="Notification")
 public class Notification implements Serializable{
-
+	public enum Direction{
+		fromStudentToEmployee,fromEmployeeToStudent
+	}
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +25,24 @@ public class Notification implements Serializable{
 	String content;
 	boolean seen;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	Student student;
 	
 	@ManyToOne
 	Employee employee;
-	
+	@Enumerated(EnumType.STRING)
+	Direction direction;
+
 	public Notification() {
-		// TODO Auto-generated constructor stub
+		super();
+	}
+	public Notification(long id, String content, boolean seen, Student student, Employee employee) {
+		super();
+		this.id = id;
+		this.content = content;
+		this.seen = seen;
+		this.student = student;
+		this.employee = employee;
 	}
 	public long getId() {
 		return id;
@@ -68,6 +82,13 @@ public class Notification implements Serializable{
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
+	}
+	
+	public Direction getDirection() {
+		return direction;
+	}
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 	@Override
 	public String toString() {
