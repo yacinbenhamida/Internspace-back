@@ -52,6 +52,8 @@ public interface CompanyEJBLocal {
 
 	List<StudentFYPSubject> getStudentFypSubjectsOfSubjectByStatus(long subjectId, ApplianceStatus status, boolean fetchAll);
 	List<StudentFYPSubject> getStudentFypSubjectsOfStudentByStatus(long studentId, ApplianceStatus status, boolean fetchAll);
+	List<FYPCategory> getAllCategories(); // Temporary
+	List<FYPCategory> getStudentPreferedCategories(long studentId);
 	List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken);
 	List<FYPSubject> getSuggestedSubjectsByCategories(List<FYPCategory> categories);
 	boolean acceptStudentAppliance(long studentId, long subjectId);

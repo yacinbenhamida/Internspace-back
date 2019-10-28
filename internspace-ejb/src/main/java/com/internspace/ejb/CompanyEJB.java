@@ -1,6 +1,5 @@
 package com.internspace.ejb;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -9,14 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.security.auth.Subject;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
-import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.StudentFYPSubject;
-import com.internspace.entities.fyp.FileTemplateElement.ElementType;
 import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
@@ -152,8 +148,6 @@ public class CompanyEJB implements CompanyEJBLocal {
 		
 		List<StudentFYPSubject> SFSs = query.getResultList();
 		
-		ApplianceStatus res = ApplianceStatus.none;
-		
 		if(SFSs != null && SFSs.size() > 0)
 			return SFSs.get(0);
 		
@@ -284,9 +278,37 @@ public class CompanyEJB implements CompanyEJBLocal {
 		return out;
 	}
 
+	@Override
+	public List<FYPCategory> getAllCategories()
+	{
+		return em.createQuery("FROM " + FYPCategory.class.getName() + " C", FYPCategory.class).getResultList();
+	}
 	
 	@Override
+	public List<FYPCategory> getStudentPreferedCategories(long studentId)
+	{
+		// First get the categories for this student
+		String queryStr = "SELECT C FROM " 
+				+ FYPCategory.class.getName() + " C"
+				+ " JOIN FETCH C.preferedByStudents PBS"
+				+ " JOIN FETCH PBS.student S"
+				+ " WHERE S.id = :studentId"
+				;
+		
+		List<FYPCategory> categories = em.createQuery(queryStr, FYPCategory.class)
+				.setParameter("studentId", studentId)
+				.getResultList()
+				;
+		
+		categories.stream().forEach((c -> System.out.println(c.getName())));
+		
+		return categories;
+	}
+	
+	// Found no matching, check if the student ID is valid, has valid categories or if there are any subjects in the database...
+	@Override
 	public List<FYPSubject> getSuggestedSubjectsByStudent(long studentId, boolean filterUntaken) {
+		
 		return null;
 	}
 
@@ -362,6 +384,7 @@ public class CompanyEJB implements CompanyEJBLocal {
 							.setParameter("subjectId", subjectId);
 					
 					int updatedCount = query.executeUpdate();
+					System.out.println("updatedCount: " + updatedCount);
 				}
 				
 				return true;
@@ -392,8 +415,6 @@ public class CompanyEJB implements CompanyEJBLocal {
 		// Means we can accept
 		if(canChangeStatus.contains(status))
 		{
-			FYPSubject subject = em.find(FYPSubject.class, subjectId);
-			
 			SFS.setApplianceStatus(ApplianceStatus.refused);
 			SFS.setRefusalReason(reason);
 			

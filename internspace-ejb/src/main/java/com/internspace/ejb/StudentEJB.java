@@ -215,7 +215,10 @@ public class StudentEJB implements StudentEJBLocal{
 		List<FYPFile> ls = getAllStudentFileCin(cin);
 		for(int i=0;i<ls.size();i++) {
 			if(ls.get(i).getIsArchived()) {
-				//getInterventions() ta3mél boucle infini f listing mte3 FYPFile .. make it with SQL
+				
+				/*************************************************************************************
+				* getInterventions() ta3mél boucle infini f listing mte3 FYPFile .. make it with SQL *
+				*************************************************************************************/
 				List<FYPIntervention> lf = ls.get(i).getInterventions();
 				for(int j=0;j<lf.size();j++) {
 					/*String name = lf.get(j).getTeacher().getUsername();
