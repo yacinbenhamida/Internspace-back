@@ -9,6 +9,9 @@ import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.NotificationEJBLocal;
 import com.internspace.entities.exchanges.Notification;
+import com.internspace.entities.exchanges.Notification.Direction;
+import com.internspace.entities.users.Employee;
+import com.internspace.entities.users.Student;
 
 @Stateless
 public class NotificationEJB implements NotificationEJBLocal{
@@ -16,7 +19,25 @@ public class NotificationEJB implements NotificationEJBLocal{
 	EntityManager em;
 	
 	@Override
-	public Notification addNotification(Notification notification) {
+	public Notification addNotification(long idFrom, long idTo, String content,String direction) {
+		Notification notification = new Notification();
+		notification.setContent(content);
+		if(direction.equals("employeeToStudent")) {
+			Student s = em.find(Student.class, idTo);
+			Employee e = em.find(Employee.class, idFrom);
+			notification.setEmployee(e);
+			notification.setStudent(s);
+			notification.setSeen(false);
+			notification.setDirection(Direction.fromEmployeeToStudent);
+		}
+		else {
+			Student s = em.find(Student.class, idFrom);
+			Employee e = em.find(Employee.class, idTo);
+			notification.setEmployee(e);
+			notification.setStudent(s);
+			notification.setSeen(false);
+			notification.setDirection(Direction.fromStudentToEmployee);
+		}
 		em.persist(notification);
 		em.flush();
 		return em.find(Notification.class, notification.getId());

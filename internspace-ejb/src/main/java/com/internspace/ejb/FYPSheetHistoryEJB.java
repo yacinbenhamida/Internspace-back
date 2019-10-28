@@ -28,7 +28,7 @@ public class FYPSheetHistoryEJB implements FYPSheetHistoryEJBLocal{
 
 	@Override
 	public FYPSheetHistory editOperation(FYPSheetHistory fypsheeth) {
-		entityManager.persist(fypsheeth);
+		entityManager.merge(fypsheeth);
 		entityManager.flush();
 		return entityManager.find(FYPSheetHistory.class, fypsheeth.getId());
 	}
@@ -41,8 +41,8 @@ public class FYPSheetHistoryEJB implements FYPSheetHistoryEJBLocal{
 	@Override
 	public List<FYPSheetHistory> getAllRecordedOperationsOfOneFYPSheet(long fypsheetId) {
 		
-		return entityManager.createQuery("SELECT f FROM FYPSheetHistory f where f.changedFile.id=:id")
-				.setParameter(0, fypsheetId).getResultList();
+		return entityManager.createQuery("SELECT f FROM fyp_sheet_history f where f.changedFile.id=:id")
+				.setParameter("id", fypsheetId).getResultList();
 
 	}
 

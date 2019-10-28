@@ -43,6 +43,30 @@ public class ClassOption implements Serializable {
 	
 	@OneToMany(mappedBy = "classOption")
 	Set<StudyClass> studyClasses;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Departement getDepartement() {
+		return departement;
+	}
+
+	public void setDepartement(Departement departement) {
+		this.departement = departement;
+	}
 	
 	/*
 	 * Getters & Setters
