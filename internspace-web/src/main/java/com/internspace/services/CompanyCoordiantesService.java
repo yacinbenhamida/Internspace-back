@@ -55,7 +55,7 @@ public class CompanyCoordiantesService {
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("updateArchive")
+	@Path("update")
 	public Response updateArchive(CompanyCoordinates c){
 		service.updateCompanyCoordinates(c);
 		return Response.status(Response.Status.OK).entity(c).build();
