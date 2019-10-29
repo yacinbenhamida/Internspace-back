@@ -86,9 +86,24 @@ public class FYPFile implements Serializable {
 			this.isPrevalidated = isPrevalidated;
 		}
 
+		
+		// Directeur validate Modification Majeure
+		
+		@Column(name = "is_confirmed", columnDefinition = "boolean default false")
+		Boolean isConfirmed;
+		public Boolean getIsConfirmed() {
+			return isConfirmed;
+		}
+		public void setIsConfirmed(Boolean isConfirmed) {
+			this.isConfirmed = isConfirmed;
+		}
+		
 	/*
 	 * Associations
 	 */
+
+
+	
 
 
 	@OneToOne(optional = true)

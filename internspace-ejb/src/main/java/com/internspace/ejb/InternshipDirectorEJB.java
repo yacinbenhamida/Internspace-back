@@ -393,7 +393,24 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 
+	@Override
+	public void acceptModification(long id) {
+		FYPFileStatus f = null;
+		FYPFile s= em.find(FYPFile.class, id);
+		if(s.getFileStatus().equals(f.pending))
+		{
+			s.setIsConfirmed(true);
+		}
+		
+		em.persist(s);
+		em.flush();
+		
+	}
+		
+	}
+
+
 
 	
 
-}
+

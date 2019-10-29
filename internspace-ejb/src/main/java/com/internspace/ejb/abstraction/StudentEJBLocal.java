@@ -29,6 +29,8 @@ public interface StudentEJBLocal {
 	void sendMail(String text,String cin);
 	void mailEtat(String text,String cin);
 	public List<Employee> getDirector(String cin);
+	public List<FYPFile> getAllSheetsPendingStudent();
+	public List<FYPFile> getAllSheetsPendingByStudent(String cin);
 	
 	
 	

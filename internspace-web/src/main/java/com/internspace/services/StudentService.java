@@ -126,6 +126,18 @@ public class StudentService {
 	public List<Employee> getDirector(@QueryParam(value = "cin") String cin){
 		 return Studentservice.getDirector(cin);
 	};
-
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("pendingStudent")
+	public List<FYPFile> getAllSheetsPendingStudent(){
+		 return Studentservice.getAllSheetsPendingStudent();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("pendingStudentId")
+	public List<FYPFile> getAllSheetsPendingByStudent(@QueryParam(value = "cin") String cin){
+		 return Studentservice.getAllSheetsPendingByStudent(cin);
+	};
 	
 }
