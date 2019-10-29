@@ -242,11 +242,24 @@ public class StudentEJB implements StudentEJBLocal{
 		//return em.createQuery("SELECT c.teacher.firstName,c.teacher.email from "+ FYPIntervention.class.getName()+" c  ").getResultList();
 		return null;
 	}
+
+	@Override
+	public List<FYPFile> getAllSheetsPendingStudent() {
 		
+		
+		return em.createQuery("SELECT s.fypFile.title,s from "+Student.class.getName()+" s  where s.fypFile.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
 	
+		
+	}
 
-
-	
+	@Override
+	public List<FYPFile> getAllSheetsPendingByStudent(String cin) {
+		//Student s = em.find(Student.class, id);
+		return em.createQuery("SELECT  s.fypFile.title,s from "+Student.class.getName()+" s  where s.fypFile.fileStatus =:status AND s.cin =:cin").setParameter("cin", cin).setParameter("status", FYPFileStatus.pending).getResultList();
+		
+		
+	}
+		
 	
 
 

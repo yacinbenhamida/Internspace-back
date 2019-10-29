@@ -49,6 +49,9 @@ public interface InternshipDirectorEJBLocal {
 	//Le directeur des stages pourra rendre l’étudiant autorisé à passer son PFE.
 	void acceptPFE(long id);
 	public Employee getInternshipDirectorById(long id);
+	//acept modification majeure
+	void acceptModification(long id);
+	
 	
 	
 	
