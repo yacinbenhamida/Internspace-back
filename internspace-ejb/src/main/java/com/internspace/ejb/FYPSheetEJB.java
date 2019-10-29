@@ -46,7 +46,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public FYPFile getFypFileOfStudent(long studId) {
-		Query q = service.createQuery("SELECT f from FYPFile fa, Student s where s.id = :id AND fa.id = s.fypFile.id")
+		Query q = service.createQuery("SELECT fa from FYPFile fa, Student s where s.id = :id AND fa.id = s.fypFile.id")
 				.setParameter("id", studId);
 		List<Object> list = q.getResultList();
 		if(!list.isEmpty()) {
@@ -78,8 +78,9 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllSheetsWithNoMarks() {
-		Query q =   service.createQuery("SELECT f from FYPFile f where (f.finalMark = NULL OR f.finalMark = 0 ) group by f.id"
-				+ " HAVING (SELECT COUNT(i.id) FROM FYP_INTERVENTION i where i.internshipSheet.id = f.id AND (i.givenMark != NULL OR f.givenMark != 0) )=0");
+		Query q =   service.createQuery("SELECT f from FYPFile f where f.finalMark = NULL OR f.finalMark = 0  group by f.id"
+				+ " HAVING (SELECT COUNT(i.id) FROM fyp_intervention i where i.fypFile.id = f.id "
+				+ " AND (i.givenMark = NULL OR i.givenMark = 0) )>0");
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -89,7 +90,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@Override
 	public List<FYPFile> getFYPSheetsWithNoSupervisors() {
 		Query q = service.createQuery("SELECT f from FYPFile f group by f.id "
-				+ "HAVING (SELECT COUNT(i.id) from FYP_INTERVENTION i where i.internshipSheet.id = f.id) = 0");
+				+ "HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.fypFile.id = f.id AND i.teacherRole = 'supervisor' ) = 0");
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -119,8 +120,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@Override
 	public List<FYPFile> getFYPSheetsOfTeacher(long idTeacher) {
 		Query q =  service.createQuery("SELECT f from FYPFile f group by f.id"
-				+ " HAVING (SELECT COUNT(i.id) from FYP_INTERVENTION i where i.teacher.id = :idt"
-				+ " AND i.internshipSheet.id = f.id) > 0").setParameter("idt", idTeacher);
+				+ " HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.teacher.id = :idt"
+				+ " AND i.fypFile.id = f.id) > 0").setParameter("idt", idTeacher);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -135,11 +136,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@Override
 	public FYPFile assignFYPFileToStudent(FYPFile file, long studentId) {
 		Student s = service.find(Student.class, studentId);
-		file.setStudent(s);
 		s.setFypFile(file);
 		service.persist(s);
-		service.persist(file);
-		service.flush();
 		return service.find(FYPFile.class, file.getId());
 	}
 
@@ -147,6 +145,15 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	public List<FYPFile> getAllSheetsPending() {
 		
 		return service.createQuery("SELECT f from FYPFile f  where f.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
+	}
+
+	@Override
+	public FYPFile editFYPSheetPending(FYPFile file) {
+		List<FYPFile> lf = getAllSheetsPending();
+		for(int i=0;i<lf.size();i++) {
+			return service.merge(file);
+		}
+		return null;
 	}
 
 }

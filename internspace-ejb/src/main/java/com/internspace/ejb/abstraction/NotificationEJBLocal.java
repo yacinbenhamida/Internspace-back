@@ -9,7 +9,7 @@ import com.internspace.entities.exchanges.Notification;
 
 @Local
 public interface NotificationEJBLocal {
-	public Notification addNotification(Notification notification);
+	public Notification addNotification(long idFrom, long idTo, String content,String direction);
 	public boolean removeNotification(long notifId);
 	public Notification editNotification(Notification notification);
 	public List<Notification> getNotificationHistoryOfStudent(long studentId);
