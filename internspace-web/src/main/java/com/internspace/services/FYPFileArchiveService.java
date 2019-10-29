@@ -42,7 +42,7 @@ public class FYPFileArchiveService {
 	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("deleteArchive")
+	@Path("deleteArchive/{id}")
 	public void  deleteArchive(long id){
 		service.DeleteFileToArchive(id);
 	}

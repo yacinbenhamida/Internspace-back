@@ -41,6 +41,10 @@ public interface InternshipDirectorEJBLocal {
 	public Company GetNameAndCountry (long id);
 	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys();
 	
+	
+	
+	
+	
 	//partie teb3a rayén
 	//Le directeur des stages pourra rendre l’étudiant autorisé à passer son PFE.
 	void acceptPFE(long id);
