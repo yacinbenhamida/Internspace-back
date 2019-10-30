@@ -32,7 +32,27 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		
 	}
+	
+	@Override
+	public List<Student> getAllStudentLateYear() {
+		
+		return em.createQuery("SELECT s from Student s where s.studyClass.classYear=:year").setParameter("year", 5).getResultList();
+	}
 
+	@Override
+	public void enregistrerAuPlatforme(String cin) {
+		
+		List<Student> ls = getAllStudentLateYear();
+		
+		for (int i=0;i<ls.size();i++) {
+			if(ls.get(i).getCin().equals(cin) && ls.get(i).getIsSaved()==false ) {
+				System.out.println("ok");
+				ls.get(i).setIsSaved(true);
+			
+			}
+	}
+	}
+		
 	@Override
 	public List<Student> getAll() {
 		return em.createQuery("SELECT c from Student c").getResultList();
@@ -65,10 +85,19 @@ public class StudentEJB implements StudentEJBLocal{
 	@Override
 	public void sendMail(String text,String cin) {
 		
-		String subject = "vous êtes autorisé a passer votre PFE " ;
+		
+		
+		String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"; // Tu supprimes les lettres dont tu ne veux pas
+	    String pass = "";
+	    for(int x=0;x<31415926L;x++)
+	    {
+	       int i = (int)Math.floor(Math.random() * 62); // Si tu supprimes des lettres tu diminues ce nb
+	       pass += chars.charAt(i);
+	    }
+		
+	    String subject = "vous êtes autorisé a passer votre PFE " + pass ;
 		String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
-		
-		
+	    
 		Mail_API mail = new Mail_API();
 		List<Student> ls = getAllStudentAutorised();
 		List<Student> ls1 = getAllStudentNodisabled();
@@ -259,7 +288,8 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		
 	}
-		
+	
+	
 	
 
 
