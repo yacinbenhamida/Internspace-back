@@ -1,11 +1,15 @@
 package com.internspace.ejb;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
 
 import com.internspace.ejb.abstraction.PaymentEJBLocal;
+import com.internspace.entities.university.Payments;
+import com.internspace.entities.university.University;
 import com.paypal.api.payments.Amount;
 import com.paypal.api.payments.Authorization;
 import com.paypal.api.payments.Details;
@@ -21,13 +25,18 @@ import com.paypal.base.rest.PayPalRESTException;
 
 @Stateless
 public class PaymentEJB implements PaymentEJBLocal {
-	 private String cId ="AbjSMnIhwuiUhsiZcsw2zuNXyUkQRPXfvT-7iOmn4zI5ERWPU2J229dHIe3rHswtKucl7vDUVwAxniuZ";
+	EntityManager em;
+	private String cId ="AbjSMnIhwuiUhsiZcsw2zuNXyUkQRPXfvT-7iOmn4zI5ERWPU2J229dHIe3rHswtKucl7vDUVwAxniuZ";
 	  private static String crunchifySecret = "EMXlrVMs0vCjcZW882fJ4QI6zZki7XyYGWAOmNnyQ9GiIc_2wUIFchu4MFrhCyrjXfa2Q4sjRSobFwHy";
 
-	  private static String executionMode = "sb-vqcv47467841@business.example.com"; // sandbox or production
+	  private static String executionMode = "sandbox"; // sandbox or production
 	 @Override
-	public void PaymentPayPalAPI() {
-
+	public void PaymentPayPalAPI(long totale,long idU) {
+		/* Payments p= new Payments();
+		 p.setPaymentDate(LocalDate.now());
+		 University u=em.find(University.class, idU);
+		 p.setUniversity(u);
+		 em.persist(p);*/
 		/*
 		 * Flow would look like this: 
 		 * 1. Create Payer object and set PaymentMethod 
@@ -55,13 +64,14 @@ public class PaymentEJB implements PaymentEJBLocal {
 		// Set Payment Details Object
 		Details crunchifyDetails = new Details();
 		crunchifyDetails.setShipping("2.22");
-		crunchifyDetails.setSubtotal("3.33");
+		crunchifyDetails.setSubtotal(totale+"");
 		crunchifyDetails.setTax("1.11");
  
 		// Set Payment amount
+		long tot=totale+2+1;
 		Amount crunchifyAmount = new Amount();
 		crunchifyAmount.setCurrency("USD");
-		crunchifyAmount.setTotal("6.66");
+		crunchifyAmount.setTotal(tot+"");
 		crunchifyAmount.setDetails(crunchifyDetails);
  
 		// Set Transaction information

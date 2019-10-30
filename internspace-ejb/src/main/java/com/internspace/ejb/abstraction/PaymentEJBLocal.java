@@ -4,6 +4,6 @@ import javax.ejb.Local;
 
 @Local
 public interface PaymentEJBLocal {
-	 void PaymentPayPalAPI() ;
+	 void PaymentPayPalAPI(long tot,long iD) ;
 
 }
