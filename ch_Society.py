@@ -1,10 +1,9 @@
-<<<<<<< HEAD
-import sys
-=======
+#!/usr/bin/python
 from bs4 import BeautifulSoup
-from os import system
 import requests as r
 import re
+
+clear = lambda : __import__('os').system('clear')
 
 argos	= __import__('sys').argv
 argsCh 	= False
@@ -22,10 +21,12 @@ class Init_checker:
     return r.get('https://www.google.com/search?q='+str(self.name)+' enterprise '+str(self.country))
 
   def _bs(self):
+    clear()
     return BeautifulSoup(self._rq().content)
-  
+    
   def _fetch(self):
     soup   = self._bs()
+    clear()
     linkos = []
     for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
         linkos.append(re.split(":(?=http)",link["href"].replace("/url?q=","")))
@@ -33,5 +34,4 @@ class Init_checker:
 
 
 
-print('les args nayeek !') if argsCh == False else [ print(l) for l in Init_checker(argos[1],argos[2])._fetch()]
->>>>>>> 722e8cd169e30bb654f62159af589af9de428f89
+print('les args nayeek !') if argsCh == False else [ print(l) for l in Init_checker(argos[1],argos[2])._fetch()[0:3]]

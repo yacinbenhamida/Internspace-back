@@ -12,6 +12,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
@@ -76,12 +79,18 @@ public class InternshipDirectorServices {
 		 return service.getFYPFileListByCountry(location);
 	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("allFYPFileByCategory")
+	public Response getFYPFileListByYear(@QueryParam(value = "category")String category){
+		 return Response.status(Status.OK).entity(service.getFYPFileListByCategory(category)).build();
+	};
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allFYPFileBySpec")
-	public List<FYPFile> FYPFileBySpecifiqueCrit(@QueryParam(value = "location") String location,@QueryParam(value = "year") int year ,@QueryParam(value = "state") FYPFileStatus state){
-		 return service.getFYPFileListSpecifique(year, location, state);
+	public List<FYPFile> FYPFileBySpecifiqueCrit(@QueryParam(value = "location") String location,@QueryParam(value = "year") int year ,@QueryParam(value = "state") FYPFileStatus state, @QueryParam(value = "category") String category){
+		 return service.getFYPFileListSpecifique(year, location, state, category);
 	};
 	
 	@GET
@@ -200,7 +209,7 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("AdrCompany")
-	public Company CompanyAdr(){
+	public List<String> CompanyAdr(@QueryParam(value = "id") long id ){
 		return service.GetNameAndCountry(51);
 	};
 	
@@ -210,6 +219,7 @@ public class InternshipDirectorServices {
 	public List<FYPSubject> myList(){
 		return service.FullStudentInfoWithVerifiedCompanys();
 	};
+
 	
 	
 	

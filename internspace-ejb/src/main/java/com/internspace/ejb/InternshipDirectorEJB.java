@@ -27,6 +27,7 @@ import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.Notification;
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileArchive;
@@ -108,27 +109,168 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		
 	
 	}
+	
 
 	@Override
-	public List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state) {
+	public List<FYPFile> getFYPFileListByCategory(String category) {
+		List<FYPFile> ls = new ArrayList<FYPFile>();
+		FYPCategory cc  =(FYPCategory)em.createQuery("FROM FYPCategory f WHERE f.name =:name").setParameter("name",category).getSingleResult();
+		 if(cc!= null)
+			 ls = em.createQuery("FROM FYPFile f WHERE :c MEMBER OF f.categories").setParameter("c", cc).getResultList();
+		return ls;
+	}
+
+	
+
+	@Override
+	public List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state,String category ) {
 		List<FYPFile> lf = new ArrayList();
 		List<FYPFile> lff = new ArrayList();
+		List<FYPFile> lfff = new ArrayList();
+		List<FYPFile> lByCat = new ArrayList();
 		List<FYPFile> rs = new ArrayList();
+		boolean tata = true ;
+		
 		if(year == 0) {
+			if(category==null) {
+				lf.addAll(getFYPFileListByCountry(location));
+				for (int i = 0; i < lf.size (); i++) {
+					if(lf.get(i).getFileStatus()==state)
+						rs.add(lf.get(i));
+				}
+			}
+			else if(state==null) {
+				lf.addAll(getFYPFileListByCountry(location));
+				lByCat = getFYPFileListByCategory(category);
+				for ( int i =0 ; i< lf.size(); i++) {
+					for (int j =0 ; j< lByCat.size(); j++) {
+						if(lf.get(i)==lByCat.get(j))
+							rs.add(lf.get(i));
+					}
+				}
+			}
+			else if (location == null) {
+				lByCat = getFYPFileListByCategory(category);
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lByCat.get(j).getFileStatus() == state)
+						rs.add(lByCat.get(j));
+				}
+				
+			}
+			else {
 			lf.addAll(getFYPFileListByCountry(location));
 			for (int i = 0; i < lf.size (); i++) {
 				if(lf.get(i).getFileStatus()==state)
-					rs.add(lf.get(i));
+					lfff.add(lf.get(i));
+			}
+			lByCat = getFYPFileListByCategory(category);
+			for ( int i =0 ; i< lfff.size(); i++) {
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lfff.get(i)==lByCat.get(j))
+						rs.add(lfff.get(i));
+				}
+			}
+			}
+			
+		}
+		/*******************************************************/
+		else if(location==null){
+				if(category == null) {
+					lf.addAll(getFYPFileListByYear(year));
+					for (int i = 0; i < lf.size (); i++) {
+						if(lf.get(i).getFileStatus()==state)
+							rs.add(lf.get(i));
+					}
+				}
+				else if (state==null) {
+					lf.addAll(getFYPFileListByYear(year));
+					lByCat = getFYPFileListByCategory(category);
+					for (int j =0 ; j< lf.size(); j++) {
+						for(int i = 0 ; i< lByCat.size();i++ )
+						if(lf.get(j)== lByCat.get(i))
+							rs.add(lf.get(i));
+					}
+				}
+				
+				else {
+			lf.addAll(getFYPFileListByYear(year));
+			for (int i = 0; i < lf.size (); i++) {
+				if(lf.get(i).getFileStatus()==state)
+					lfff.add(lf.get(i));
+			}
+			lByCat = getFYPFileListByCategory(category);
+			for ( int i =0 ; i< lfff.size(); i++) {
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lfff.get(i)==lByCat.get(j))
+						rs.add(lfff.get(i));
+				}
 			}
 		}
-		else if(location==null){
+		}
+		/*******************************************************/
+		else if(state==null){
+			if(category==null) {
+				lf.addAll(getFYPFileListByCountry(location));
+				lff = getFYPFileListByYear(year);
+				for(int i=0 ; i<lff.size(); i++)
+				{
+					for(int j=0 ; j<lf.size(); j++) {
+						if(lff.get(i).equals(lf.get(j)))
+							rs.add(lff.get(i));
+					}
+				}
+			}
+			else {
+			lf.addAll(getFYPFileListByCountry(location));
+			lff = getFYPFileListByYear(year);
+			for(int i=0 ; i<lff.size(); i++)
+			{
+				for(int j=0 ; j<lf.size(); j++) {
+					if(lff.get(i).equals(lf.get(j)))
+						lfff.add(lff.get(i));
+				}
+			}
+			lByCat = getFYPFileListByCategory(category);
+			for ( int i =0 ; i< lfff.size(); i++) {
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lfff.get(i)==lByCat.get(j))
+						rs.add(lfff.get(i));
+				}
+			}
+			
+		}
+		}
+		/*******************************************************/
+		else if(category==null){
+			lf.addAll(getFYPFileListByCountry(location));
+			lff = getFYPFileListByYear(year);
+			for(int i=0 ; i<lff.size(); i++)
+			{
+				for(int j=0 ; j<lf.size(); j++) {
+					if(lff.get(i).equals(lf.get(j)))
+						lfff.add(lff.get(i));
+				}
+			}
+			for ( int i =0 ; i< lfff.size(); i++) {
+				if(lfff.get(i).getFileStatus()==state)
+					rs.add(lfff.get(i));
+			}
+		}
+		
+			/*lf.addAll(getFYPFileListByCountry(location));
+			for (int i = 0; i < lf.size (); i++) {
+				if(lf.get(i).getFileStatus()==state)
+					rs.add(lf.get(i));
+			}*/
+
+		/*else if((location==null) & (category == null)){
 			lf.addAll(getFYPFileListByYear(year));
 			for (int i = 0; i < lf.size (); i++) {
 				if(lf.get(i).getFileStatus()==state)
 					rs.add(lf.get(i));
 			}
 		}
-		else{
+		else if((state==null) & (category == null)){
 			lf.addAll(getFYPFileListByCountry(location));
 			lff = getFYPFileListByYear(year);
 			for(int i=0 ; i<lff.size(); i++)
@@ -139,7 +281,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 				}
 			}
 			
-		}
+		}*/
 			
 		return rs;
 	}
@@ -327,35 +469,29 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		//"SELECT f.fypFile , f.company , f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus='confirmed'"
 	}
 	
-	
-	//pour verifier l'existance de la company
-	@Override
-	public Company GetNameAndCountry(long id){
-		Company c =em.find(Company.class,id);
-		String [] params= {c.getName(),c.getCountry()};		
-		//ProcessBuilder command = new ProcessBuilder("python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py",""+params);
-		/*try {
-			System.out.println(command.start().getOutputStream().toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		/*Process p = null;
-			try {
-				p = Runtime.getRuntime().exec(command + params );
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-			/*BufferedReader stdInput = new BufferedReader(new 
-	                InputStreamReader(p.getInputStream()));
-			System.out.println(stdInput); 
-			//return (List<String>) stdInput;
-		System.out.println("hello"+c);*/
-		 return c;
-	}
 
+	//pour verifier l'existance de la company return links from google
+	@Override
+	public List<String> GetNameAndCountry(long id){
+		Company c =em.find(Company.class,id);
+		List<String> ls = new ArrayList<String>();
+		try{
+
+			ProcessBuilder pb = new ProcessBuilder("/Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py","inwi","maroc");
+			Process p = pb.start(); 
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
 	
+			
+			while ((s = in.readLine()) != null) {
+				ls.add(s);
+			}
+			}catch(Exception e){System.out.println(e);}
+			
+
+				 return ls;
+	}
 	
 	
 	
@@ -391,6 +527,8 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		
 		return employee;
 	}
+
+
 
 
 
