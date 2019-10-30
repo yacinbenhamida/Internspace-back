@@ -311,7 +311,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		f.setFileStatus(FYPFileStatus.declined);
 		Student i = (Student) em.createQuery("FROM Student s WHERE s.fypFile = :file").setParameter("file", f).getSingleResult();
 		Notification n = new Notification();
-		n.setStudent(i);
+		n.setSender(i);
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
 		em.persist(n);
