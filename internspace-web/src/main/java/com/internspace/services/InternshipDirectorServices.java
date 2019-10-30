@@ -236,5 +236,11 @@ public class InternshipDirectorServices {
 		service.acceptPFE(id);
 	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptModifMajor")
+	public void acceptModification(@QueryParam(value = "id") long id){
+		service.acceptModification(id);
+	};
 	
 }

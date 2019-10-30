@@ -1,7 +1,9 @@
 package com.internspace.entities.exchanges;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,41 +11,38 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
+import com.internspace.entities.users.User;
 @Entity(name="Notification")
 public class Notification implements Serializable{
-	public enum Direction{
-		fromStudentToEmployee,fromEmployeeToStudent
-	}
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	long id;
+	
 	String content;
+	
 	boolean seen;
 	
 	@ManyToOne
-	Student student;
+	@JoinColumn(name="sender_id")
+	User sender;
 	
 	@ManyToOne
-	Employee employee;
-	@Enumerated(EnumType.STRING)
-	Direction direction;
+	@JoinColumn(name="reciver_id")
+	User reciever;
+	@Column(name="date_of_emssion")
+	LocalDateTime dateOfEmission;
 
 	public Notification() {
 		super();
 	}
-	public Notification(long id, String content, boolean seen, Student student, Employee employee) {
-		super();
-		this.id = id;
-		this.content = content;
-		this.seen = seen;
-		this.student = student;
-		this.employee = employee;
-	}
+	
 	public long getId() {
 		return id;
 	}
@@ -68,34 +67,33 @@ public class Notification implements Serializable{
 		this.seen = seen;
 	}
 
-	public Student getStudent() {
-		return student;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
 	
-	public Direction getDirection() {
-		return direction;
-	}
-	public void setDirection(Direction direction) {
-		this.direction = direction;
-	}
-	@Override
-	public String toString() {
-		return "Notification [id=" + id + ", content=" + content + ", seen=" + seen + ", student=" + student
-				+ ", employee=" + employee + "]";
-	}
 	
+	public LocalDateTime getDateOfEmission() {
+		return dateOfEmission;
+	}
+
+	public void setDateOfEmission(LocalDateTime dateOfEmission) {
+		this.dateOfEmission = dateOfEmission;
+	}
+
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+
+	public User getReciever() {
+		return reciever;
+	}
+
+	public void setReciever(User reciever) {
+		this.reciever = reciever;
+	}
+
+
 	
 	
 }

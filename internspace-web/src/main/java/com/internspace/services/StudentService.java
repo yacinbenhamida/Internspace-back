@@ -60,9 +60,9 @@ public class StudentService {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("login")
-	public void login(@QueryParam(value = "cin") String cin){
-		Studentservice.login(cin);
+	@Path("enregistrer")
+	public void enregistrerAuPlatforme(@QueryParam(value = "cin") String cin){
+		Studentservice.enregistrerAuPlatforme(cin);
 	};
 	
 	
@@ -126,6 +126,23 @@ public class StudentService {
 	public List<Employee> getDirector(@QueryParam(value = "cin") String cin){
 		 return Studentservice.getDirector(cin);
 	};
-
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("pendingStudent")
+	public List<FYPFile> getAllSheetsPendingStudent(){
+		 return Studentservice.getAllSheetsPendingStudent();
+	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("pendingStudentId")
+	public List<FYPFile> getAllSheetsPendingByStudent(@QueryParam(value = "cin") String cin){
+		 return Studentservice.getAllSheetsPendingByStudent(cin);
+	};
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("latestudents")
+	public List<Student> getAllStudentLateYear(){
+		 return Studentservice.getAllStudentLateYear();
+	};
 }

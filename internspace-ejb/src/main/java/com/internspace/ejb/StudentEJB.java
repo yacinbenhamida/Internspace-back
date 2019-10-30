@@ -2,6 +2,7 @@ package com.internspace.ejb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
@@ -32,7 +33,27 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		
 	}
+	
+	@Override
+	public List<Student> getAllStudentLateYear() {
+		
+		return em.createQuery("SELECT s from Student s where s.studyClass.classYear=:year").setParameter("year", 5).getResultList();
+	}
 
+	@Override
+	public void enregistrerAuPlatforme(String cin) {
+		
+		List<Student> ls = getAllStudentLateYear();
+		
+		for (int i=0;i<ls.size();i++) {
+			if(ls.get(i).getCin().equals(cin) && ls.get(i).getIsSaved()==false ) {
+				System.out.println("ok");
+				ls.get(i).setIsSaved(true);
+			
+			}
+	}
+	}
+		
 	@Override
 	public List<Student> getAll() {
 		return em.createQuery("SELECT c from Student c").getResultList();
@@ -65,8 +86,44 @@ public class StudentEJB implements StudentEJBLocal{
 	@Override
 	public void sendMail(String text,String cin) {
 		
-		String subject = "vous êtes autorisé a passer votre PFE " ;
+		
+		   Random rand = new Random();
+		   String Xsi ="abcdefghijklmnopqrstuvwxyz";
+		   final String Gamm ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";  
+		   final String Iot = "1234567890";
+		   final String Zeta="&~#|`-_)('/?,;:.";
+		   String demo =""; 
+		   double x =0;
+		   
+		   for (int k=0;k<100;k++){
+				demo="";
+			//randomisation des caractères selon leur nombre par type définis ,entre six et dix caratères
+			        while ((demo.length() != 6)&& (demo.length() != 7)&& (demo.length() != 8)&& (demo.length() != 9)&& (demo.length() != 10)) {
+			//selection aleatoire du type de caractère puis selection parmis les differents modèles de caractères              
+			              int rPick=rand.nextInt(4);
+			           if (rPick ==0) {
+				      int erzat=rand.nextInt(25);
+			              demo+=Xsi.charAt(erzat);
+			         } else if (rPick == 1) {
+				      int erzat=rand.nextInt(9);
+				      demo+=Iot.charAt(erzat);
+			         } else if (rPick==2) {
+			              int erzat=rand.nextInt(25);
+			              demo+=Gamm.charAt(erzat);
+			         }else if (rPick==3) {
+			              int erzat=rand.nextInt(15);
+			              demo+=Zeta.charAt(erzat);
+				}
+				}
+		   }
+		
+	    String subject = "vous êtes autorisé a passer votre PFE "
+	    		+ "voici votre mot de passe " + demo ;
 		String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
+	    
+		
+		
+		
 		
 		
 		Mail_API mail = new Mail_API();
@@ -242,10 +299,24 @@ public class StudentEJB implements StudentEJBLocal{
 		//return em.createQuery("SELECT c.teacher.firstName,c.teacher.email from "+ FYPIntervention.class.getName()+" c  ").getResultList();
 		return null;
 	}
+
+	@Override
+	public List<FYPFile> getAllSheetsPendingStudent() {
 		
+		
+		return em.createQuery("SELECT s.fypFile.title,s from "+Student.class.getName()+" s  where s.fypFile.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
 	
+		
+	}
 
-
+	@Override
+	public List<FYPFile> getAllSheetsPendingByStudent(String cin) {
+		//Student s = em.find(Student.class, id);
+		return em.createQuery("SELECT  s.fypFile.title,s from "+Student.class.getName()+" s  where s.fypFile.fileStatus =:status AND s.cin =:cin").setParameter("cin", cin).setParameter("status", FYPFileStatus.pending).getResultList();
+		
+		
+	}
+	
 	
 	
 

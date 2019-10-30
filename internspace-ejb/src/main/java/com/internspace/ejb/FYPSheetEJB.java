@@ -147,13 +147,6 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		return service.createQuery("SELECT f from FYPFile f  where f.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
 	}
 
-	@Override
-	public FYPFile editFYPSheetPending(FYPFile file) {
-		List<FYPFile> lf = getAllSheetsPending();
-		for(int i=0;i<lf.size();i++) {
-			return service.merge(file);
-		}
-		return null;
-	}
+	
 
 }

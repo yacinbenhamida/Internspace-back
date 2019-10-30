@@ -16,6 +16,8 @@ public interface StudentEJBLocal {
 	public void addStudent(Student std);
 	public  List<Student> getAll();
 	public  List<Student> getAllStudentSaved();
+	public  List<Student> getAllStudentLateYear();
+	public void enregistrerAuPlatforme(String cin);
 	
 	public void login(String cin);
 	
@@ -29,6 +31,8 @@ public interface StudentEJBLocal {
 	void sendMail(String text,String cin);
 	void mailEtat(String text,String cin);
 	public List<Employee> getDirector(String cin);
+	public List<FYPFile> getAllSheetsPendingStudent();
+	public List<FYPFile> getAllSheetsPendingByStudent(String cin);
 	
 	
 	
