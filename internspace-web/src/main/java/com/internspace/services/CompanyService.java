@@ -237,7 +237,13 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Can't find suject to delete with ID: " + subjectId).build();
 
-		service.deleteSubject(subject);
+		boolean success = service.deleteSubject(subject);
+		
+		if(!success)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Won't delete this subject, it is already linked to a fyp file... | subjectId: " + subjectId).build();
+
+		
 		return Response.status(Response.Status.OK).entity("Successfully DELETED Subject for ID: " + subjectId).build();
 	}
 
