@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
@@ -97,6 +98,20 @@ public class CompanyEJB implements CompanyEJBLocal {
 	@Override
 	public void deleteSubjectById(long subjectId) {
 		FYPSubject subject = findSubject(subjectId);
+		
+		// Before, detach fyp from this subject
+		
+		List<FYPFile> fypFiles = em.createQuery("SELECT F FROM " + FYPFile.class.getName() + " F WHERE F.subject.id = :subjectId", FYPFile.class)
+		.setParameter("subjectId", subjectId)
+		.getResultList();
+		
+		if(fypFiles != null && fypFiles.size() > 0)
+		{
+			FYPFile fypFile = fypFiles.get(0);
+			fypFile.setSubject(null);
+			em.persist(fypFile);
+		}
+		
 		em.remove(subject);
 	}
 
