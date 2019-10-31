@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 
 @Path("fypsheet")
 public class FYPSheetService {
@@ -153,6 +155,13 @@ public class FYPSheetService {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheetsPending()).build();
 	}
 	
+	@GET
+	@Path("etat")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response etatChanged(@QueryParam(value = "id") long id) {
+		FYPFileStatus ff = fypSheetService.etatChanged(id);
+		return 	Response.status(Response.Status.OK).entity(ff).build();
+	}
 	
 
 }

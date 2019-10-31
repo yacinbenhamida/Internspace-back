@@ -37,6 +37,9 @@ public class Student extends User {
 	@Column(name="cin")
 	String cin;
 	
+	@Column(name="pass_generated")
+	String passGenerated;
+	
 	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated;
 	
@@ -105,8 +108,20 @@ public class Student extends User {
 	 * public boolean isHasSubmittedAreport() { return hasSubmittedAReport; }
 	 * 
 	 */
+	
+	
 	public Boolean getIsSaved() {
 		return isSaved;
+	}
+
+	
+
+	public String getPassGenerated() {
+		return passGenerated;
+	}
+
+	public void setPassGenerated(String passGenerated) {
+		this.passGenerated = passGenerated;
 	}
 
 	public void setIsSaved(Boolean isSaved) {

@@ -3,11 +3,14 @@ package com.internspace.ejb;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
+import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Student;
@@ -15,6 +18,9 @@ import com.internspace.entities.users.Student;
 public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@PersistenceContext
 	EntityManager service;
+	
+	@Inject
+	FYPSheetHistoryEJBLocal serviceHistory;
 
 	@Override
 	public FYPFile addFYPSheet(FYPFile file) {
@@ -141,10 +147,29 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		return service.find(FYPFile.class, file.getId());
 	}
 
+	
+	// my work
+	
 	@Override
 	public List<FYPFile> getAllSheetsPending() {
 		
 		return service.createQuery("SELECT f from FYPFile f  where f.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
+	}
+
+	@Override
+	public FYPFileStatus etatChanged(long id) {
+		FYPFile f = service.find(FYPFile.class, id);
+		serviceHistory.getAllFiles();
+		for(int i=0;i<serviceHistory.getAllFiles().size();i++) {
+			if(serviceHistory.getAllFiles().get(i).getId()!=f.getId()) {
+		if(f.getFileStatus().equals(FYPFileStatus.confirmed) ||f.getFileStatus().equals(FYPFileStatus.declined)) {
+			
+			serviceHistory.addFYPSheet(f);
+			service.persist(f);
+			service.flush();
+		}}}
+		return f.getFileStatus();
+		
 	}
 
 	

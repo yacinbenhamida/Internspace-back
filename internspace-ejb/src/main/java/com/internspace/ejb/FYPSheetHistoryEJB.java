@@ -8,7 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSheetHistory;
+
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 @Stateless
 public class FYPSheetHistoryEJB implements FYPSheetHistoryEJBLocal{
 	@PersistenceContext
@@ -49,6 +52,22 @@ public class FYPSheetHistoryEJB implements FYPSheetHistoryEJBLocal{
 	@Override
 	public FYPSheetHistory getById(long id) {
 		return entityManager.find(FYPSheetHistory.class, id);
+	}
+
+	@Override
+	public void addFYPSheet(FYPFile file) {
+		FYPSheetHistory f = new FYPSheetHistory();
+		
+		f.setChangedFile(file);
+		f.setOldState(file.getFileStatus());
+		
+		entityManager.persist(f);
+		entityManager.flush();
+	}
+
+	@Override
+	public List<FYPFile> getAllFiles() {
+		return entityManager.createQuery("SELECT f.fypFile FROM fyp_sheet_history f").getResultList();
 	}
 
 }
