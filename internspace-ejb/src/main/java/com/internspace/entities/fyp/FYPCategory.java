@@ -1,13 +1,13 @@
 package com.internspace.entities.fyp;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
@@ -37,17 +37,17 @@ public class FYPCategory implements Serializable {
 	/*
 	 * Associations
 	 */
-	
-	
 
 	// Many to Many to Students using custom association table.
 	@OneToMany(mappedBy = "category")
 	Set<StudentCategoryPreference> preferedByStudents;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany
+	@JoinTable(name = "fypfiles_categories", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "fypfile_id"))
 	Set<FYPFile> fypFiles;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany
+	@JoinTable(name = "subjects_categories", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
 	Set<FYPSubject> subjects;
 
 	/*
