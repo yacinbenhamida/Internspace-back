@@ -21,7 +21,8 @@ public interface InternshipDirectorEJBLocal {
 	List<FYPFile> getFYPFileListByState(FYPFileStatus state);
 	List<FYPFile> getFYPFileListByYear(int year);
 	List<FYPFile> getFYPFileListByCountry(String location);
-	List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state);
+	List<FYPFile> getFYPFileListByCategory(String category);
+	List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state, String category);
 	List<FYPFile> getFYPFileListCurrentYear(FYPFileStatus state);
 	void acceptFile(long id);
 	void refuseFile(long id, String text);
@@ -38,7 +39,7 @@ public interface InternshipDirectorEJBLocal {
 	public  void FixActionNumberAsProtractor(int nb, int id);
 	public  void FixActionNumberAsPreValidator(int nb, int id);
 	public  void FixActionNumberAsJuryPresident(int nb, int id);
-	public Company GetNameAndCountry (long id);
+	public List<String> GetNameAndCountry (long id);
 	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys();
 	
 	
