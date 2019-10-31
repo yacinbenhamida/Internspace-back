@@ -321,8 +321,6 @@ public class CompanyService {
         	Invocation.Builder invocationBuilder 
         	  = subjectSuggestionWebTarget.request(MediaType.APPLICATION_JSON);
         	
-        	List<FYPSubject> subjects = null;
-        	
         	Response response 
         	  = invocationBuilder
         	  .get();
