@@ -64,10 +64,12 @@ public class FYPSheetHistoryEJB implements FYPSheetHistoryEJBLocal{
 		entityManager.persist(f);
 		entityManager.flush();
 	}
+	
+	// list all fypfile in  FYPSheetHistory
 
 	@Override
 	public List<FYPFile> getAllFiles() {
-		return entityManager.createQuery("SELECT f.fypFile FROM fyp_sheet_history f").getResultList();
+		return entityManager.createQuery("SELECT f.changedFile FROM "+ FYPSheetHistory.class.getName()+" f").getResultList();
 	}
 
 }

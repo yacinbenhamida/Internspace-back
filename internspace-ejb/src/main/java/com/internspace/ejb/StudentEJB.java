@@ -409,6 +409,16 @@ public class StudentEJB implements StudentEJBLocal{
 		
 	}
 
+	@Override
+	public List<Student> getAllStudentFile(long id) {
+		
+		FYPFile std = em.find(FYPFile.class, id);
+		
+		return em.createQuery("SELECT s from "+Student.class.getName()+" s  where s.fypFile.id =:id").setParameter("id", id).getResultList();
+		
+		
+	}
+
 	
 	
 

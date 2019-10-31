@@ -38,6 +38,7 @@ public interface StudentEJBLocal {
 	public List<Employee> getDirector(String cin);
 	public List<FYPFile> getAllSheetsPendingStudent();
 	public List<FYPFile> getAllSheetsPendingByStudent(String cin);
+	public  List<Student> getAllStudentFile(long id);
 	
 	
 	
