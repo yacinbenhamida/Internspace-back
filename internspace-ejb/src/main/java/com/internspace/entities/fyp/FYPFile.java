@@ -210,10 +210,7 @@ public class FYPFile implements Serializable {
 	
 	
 
-	public Set<FYPFeature> getFeatures() {
-		return features;
-	}
-
+	
 	public void setStudent(Student student) {
 		this.student = student;
 	}

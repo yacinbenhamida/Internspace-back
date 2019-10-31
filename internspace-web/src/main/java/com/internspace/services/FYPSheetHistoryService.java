@@ -1,5 +1,7 @@
 package com.internspace.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -12,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
 import com.internspace.entities.fyp.FYPSheetHistory;
+import com.internspace.entities.users.Student;
 
 @Path("FYPSheetHistory")
 public class FYPSheetHistoryService {
@@ -66,4 +69,11 @@ public class FYPSheetHistoryService {
 	public Response getAllOfOneInternSheet(@PathParam("internshipSheetId") long internshipSheetId) {
 		return Response.status(Response.Status.OK).entity(service.getAllRecordedOperationsOfOneFYPSheet(internshipSheetId)).build();
 	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("latestudents")
+	public List<Student> getAllStudentLateYear(){
+		 return Studentservice.getAllStudentLateYear();
+	};
 }

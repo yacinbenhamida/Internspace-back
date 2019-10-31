@@ -13,8 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
@@ -232,8 +230,12 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("acceptPFE")
-	public void acceptPFE(@QueryParam(value = "id") long id){
-		service.acceptPFE(id);
+	public Response acceptPFE(@QueryParam(value = "id") long id){
+		Student res = service.acceptPFE(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
 	};
 	
 	@GET
