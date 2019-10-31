@@ -31,10 +31,9 @@ public class FYPInterventionService {
 	@GET
 	@Path("ranked")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTeachersByNumberOfSupervisions() {
-		
-		if(service.getAllTeachersRankedByNumberOfSupervisions() != null ) return Response.status(Response.Status.OK).entity(service.getAllTeachersRankedByNumberOfSupervisions()).build();
-		
+	public Response getTeachersByNumberOfSupervisions() {		
+		if(service.getAllTeachersRankedByNumberOfSupervisions() != null )
+			return Response.status(Response.Status.OK).entity(service.getAllTeachersRankedByNumberOfSupervisions()).build();
 		return Response.status(Response.Status.NOT_FOUND).entity("norecords").build();
 	}
 	@GET

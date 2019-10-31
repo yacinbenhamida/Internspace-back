@@ -21,7 +21,8 @@ public interface InternshipDirectorEJBLocal {
 	List<FYPFile> getFYPFileListByState(FYPFileStatus state);
 	List<FYPFile> getFYPFileListByYear(int year);
 	List<FYPFile> getFYPFileListByCountry(String location);
-	List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state);
+	List<FYPFile> getFYPFileListByCategory(String category);
+	List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state, String category);
 	List<FYPFile> getFYPFileListCurrentYear(FYPFileStatus state);
 	void acceptFile(long id);
 	void refuseFile(long id, String text);
@@ -30,7 +31,7 @@ public interface InternshipDirectorEJBLocal {
 	List<FYPFile> listCancelingDemand();
 	public boolean disableAccount(long id);
 	public List<Student> getAllStudentsList();
-	public Student FindStudent(long id);
+	public Student FindStudent(String cin);
 	public Boolean ValidateSubmittedAReport(long id);
 	public List<FYPFile> WaitingForDefensePlanningList();
 	public FYPFile FilterWaitingForDefensePlanningList(String cin, String nom);
@@ -38,13 +39,20 @@ public interface InternshipDirectorEJBLocal {
 	public  void FixActionNumberAsProtractor(int nb, int id);
 	public  void FixActionNumberAsPreValidator(int nb, int id);
 	public  void FixActionNumberAsJuryPresident(int nb, int id);
-	public List<Company> GetNameAndCountry (long id);
-	public List<FYPSubject> StudentWithVerifiedCompanys();
+	public List<String> GetNameAndCountry (long id);
+	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys();
+	
+	
+	
+	
 	
 	//partie teb3a rayén
 	//Le directeur des stages pourra rendre l’étudiant autorisé à passer son PFE.
 	void acceptPFE(long id);
 	public Employee getInternshipDirectorById(long id);
+	//acept modification majeure
+	void acceptModification(long id);
+	
 	
 	
 	

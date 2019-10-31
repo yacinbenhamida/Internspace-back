@@ -146,6 +146,12 @@ public class FYPSheetService {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheets()).build();
 	}
 	
+	@GET
+	@Path("pending")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllSheetsPending() {
+			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheetsPending()).build();
+	}
 	
 	
 

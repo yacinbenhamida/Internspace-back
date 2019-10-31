@@ -7,7 +7,6 @@ import javax.ejb.Local;
 
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
-import com.internspace.entities.users.Employee;
 //rchm
 @Local
 public interface FYPSheetEJBLocal {
@@ -29,6 +28,9 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getFYPSheetsWithNoSupervisors();
 	public List<FYPFile> getAllSheets();
 	public List<FYPFile> getAll();
+	public List<FYPFile> getAllSheetsPending();
 	
+
+
 	
 }

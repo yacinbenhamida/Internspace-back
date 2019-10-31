@@ -27,6 +27,9 @@ public class Company extends User {
 	String website;
 	String address;
 	String country;
+	//verify if the company is real or not
+	@Column(name = "isReal", columnDefinition = "boolean default false")
+	Boolean isReal;
 	// This is the principal supervisor email.
 	// This will be used by InternshipConvention if not inserted in there.
 	// Can ignore this.
@@ -114,5 +117,15 @@ public class Company extends User {
 	public void setInternshipConventions(Set<InternshipConvention> internshipConventions) {
 		this.internshipConventions = internshipConventions;
 	}
+
+	public Boolean getIsReal() {
+		return isReal;
+	}
+
+	public void setIsReal(Boolean isReal) {
+		this.isReal = isReal;
+	}
+	
+	
 
 }
