@@ -17,6 +17,7 @@ import javax.ws.rs.PUT;
 
 import com.internspace.ejb.abstraction.QuizEJBLocal;
 import com.internspace.entities.fyp.quiz.Quiz;
+import com.internspace.entities.fyp.quiz.StudentQuiz;
 
 @Path("quiz")
 public class QuizService {
@@ -101,9 +102,20 @@ public class QuizService {
 	
 	
 	// Student Quiz Section
-	
-	public Response getQuizzesByCategory()
+
+	@GET
+	@Path("/student/quiz")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getQuizByCategoryAndLevel(@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "category") long categoryId, @QueryParam(value = "level") int quizLevel)
+
 	{
+		StudentQuiz studentQuiz = service.getStudentQuizByCategoryAndLevel(studentId, categoryId, quizLevel);
 		
+		if (studentQuiz == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Can't find a matching StudentQuiz...").build();
+		
+		return Response.status(Response.Status.OK).entity(studentQuiz).build();
 	}
 }

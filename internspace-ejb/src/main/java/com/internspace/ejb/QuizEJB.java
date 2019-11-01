@@ -250,6 +250,19 @@ public class QuizEJB implements QuizEJBLocal {
 		return quizzes;
 		
 	}
+
 	
+	@Override
+	public StudentQuiz getStudentQuizByCategoryAndLevel(long studentId, long categoryId, int quizLevel) {
+		
+		Quiz quiz = getQuizOfCategoryWithLevel(categoryId, quizLevel);
+		
+		if(quiz == null)
+			return null;
+		
+		// StudentQuiz
+		return getOrCreateStudentQuiz(studentId, quiz.getId());
+	}
+
 
 }

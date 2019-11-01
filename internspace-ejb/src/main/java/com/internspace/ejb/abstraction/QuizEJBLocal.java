@@ -23,6 +23,7 @@ public interface QuizEJBLocal {
 	public boolean deleteQuiz(long quizId);
 
 	public StudentQuiz getOrCreateStudentQuiz(long studentId, long quizId);
+	public StudentQuiz getStudentQuizByCategoryAndLevel(long studentId, long categoryId, int quizLevel);
 	public Quiz getQuizOfCategoryWithLevel(long categoryId, int quizLevel);
 	void updateStudentQuiz(StudentQuiz studentQuiz);
 	
