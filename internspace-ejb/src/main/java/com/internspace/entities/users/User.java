@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 // To ensure TPC (type-per-class)
 import javax.persistence.Inheritance;
@@ -16,7 +18,9 @@ import javax.persistence.Column;
 @Table(name = "user")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User implements Serializable {
-
+	public enum UserType{
+		superAdmin,employee,company,student
+	}
 	private static final long serialVersionUID = 1L;
 
 	/*
@@ -35,7 +39,9 @@ public class User implements Serializable {
 	protected String email;
 	protected String username;
 	protected String password;
-	
+	@Column(name="user_type")
+	@Enumerated(EnumType.STRING)
+	protected UserType userType; 
 	/*
 	 * Associations
 	 */
@@ -111,6 +117,14 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
 	}
 
 
