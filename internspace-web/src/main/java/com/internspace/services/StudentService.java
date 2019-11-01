@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.users.Employee;
@@ -47,7 +48,17 @@ public class StudentService {
 		Studentservice.addStudent(std);
 		return Response.status(Status.OK).entity(std).build();
 	}
-	
+
+	@POST
+	@Path("create")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response  addFYPSheet(FYPFile file,@QueryParam(value = "id") long id) {
+		
+		
+		FYPFile f = Studentservice.addFYPSheet(file,id);
+		return Response.status(Status.OK).entity(f).build();
+	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -57,15 +68,27 @@ public class StudentService {
 	};
 
 
-	
+	// s'enregistrer au platforme
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("enregistrer")
-	public void enregistrerAuPlatforme(@QueryParam(value = "cin") String cin){
-		Studentservice.enregistrerAuPlatforme(cin);
+	public Response enregistrerAuPlatforme(@QueryParam(value = "cin") String cin){
+		Student res= Studentservice.enregistrerAuPlatforme(cin);
+		if(res!=null) {
+		return Response.status(Response.Status.OK).entity("vous êtes enregistrée , attendez un mail").build();}
+		
+		return Response.status(Response.Status.NOT_FOUND).entity("vous êtes pas en 5éme anneé ou bien déja enregistrée").build();
 	};
 	
 	
+	// s'authentifier avec un password auto generée
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("authentification")
+	public void authentification(@QueryParam(value = "cin") String cin,@QueryParam(value = "password") String password){
+		Studentservice.authentification(cin,password);
+	};
 	
 
 	@GET
@@ -103,10 +126,15 @@ public class StudentService {
 	public List<FYPFile> getstudentCinfile(@QueryParam(value = "cin") String cin){
 		 return Studentservice.getAllStudentFileCin(cin);
 	};
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("maili")
+	@Path("ciFile")
+	public List<FYPFeature> getAllStudentFileCinFeatures(@QueryParam(value = "cin") String cin){
+		 return Studentservice.getAllStudentFileCinFeatures(cin);
+	};
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("mailEtat")
 	public void mailetat(@QueryParam(value = "text") String text,@QueryParam(value = "cin") String cin){
 		Studentservice.mailEtat(text,cin);
 		
@@ -144,5 +172,12 @@ public class StudentService {
 	@Path("latestudents")
 	public List<Student> getAllStudentLateYear(){
 		 return Studentservice.getAllStudentLateYear();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("StudentfypfileById")
+	public List<Student> getAllStudentFile(@QueryParam(value = "id") long id){
+		 return Studentservice.getAllStudentFile(id);
 	};
 }

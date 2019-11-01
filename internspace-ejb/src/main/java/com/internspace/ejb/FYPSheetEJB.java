@@ -3,11 +3,18 @@ package com.internspace.ejb;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
+import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
+import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
+import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Student;
@@ -15,6 +22,13 @@ import com.internspace.entities.users.Student;
 public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@PersistenceContext
 	EntityManager service;
+	
+	@Inject
+	FYPSheetHistoryEJBLocal serviceHistory;
+	@Inject
+	StudentEJBLocal serviceStudent;
+	@Inject
+	InternshipDirectorEJBLocal serviceDirector;
 
 	@Override
 	public FYPFile addFYPSheet(FYPFile file) {
@@ -141,11 +155,76 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		return service.find(FYPFile.class, file.getId());
 	}
 
+	
+	// my work
+	
 	@Override
 	public List<FYPFile> getAllSheetsPending() {
 		
 		return service.createQuery("SELECT f from FYPFile f  where f.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
 	}
+
+	
+	@Override
+	public FYPFileStatus etatChanged(long id) {
+		
+		String subject = "Votre fiche PFE est acceptée " ;
+		String subject1 = "Votre fiche PFE est refusée" ;
+		String text = "mail d'etat" ;
+		FYPFile f = service.find(FYPFile.class, id);
+		Mail_API mail = new Mail_API();
+		serviceHistory.getAllFiles();
+		for(int i=0;i<serviceHistory.getAllFiles().size();i++) {
+			if(serviceHistory.getAllFiles().get(i).getId()!=f.getId()) {
+		if(f.getFileStatus().equals(FYPFileStatus.confirmed) ||f.getFileStatus().equals(FYPFileStatus.declined)) {
+			
+			serviceHistory.addFYPSheet(f);
+			service.persist(f);
+			service.flush();
+			//List<FYPFile> lc =  serviceStudent.getAllStudentFileCin(cin);
+			//List<Student> ls11 = serviceStudent.getAllStudentCin(cin);
+			
+			
+		}}
+			
+			
+			
+		}
+		List<Student> lf = serviceStudent.getAllStudentFile(id);
+		for(int j=0;j<lf.size();j++) {
+			
+			if( f.getFileStatus().equals(FYPFileStatus.confirmed) ) {
+		try {
+			mail.sendMail(lf.get(j).getEmail(), text, subject);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			}
+		else if( f.getFileStatus().equals(FYPFileStatus.declined)){
+			try {
+				mail.sendMail(lf.get(j).getEmail(), text, subject1);
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		}
+		
+		return f.getFileStatus();
+		
+	}
+
+	@Override
+	public void modificationMajeur(FYPFile file) {
+
+		
+		editFYPSheet(file);
+		file.getProblematic();
+		//if(file.setFeatures(features);)
+		
+	}
+
 
 	
 

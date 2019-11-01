@@ -53,14 +53,14 @@ public class NotificationEJB implements NotificationEJBLocal{
 
 	@Override
 	public List<Notification> getNotificationHistoryOfUser(long studentId) {
-		return em.createQuery("SELECT n from Notification n where n.reciever.id = :id")
+		return em.createQuery("SELECT n from Notification n where n.reciever.id = :id order by n.dateOfEmission DESC")
 				.setParameter("id", studentId).getResultList();
 	}
 
 
 	@Override
 	public List<Notification> getAll() {
-		return em.createQuery("SELECT n from Notification n")
+		return em.createQuery("SELECT n from Notification n ")
 				.getResultList();
 	}
 

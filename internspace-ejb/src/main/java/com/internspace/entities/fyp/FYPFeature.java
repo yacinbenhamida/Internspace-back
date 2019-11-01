@@ -45,6 +45,10 @@ public class FYPFeature implements Serializable {
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "fyp_file_mod_id")
+	FYPFileModification fypMod;
+	
 	/*
 	 * Getters & Setters
 	 */
@@ -65,9 +69,6 @@ public class FYPFeature implements Serializable {
 		this.content = content;
 	}
 
-	public FYPFile getFypFile() {
-		return fypFile;
-	}
 
 	public void setFypFile(FYPFile fypFile) {
 		this.fypFile = fypFile;

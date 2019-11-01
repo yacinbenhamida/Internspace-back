@@ -12,12 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+
 @Entity(name = "fyp_sheet_history")
 public class FYPSheetHistory implements Serializable {
 	public enum TypeOfOperation {
 		majorOperation, normalOperation
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -33,7 +35,7 @@ public class FYPSheetHistory implements Serializable {
 
 	int editedById; // Modifier might be a teacher, student...
 	int oldCompanyId;
-	int oldState;
+	FYPFileStatus oldState;
 
 	String oldTitle;
 	String oldDescription;
@@ -82,12 +84,12 @@ public class FYPSheetHistory implements Serializable {
 		this.editedById = editedById;
 	}
 
-	public int getOldState() {
+	public FYPFileStatus getOldState() {
 		return oldState;
 	}
 
-	public void setOldState(int oldState) {
-		this.oldState = oldState;
+	public void setOldState(FYPFileStatus fypFileStatus) {
+		this.oldState = fypFileStatus;
 	}
 
 	public String getOldTitle() {

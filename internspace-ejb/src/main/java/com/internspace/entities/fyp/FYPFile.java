@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import com.internspace.entities.university.UniversitaryYear;
-import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -13,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -53,23 +53,13 @@ public class FYPFile implements Serializable {
 	String description;
 	String problematic;
 
-	@ManyToOne
-	@JoinColumn(name = "uni_year")
-	UniversitaryYear universitaryYear;
-	
-	/*@ManyToOne(cascade = {CascadeType.ALL})
-	@JoinColumn(name = "featt")
-	FYPFeature feat;*/
-	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	FYPFileStatus fileStatus;
 
 	@Column(name = "final_mark")
-	int finalMark;	
-	@OneToOne(mappedBy="fypFile",fetch = FetchType.LAZY)
-	Student student;
-	
+	int finalMark;
+
 	// True = Student wants to cancel.
 	@Column(name = "canceled", columnDefinition = "boolean default false")
 	Boolean isCanceled;
@@ -77,49 +67,46 @@ public class FYPFile implements Serializable {
 	// True = InternshipDirector accepted the cancel request.
 	@Column(name = "is_archived", columnDefinition = "boolean default false")
 	Boolean isArchived;
-	
-	// True = Teacher prevalidate the FypFile.
-		@Column(name = "is_prevalidated", columnDefinition = "boolean default false")
-		Boolean isPrevalidated;public Boolean getIsPrevalidated() {
-			return isPrevalidated;
-		}public void setIsPrevalidated(Boolean isPrevalidated) {
-			this.isPrevalidated = isPrevalidated;
-		}
 
-		
-		// Directeur validate Modification Majeure
-		
-		@Column(name = "is_confirmed", columnDefinition = "boolean default false")
-		Boolean isConfirmed;
-		public Boolean getIsConfirmed() {
-			return isConfirmed;
-		}
-		public void setIsConfirmed(Boolean isConfirmed) {
-			this.isConfirmed = isConfirmed;
-		}
-		
+	// True = Teacher prevalidate the FypFile.
+	@Column(name = "is_prevalidated", columnDefinition = "boolean default false")
+	Boolean isPrevalidated;
+
+	// Directeur validate Modification Majeure
+
+	@Column(name = "is_confirmed", columnDefinition = "boolean default false")
+	Boolean isConfirmed;
+
 	/*
 	 * Associations
 	 */
 
-
+	@OneToOne(mappedBy = "fypFile")
+	Student student;
 	
+	@OneToOne(mappedBy = "fyp")
+	FYPFileModification fypm;
 
 
-	@OneToOne(optional = true)
-	@JoinColumn(name = "subject")
+	@ManyToOne
+	@JoinColumn(name = "uni_year")
+	UniversitaryYear universitaryYear;
+
+	@OneToOne(optional = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = "subject", nullable = true)
 	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
-	
-	@OneToMany(mappedBy = "fypFile",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "fypFile", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	Set<FYPFeature> features;
 
-	@OneToMany(mappedBy = "fypFile" , cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "fypFile", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	List<FYPIntervention> interventions;
 
 	@OneToMany(mappedBy = "fypFile")
 	Set<FYPKeyword> keywords; // Useful for NLP
 
-	@ManyToMany(mappedBy = "fypFiles")
+	@ManyToMany
+	@JoinTable(name = "fypfiles_categories", joinColumns = @JoinColumn(name = "fypfile_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	Set<FYPCategory> categories;
 
 	/*
@@ -162,6 +149,14 @@ public class FYPFile implements Serializable {
 		this.universitaryYear = universitaryYear;
 	}
 
+	public Boolean getIsPrevalidated() {
+		return isPrevalidated;
+	}
+
+	public void setIsPrevalidated(Boolean isPrevalidated) {
+		this.isPrevalidated = isPrevalidated;
+	}
+
 	public FYPFileStatus getFileStatus() {
 		return fileStatus;
 	}
@@ -176,6 +171,14 @@ public class FYPFile implements Serializable {
 
 	public void setIsCanceled(Boolean isCanceled) {
 		this.isCanceled = isCanceled;
+	}
+
+	public Boolean getIsConfirmed() {
+		return isConfirmed;
+	}
+
+	public void setIsConfirmed(Boolean isConfirmed) {
+		this.isConfirmed = isConfirmed;
 	}
 
 	public int getFinalMark() {
@@ -193,37 +196,25 @@ public class FYPFile implements Serializable {
 	public void setIsArchived(Boolean isArchived) {
 		this.isArchived = isArchived;
 	}
+
 	public void setInterventions(List<FYPIntervention> interventions) {
 		this.interventions = interventions;
 	}
 
-	
 	public void setSubject(FYPSubject subject) {
 		this.subject = subject;
 	}
 
-
 	public void setFeatures(Set<FYPFeature> features) {
 		this.features = features;
-	}
-
-	
-	
-
-	public Set<FYPFeature> getFeatures() {
-		return features;
 	}
 
 	public void setStudent(Student student) {
 		this.student = student;
 	}
 
-
-	/*public List<FYPIntervention> getInterventions() {
-		return interventions;
-	}*/
-
-
-	
+	/*
+	 * public List<FYPIntervention> getInterventions() { return interventions; }
+	 */
 
 }

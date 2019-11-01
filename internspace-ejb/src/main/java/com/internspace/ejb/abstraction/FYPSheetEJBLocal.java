@@ -7,6 +7,7 @@ import javax.ejb.Local;
 
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 //rchm
 @Local
 public interface FYPSheetEJBLocal {
@@ -27,8 +28,14 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getAllSheetsWithNoMarks();
 	public List<FYPFile> getFYPSheetsWithNoSupervisors();
 	public List<FYPFile> getAllSheets();
+	
+	//my work
 	public List<FYPFile> getAll();
 	public List<FYPFile> getAllSheetsPending();
+	public FYPFileStatus etatChanged(long id);
+	public void modificationMajeur(FYPFile file);
+
+
 	
 
 

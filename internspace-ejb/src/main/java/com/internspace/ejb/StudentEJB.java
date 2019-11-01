@@ -4,18 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
+import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
+import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
+import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPSheetHistory;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
@@ -24,6 +30,15 @@ public class StudentEJB implements StudentEJBLocal{
 	
 	@PersistenceContext
 	EntityManager em;
+	
+	@Inject
+	InternshipDirectorEJBLocal serv;
+	
+	@Inject
+	FYPSheetHistoryEJBLocal hist;
+	@Inject
+	FYPFileModificationEJBLocal modifFyle;
+	
 	
 	@Override
 	public void addStudent(Student std) {
@@ -41,7 +56,7 @@ public class StudentEJB implements StudentEJBLocal{
 	}
 
 	@Override
-	public void enregistrerAuPlatforme(String cin) {
+	public Student enregistrerAuPlatforme(String cin) {
 		
 		List<Student> ls = getAllStudentLateYear();
 		
@@ -49,9 +64,13 @@ public class StudentEJB implements StudentEJBLocal{
 			if(ls.get(i).getCin().equals(cin) && ls.get(i).getIsSaved()==false ) {
 				System.out.println("ok");
 				ls.get(i).setIsSaved(true);
+				
+				return ls.get(i);
 			
 			}
 	}
+		
+		return null;
 	}
 		
 	@Override
@@ -117,10 +136,8 @@ public class StudentEJB implements StudentEJBLocal{
 				}
 		   }
 		
-	    String subject = "vous êtes autorisé a passer votre PFE "
-	    		+ "voici votre mot de passe " + demo ;
-		String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
-	    
+		   
+	  
 		
 		
 		
@@ -134,9 +151,17 @@ public class StudentEJB implements StudentEJBLocal{
 		List<Student> ls4 = new ArrayList();
 		
 		
+		
+			String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
+		    
+		
 		for(int i=0;i<ls.size();i++) {
 			if(ls.get(i).getCin().equals(cin)) {
 				ls3.add(ls.get(i));
+				  String subject = "vous êtes autorisé a passer votre PFE "
+				    		+ "voici votre mot de passe " + demo ;
+				  
+				  ls.get(i).setPassGenerated(demo);
 				//ls3.forEach(x->mail.send(x.getEmail(),text,subject));
 				try {
 					mail.sendMail(ls.get(i).getEmail(), text, subject);
@@ -195,7 +220,14 @@ public class StudentEJB implements StudentEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllStudentFileCin(String cin) {
-		return em.createQuery("SELECT fypFile from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
+		return em.createQuery("SELECT c.fypFile from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
+		
+	}
+	
+	
+	@Override
+	public List<FYPFeature> getAllStudentFileCinFeatures(String cin) {
+		return em.createQuery("SELECT c.fypFile.features from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
 		
 	}
 
@@ -215,11 +247,43 @@ public class StudentEJB implements StudentEJBLocal{
 		List<FYPFile> lc =  getAllStudentFileCin(cin);
 		List<Student> ls11 = getAllStudentCin(cin);
 		
+		List<FYPFile> lh = hist.getAllFiles();
+		
+	
+		
 		for(int i=0;i<lc.size();i++) {
 			FYPFileStatus fs = lc.get(i).getFileStatus();
+			for(int k=0;k<lh.size();k++) {
+				if(lc.get(i).equals(lh.get(k))) {
+					
+					if(lh.get(k).getFileStatus().equals(fs.confirmed)) {
+						
+						try {
+							mail.sendMail(ls11.get(i).getEmail(), text, subject);
+						} catch (MessagingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+					}
+					else
+						if(lh.get(k).getFileStatus().equals(fs.declined)) {
+							
+							
+							try {
+								mail.sendMail(ls11.get(i).getEmail(), text, subject1);
+							} catch (MessagingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					
+				}
+			}
 			
 		
-				System.out.println("changed"+lc.get(i).getFileStatus());
+		/*		System.out.println("changed"+lc.get(i).getFileStatus());
 			  if(lc.get(i).getFileStatus().equals(ff.pending)) {
 				
 				if(lc.get(i).getIsArchived()==true) {
@@ -257,7 +321,7 @@ public class StudentEJB implements StudentEJBLocal{
 			  
 			  
 			
-			}
+			}*/
 		}
 		}
 
@@ -311,12 +375,60 @@ public class StudentEJB implements StudentEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllSheetsPendingByStudent(String cin) {
-		//Student s = em.find(Student.class, id);
-		return em.createQuery("SELECT  s.fypFile.title,s from "+Student.class.getName()+" s  where s.fypFile.fileStatus =:status AND s.cin =:cin").setParameter("cin", cin).setParameter("status", FYPFileStatus.pending).getResultList();
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Student authentification(String cin, String password) {
+		List<Student> ls = getAllStudentAutorised();
+		List <String>  name = new ArrayList();
+		for (int i=0;i<ls.size();i++) {
+			if(ls.get(i).getCin().equals(cin) && ls.get(i).getPassGenerated().equals(password)) {
+				
+				String FirstName  = ls.get(i).getFirstName();
+				String LastName = ls.get(i).getLastName();
+				
+				name.add(FirstName);
+				name.add(LastName);
+			}
+		}
+		
+		return  (Student) name;
+	}
+
+	@Override
+	public FYPFile addFYPSheet(FYPFile file, long id) {
+		
+		Student std = em.find(Student.class, id);
+		List<FYPFile> ff =em.createQuery("SELECT c.fypFile from Student c  where c.id=:id").setParameter("id", id).getResultList();
+
+		if(std!= null && ff==null ) {
+			file.setStudent(std);
+			modifFyle.addFYPSheet(file);
+		
+		    em.persist(file);
+			std.setFypFile(file);
+		    em.persist(std);
+		}
+		return em.find(FYPFile.class, file.getId());
+		
+	
+	}
+
+	@Override
+	public List<Student> getAllStudentFile(long id) {
+		
+		FYPFile std = em.find(FYPFile.class, id);
+		
+		return em.createQuery("SELECT s from "+Student.class.getName()+" s  where s.fypFile.id =:id").setParameter("id", id).getResultList();
 		
 		
 	}
+
 	
+	
+
 	
 	
 
