@@ -3,7 +3,6 @@ package com.internspace.ejb;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -94,7 +93,6 @@ public class QuizEJB implements QuizEJBLocal {
 				System.out.println("Got a non-valid student id: " + studentId + ".");
 				return null;
 			}
-
 			Quiz quiz = em.find(Quiz.class, quizId);
 
 			if (quiz == null) {
@@ -103,6 +101,11 @@ public class QuizEJB implements QuizEJBLocal {
 			}
 
 			studentQuiz = new StudentQuiz(student, quiz, 1);
+			
+			
+			for (QuestionResponse questionResponse : getQuestionResponsesOfQuiz(quiz.getId())) {
+				getOrCreateUserQuestionResponse(studentId, questionResponse.getId());
+			}
 			
 			em.persist(studentQuiz);
 
@@ -113,6 +116,57 @@ public class QuizEJB implements QuizEJBLocal {
 		return studentQuiz;
 	}
 
+	@Override
+	public List<QuestionResponse> getQuestionResponsesOfQuiz(long quizId)
+	{
+		List<QuestionResponse> questionResponses = em.createQuery("SELECT QR FROM " + QuestionResponse.class.getName() + " QR"
+				+ " WHERE QR.question.quiz.id = :quizId", QuestionResponse.class)
+				.setParameter("quizId", quizId)
+				.getResultList();
+		
+		return questionResponses;
+	}
+	
+	@Override
+	public StudentQuizResponse getOrCreateUserQuestionResponse(long studentId, long responseId)
+	{
+		List<StudentQuizResponse> studentQuizResponses = em
+				.createQuery("SELECT UQR FROM " + StudentQuizResponse.class.getName() + " UQR"
+						+ " WHERE UQR.student.id = :studentId AND UQR.response.id = :responseId", StudentQuizResponse.class)
+				.setParameter("studentId", studentId)
+				.setParameter("responseId", responseId)
+				.getResultList();
+
+		StudentQuizResponse studentQuizResponse = null;
+
+		// Does it exist?
+		if (studentQuizResponses == null || studentQuizResponses.size() == 0) {
+			// Then create one
+
+			Student student = em.find(Student.class, studentId);
+
+			if (student == null) {
+				System.out.println("Got a non-valid Student id: " + studentId + ".");
+				return null;
+			}
+
+			QuestionResponse response = em.find(QuestionResponse.class, responseId);
+
+			if (response == null) {
+				System.out.println("Got a non-valid response id: " + responseId + ".");
+				return null;
+			}
+
+			studentQuizResponse = new StudentQuizResponse(student, response, false);
+			em.persist(studentQuizResponse);
+
+		} else {
+			studentQuizResponse = studentQuizResponses.get(0);
+		}
+
+		return studentQuizResponse;
+	}
+	
 	@Override
 	public Quiz getQuizOfCategoryWithLevel(long categoryId, int quizLevel)
 	{
@@ -262,6 +316,12 @@ public class QuizEJB implements QuizEJBLocal {
 		
 		// StudentQuiz
 		return getOrCreateStudentQuiz(studentId, quiz.getId());
+	}
+	
+	@Override
+	public void updateUserQuizResponse(StudentQuizResponse userQuizResponse)
+	{
+		em.persist(em.contains(userQuizResponse) ? userQuizResponse : em.merge(userQuizResponse));
 	}
 
 
