@@ -1,8 +1,15 @@
 package com.internspace.services;
 
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -18,13 +25,11 @@ import javax.ws.rs.PUT;
 // To consume other Web Services
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
-import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
@@ -237,7 +242,13 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Can't find suject to delete with ID: " + subjectId).build();
 
-		service.deleteSubject(subject);
+		boolean success = service.deleteSubject(subject);
+		
+		if(!success)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Won't delete this subject, it is already linked to a fyp file... | subjectId: " + subjectId).build();
+
+		
 		return Response.status(Response.Status.OK).entity("Successfully DELETED Subject for ID: " + subjectId).build();
 	}
 
@@ -298,7 +309,7 @@ public class CompanyService {
 	 */
 	@GET
 	@Path("/subjects/suggestion/student")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSuggestedSubjectsByStudent(@QueryParam(value = "student") long studentId,
 			@QueryParam(value = "filter-untaken") boolean filterUntaken) {
 		
@@ -328,8 +339,21 @@ public class CompanyService {
         	
         	String responseStr = response.readEntity(String.class);
         	System.out.println(responseStr);
+        	JsonReader jsonReader = Json.createReader(new StringReader(responseStr));
+        	JsonArray subjectsIds = jsonReader.readArray();
         	
-        	return Response.ok(responseStr).build();
+        	List<FYPSubject> subjects = new ArrayList<FYPSubject>();
+        	
+        	// Get subjects now...
+            for (int i = 0; i < subjectsIds.size(); i++) {
+               Long id = Long.parseLong(subjectsIds.get(i).toString());
+               FYPSubject subject = service.findSubject(id);
+               
+               if(subject != null)
+            	   subjects.add(subject);
+            }
+        	
+        	return Response.ok(subjects).build();
         	
         } catch (Exception e) {
  
@@ -350,11 +374,12 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
 
-		boolean success = service.tryApplyOnSubject(subjectId, studentId);
+		boolean success = service.tryApplyOnSubject(studentId, subjectId);
 
 		String outputMsg = "Successfully applied.";
+		
 		if (!success)
-			outputMsg = "Failed to apply, you might be already applied, accepted or rejected ";
+			outputMsg = "Failed to apply, you might be already applied, accepted or rejected. also check if given student and subject ids are valid...";
 
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}
@@ -368,11 +393,11 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
 
-		boolean success = service.tryUnapplyOnSubject(subjectId, studentId);
+		boolean success = service.tryUnapplyOnSubject(studentId, subjectId);
 
 		String outputMsg = "Successfully unapplied.";
 		if (!success)
-			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected ";
+			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected. also check if given student and subject ids are valid... ";
 
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}

@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
@@ -95,14 +96,68 @@ public class CompanyEJB implements CompanyEJBLocal {
 	}
 
 	@Override
-	public void deleteSubjectById(long subjectId) {
+	public boolean deleteSubjectById(long subjectId) {
 		FYPSubject subject = findSubject(subjectId);
+		
+		if(subject == null)
+			return false;
+		
+		List<FYPFile> fypFiles = em.createQuery("SELECT F FROM " + FYPFile.class.getName() + " F WHERE F.subject.id = :subjectId", FYPFile.class)
+		.setParameter("subjectId", subjectId)
+		.getResultList();
+		
+		// Already linked to an internship, poor guy... we won't delete this subject, no worries...
+		if(fypFiles != null && fypFiles.size() > 0)
+			return false;
+		
+		/*
+		 // OLD LOGIC
+		if(fypFiles != null && fypFiles.size() > 0)
+		{
+			FYPFile fypFile = fypFiles.get(0);
+			fypFile.setSubject(null);
+			em.persist(fypFile);
+		}
+
+		subject.setFypFile(null);
+		 */
+		
 		em.remove(subject);
+		
+		return true;
 	}
 
 	@Override
-	public void deleteSubject(FYPSubject subject) {
+	public boolean deleteSubject(FYPSubject subject) {
+		
+		if(subject == null)
+			return false;
+		
+		List<FYPFile> fypFiles = em.createQuery("SELECT F FROM " + FYPFile.class.getName() + " F WHERE F.subject.id = :subjectId", FYPFile.class)
+		.setParameter("subjectId", subject.getId())
+		.getResultList();
+		
+		// Already linked to an internship, poor guy... we won't delete this subject, no worries...
+		if(fypFiles != null && fypFiles.size() > 0)
+			return false;
+		
+		System.out.println("/.......................");
+		
+		/*
+		 // OLD LOGIC
+		if(fypFiles != null && fypFiles.size() > 0)
+		{
+			FYPFile fypFile = fypFiles.get(0);
+			fypFile.setSubject(null);
+			em.persist(fypFile);
+		}
+
+		subject.setFypFile(null);
+		 */
+		if(true)
 		em.remove(em.contains(subject) ? subject : em.merge(subject));
+		
+		return true;
 	}
 	
 	@Override
@@ -185,11 +240,22 @@ public class CompanyEJB implements CompanyEJBLocal {
 		{
 			if(SFS == null) // Create a row
 			{
+				Student student = em.find(Student.class, studentId);
+				FYPSubject subject = em.find(FYPSubject.class, subjectId);
+				
+				System.out.print(student);
+				System.out.print(subject);
+				
+				// Check if both components aren't null
+				if(student == null || subject == null)
+					return false;
+				
 				SFS = new StudentFYPSubject(
-					em.find(Student.class, studentId),
-					em.find(FYPSubject.class, subjectId)
+						student,
+						subject
 					);
 			}
+			
 			
 			SFS.setApplianceStatus(ApplianceStatus.pending);
 			
