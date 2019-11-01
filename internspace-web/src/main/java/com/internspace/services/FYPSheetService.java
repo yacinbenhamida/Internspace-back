@@ -155,6 +155,8 @@ public class FYPSheetService {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheetsPending()).build();
 	}
 	
+	
+	// consulter l'etat de sa fichePFE et l'envoi d'un mail
 	@GET
 	@Path("etat")
 	@Produces(MediaType.APPLICATION_JSON)

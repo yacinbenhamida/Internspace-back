@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSheetHistory;
 import com.internspace.entities.users.Student;
 
@@ -72,8 +73,8 @@ public class FYPSheetHistoryService {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("latestudents")
-	public List<Student> getAllStudentLateYear(){
-		 return Studentservice.getAllStudentLateYear();
+	@Path("files")
+	public List<FYPFile> getAllStudentLateYear(){
+		 return service.getAllFiles();
 	};
 }

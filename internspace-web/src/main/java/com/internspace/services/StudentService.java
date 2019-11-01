@@ -173,4 +173,11 @@ public class StudentService {
 	public List<Student> getAllStudentLateYear(){
 		 return Studentservice.getAllStudentLateYear();
 	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("StudentfypfileById")
+	public List<Student> getAllStudentFile(@QueryParam(value = "id") long id){
+		 return Studentservice.getAllStudentFile(id);
+	};
 }
