@@ -71,10 +71,4 @@ public class FYPSheetHistoryService {
 		return Response.status(Response.Status.OK).entity(service.getAllRecordedOperationsOfOneFYPSheet(internshipSheetId)).build();
 	}
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("files")
-	public List<FYPFile> getAllStudentLateYear(){
-		 return service.getAllFiles();
-	};
 }
