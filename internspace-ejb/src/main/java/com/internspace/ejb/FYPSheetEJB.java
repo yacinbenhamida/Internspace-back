@@ -221,7 +221,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		
 		editFYPSheet(file);
 		file.getProblematic();
-		if(file.setFeatures(features);)
+		//if(file.setFeatures(features);)
 		
 	}
 
