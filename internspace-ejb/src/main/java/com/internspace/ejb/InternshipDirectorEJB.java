@@ -56,14 +56,23 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public List<Student> getLateStudentsList(int year) {
+		String sql;
 		//return em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.classYear =:year AND s.isCreated =false").setParameter("year", year).getResultList();
 		List<StudyClass> ls = em.createQuery("FROM StudyClass").getResultList();
-		String sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
+		if(year==0) {
+			sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
+					+ " WHERE S.isCreated = :mybool";
+			return em.createQuery(sql, Student.class)
+					.setParameter("mybool", false).getResultList();
+		}
+		else {
+			sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
 				+ " WHERE Y.startDate = :year"
 				+ " AND S.isCreated = :mybool";
+		
 		return em.createQuery(sql, Student.class)
 		.setParameter("year", year).setParameter("mybool", false).getResultList();
-	}
+	}}
 
 	
 	@Override
@@ -105,7 +114,9 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			lf.addAll(em.createQuery("SELECT fypFile FROM " + FYPSubject.class.getName()  + " c WHERE c.company =:company").setParameter("company", it.next()).getResultList());
 	      }
 		 //li.forEach(x->lf.add(x.getFypFile())); // Na7it l get khatr yrajaali f fypFile eli aando getSubject eli yrajaa f fypFile :( | achraf
-		 return lf;
+		if(!lf.isEmpty()) 
+		return lf;
+		return null;
 		
 	
 	}
@@ -314,7 +325,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		n.setSender(i);
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
-		em.persist(n);
+		//em.persist(n);
 		em.flush(); 
 		Mailer mail = new Mailer();
 		//List<Student> ls =em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.internship =:intern").setParameter("intern", i).getResultList();
@@ -408,7 +419,6 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	public FYPFile FilterWaitingForDefensePlanningList(String cin, String nom) {
 		List<FYPFile> xx = WaitingForDefensePlanningList();
 		List<Long> ls;
-		
 		if(nom==null)
 		ls = em.createQuery("SELECT s.fypFile.id FROM " + Student.class.getName() + " s"
 				+ " WHERE s.cin =:cin ").setParameter("cin", cin).getResultList();
@@ -432,7 +442,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsSupervisor(int nb,int id) {
+	public void FixActionNumberAsSupervisor(int nb,long id) {
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForSupervisors(nb);
 		
@@ -440,7 +450,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsProtractor(int nb, int id) {
+	public void FixActionNumberAsProtractor(int nb, long id) {
 		// TODO Auto-generated method stub
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForProtractors(nb);
@@ -448,7 +458,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsPreValidator(int nb, int id) {
+	public void FixActionNumberAsPreValidator(int nb, long id) {
 		// TODO Auto-generated method stub
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForPreValidators(nb);
@@ -456,25 +466,26 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsJuryPresident(int nb, int id) {
+	public void FixActionNumberAsJuryPresident(int nb, long id) {
 		// TODO Auto-generated method stub
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForPresidents(nb);
 	}
 
+	
 	//pour la localisation sur la map
 	@Override
 	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys() {
 		return em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='confirmed'").getResultList();
-		//"SELECT f.fypFile , f.company , f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus='confirmed'"
 	}
 	
 
 	//pour verifier l'existance de la company return links from google
 	@Override
-	public List<String> GetNameAndCountry(long id){
+	public Boolean GetNameAndCountry(long id){
 		Company c =em.find(Company.class,id);
 		List<String> ls = new ArrayList<String>();
+		Boolean verified = false;
 		try{
 
 			ProcessBuilder pb = new ProcessBuilder("/Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py","inwi","maroc");
@@ -487,13 +498,33 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			while ((s = in.readLine()) != null) {
 				ls.add(s);
 			}
-			}catch(Exception e){System.out.println(e);}
 			
+			}catch(Exception e){System.out.println(e);}
+		if(ls.size()>=1)
+			verified=true;
 
-				 return ls;
+				 return verified;
 	}
 	
 	
+	//Get panding FYPFile and change the status of comapny depends on the results of the Script Python ( use the before function )
+	@Override
+	public List<Object[]> getPendingFYPFile() {
+		
+		List<Object[]> list = em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='pending'").getResultList();
+		for (Object[] objects : list) {
+			Company c = (Company)objects[1];
+			if(c.getIsReal()==false) {
+				c.setIsReal(this.GetNameAndCountry(c.getId()));
+				em.persist(c);
+			}
+		}
+		em.flush();
+		
+		return list;
+	}
+	
+
 	
 	/*******************************
 	* Not the work of Mahmoud !!!! *
@@ -542,6 +573,9 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		em.flush();
 		
 	}
+
+
+
 		
 	}
 
