@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
+import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
@@ -29,7 +30,9 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	StudentEJBLocal serviceStudent;
 	@Inject
 	InternshipDirectorEJBLocal serviceDirector;
-
+	@Inject
+	FYPFileModificationEJBLocal serviceModif;
+	
 	@Override
 	public FYPFile addFYPSheet(FYPFile file) {
 		service.persist(file);
@@ -221,6 +224,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		
 		editFYPSheet(file);
 		file.getProblematic();
+		//serviceModif
+		
 		//if(file.setFeatures(features);)
 		
 	}

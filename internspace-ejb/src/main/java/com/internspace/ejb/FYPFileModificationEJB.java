@@ -38,4 +38,10 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
 		return em.find(FYPFile.class, file.getId());
 	}
 
+	@Override
+	public List<FYPFile> getAllFilesModification() {
+		return em.createQuery("SELECT s from Student s where s.studyClass.classYear=:year").setParameter("year", 5).getResultList();
+		
+	}
+
 }
