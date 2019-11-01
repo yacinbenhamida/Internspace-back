@@ -240,11 +240,22 @@ public class CompanyEJB implements CompanyEJBLocal {
 		{
 			if(SFS == null) // Create a row
 			{
+				Student student = em.find(Student.class, studentId);
+				FYPSubject subject = em.find(FYPSubject.class, subjectId);
+				
+				System.out.print(student);
+				System.out.print(subject);
+				
+				// Check if both components aren't null
+				if(student == null || subject == null)
+					return false;
+				
 				SFS = new StudentFYPSubject(
-					em.find(Student.class, studentId),
-					em.find(FYPSubject.class, subjectId)
+						student,
+						subject
 					);
 			}
+			
 			
 			SFS.setApplianceStatus(ApplianceStatus.pending);
 			

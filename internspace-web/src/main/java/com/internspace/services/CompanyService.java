@@ -18,13 +18,11 @@ import javax.ws.rs.PUT;
 // To consume other Web Services
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
-import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
@@ -356,11 +354,12 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
 
-		boolean success = service.tryApplyOnSubject(subjectId, studentId);
+		boolean success = service.tryApplyOnSubject(studentId, subjectId);
 
 		String outputMsg = "Successfully applied.";
+		
 		if (!success)
-			outputMsg = "Failed to apply, you might be already applied, accepted or rejected ";
+			outputMsg = "Failed to apply, you might be already applied, accepted or rejected. also check if given student and subject ids are valid...";
 
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}
@@ -374,11 +373,11 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
 
-		boolean success = service.tryUnapplyOnSubject(subjectId, studentId);
+		boolean success = service.tryUnapplyOnSubject(studentId, subjectId);
 
 		String outputMsg = "Successfully unapplied.";
 		if (!success)
-			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected ";
+			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected. also check if given student and subject ids are valid... ";
 
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}
