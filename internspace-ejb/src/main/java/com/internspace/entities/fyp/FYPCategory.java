@@ -78,10 +78,12 @@ public class FYPCategory implements Serializable {
 		this.isApproved = isApproved;
 	}
 
+	/*
 	public Set<FYPSubject> getSubjects() {
 		return subjects;
 	}
-
+	 */
+	
 	public void setSubjects(Set<FYPSubject> subjects) {
 		this.subjects = subjects;
 	}

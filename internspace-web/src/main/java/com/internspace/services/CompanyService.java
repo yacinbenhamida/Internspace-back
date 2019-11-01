@@ -7,9 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonValue;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -453,7 +451,7 @@ public class CompanyService {
 
 		boolean success = service.refuseStudentAppliance(studentId, subjectId, reason);
 
-		String outputMsg = "Successfully refused students' appliance.";
+		String outputMsg = "Successfully refused student's appliance.";
 
 		if (!success)
 			outputMsg = "Failed to accept, it might be already none, accepted or matching doesn't exist.";
