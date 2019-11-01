@@ -34,4 +34,4 @@ class Init_checker:
 
 
 
-print('les args nayeek !') if argsCh == False else [ print(l) for l in Init_checker(argos[1],argos[2])._fetch()[0:3]]
+print('les args !!!') if argsCh == False else [ print(l) for l in Init_checker(argos[1],argos[2])._fetch()[0:3]]
