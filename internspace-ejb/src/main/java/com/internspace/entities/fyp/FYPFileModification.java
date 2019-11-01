@@ -73,6 +73,12 @@ public class FYPFileModification {
 	public void setFyp(FYPFile fyp) {
 		this.fyp = fyp;
 	}
+
+	
+
+	public void setFeatures(Set<FYPFeature> features) {
+		this.features = features;
+	}
 	
 	
 	

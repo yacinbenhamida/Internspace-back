@@ -215,6 +215,16 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		
 	}
 
+	@Override
+	public void modificationMajeur(FYPFile file) {
+
+		
+		editFYPSheet(file);
+		file.getProblematic();
+		if(file.setFeatures(features);)
+		
+	}
+
 
 	
 

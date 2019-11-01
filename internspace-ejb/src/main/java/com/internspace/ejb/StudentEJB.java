@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
@@ -35,6 +36,9 @@ public class StudentEJB implements StudentEJBLocal{
 	
 	@Inject
 	FYPSheetHistoryEJBLocal hist;
+	@Inject
+	FYPFileModificationEJBLocal modifFyle;
+	
 	
 	@Override
 	public void addStudent(Student std) {
@@ -397,9 +401,11 @@ public class StudentEJB implements StudentEJBLocal{
 	public FYPFile addFYPSheet(FYPFile file, long id) {
 		
 		Student std = em.find(Student.class, id);
-		
-		if(std!= null) {
+		List<FYPFile> ff =em.createQuery("SELECT c.fypFile from Student c  where c.id=:id").setParameter("id", id).getResultList();
+
+		if(std!= null && ff==null ) {
 			file.setStudent(std);
+			modifFyle.addFYPSheet(file);
 		
 		    em.persist(file);
 			std.setFypFile(file);
@@ -407,6 +413,7 @@ public class StudentEJB implements StudentEJBLocal{
 		}
 		return em.find(FYPFile.class, file.getId());
 		
+	
 	}
 
 	@Override
