@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.internspace.ejb.abstraction.FYPFeaturesEJBLocal;
 import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
 import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
@@ -17,6 +18,7 @@ import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Student;
 @Stateless
@@ -32,6 +34,9 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	InternshipDirectorEJBLocal serviceDirector;
 	@Inject
 	FYPFileModificationEJBLocal serviceModif;
+	
+	@Inject
+	FYPFeaturesEJBLocal features;
 	
 	@Override
 	public FYPFile addFYPSheet(FYPFile file) {
@@ -241,7 +246,34 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		//if(file.setFeatures(features);)
 		
 	}
-
+	@Override
+	public FYPFile editFYPSheett(FYPFile file) {
+		List<FYPFileModification> fm= service.createQuery("SELECT f from FYPFileModification f").getResultList();
+		 service.merge(file);
+		for(int i =0 ;i<fm.size();i++){
+			
+			if(file.getId()==fm.get(i).getFyp().getId()) {
+				
+				if((file.getProblematic().equals(fm.get(i).getProblematic())) && file.getFeatures().equals(fm.get(i).getFeatures())) {
+					return file;
+				}
+				else
+				{
+					
+					fm.get(i).setProblematic(file.getProblematic());
+					fm.get(i).setFeatures(file.getFeatures());
+					fm.get(i).setIsChanged(true);
+					features.addFYPFeatures(file.getFeatures());
+					//file.getFeatures().iterator().next().setFypFile(file);
+					//features.addFYPFeature(file.getFeatures().iterator().next());
+			
+				}
+			}
+			
+		}
+		
+		return null;
+	}
 
 	
 

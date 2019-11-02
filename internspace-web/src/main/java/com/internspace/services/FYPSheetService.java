@@ -177,4 +177,16 @@ public class FYPSheetService {
 		return 	Response.status(Response.Status.OK).entity("bien").build();
 	}
 
+	
+	@PUT
+	@Path("editt")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editFYPSheett(FYPFile file) {
+		FYPFile res = fypSheetService.editFYPSheett(file);
+ 
+			return Response.status(Response.Status.OK).entity(res).build();
+		
+		
+	}
 }

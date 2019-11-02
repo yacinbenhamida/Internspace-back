@@ -48,17 +48,10 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
 
 	@Override
 	public FYPFile editFYPSheet(FYPFile file) {
-		List<FYPFile> fm= em.createQuery("SELECT f.fyp from FYPFileModification f").getResultList();
-		
-		for(int i =0 ;i<fm.size();i++){
-			
-			if(file.getId()==fm.get(i).getId()) {
-				return em.merge(file);
-			}
-			
-		}
-		
+		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }

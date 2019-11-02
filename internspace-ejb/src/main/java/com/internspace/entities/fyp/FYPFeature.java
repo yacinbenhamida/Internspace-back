@@ -41,7 +41,7 @@ public class FYPFeature implements Serializable {
 	 * Associations
 	 */
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
 
