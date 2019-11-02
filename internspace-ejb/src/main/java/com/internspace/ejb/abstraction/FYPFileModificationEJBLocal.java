@@ -13,6 +13,7 @@ public interface FYPFileModificationEJBLocal {
 	
 	public FYPFile addFYPSheet(FYPFile file);
 	public  List<FYPFile> getAllFilesModification();
+	public  List<FYPFileModification> getAll();
 	public FYPFile editFYPSheet(FYPFile file);
 	
 	

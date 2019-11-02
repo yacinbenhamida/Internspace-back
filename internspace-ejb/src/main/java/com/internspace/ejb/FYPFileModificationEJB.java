@@ -52,6 +52,11 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
 		return null;
 	}
 
+	@Override
+	public List<FYPFileModification> getAll() {
+		return em.createQuery("SELECT f from FYPFileModification f").getResultList();
+	}
+
 	
 
 }

@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
+import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.Notification;
@@ -53,6 +54,8 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	Process mProcess;
 	@Inject
 	FYPFileArchiveEJBLocal serviceArchive;
+	@Inject
+	FYPFileModificationEJBLocal servicemodif;
 
 	@Override
 	public List<Student> getLateStudentsList(int year) {
@@ -561,7 +564,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 	@Override
 	public void acceptModification(long id) {
-		FYPFileStatus f = null;
+		/*FYPFileStatus f = null;
 		FYPFile s= em.find(FYPFile.class, id);
 		if(s.getFileStatus().equals(f.pending))
 		{
@@ -569,7 +572,8 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		}
 		
 		em.persist(s);
-		em.flush();
+		em.flush();*/
+		servicemodif.getAllFilesModification();
 		
 	}
 

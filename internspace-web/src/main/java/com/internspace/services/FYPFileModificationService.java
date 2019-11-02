@@ -45,4 +45,16 @@ public class FYPFileModificationService {
 		
 		
 	}
+	
+
+	@GET
+	@Path("all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAlll() {
+		return Response.status(Status.OK)
+				.entity(service.getAll()).build();
+		
+	
+		
+	}
 }
