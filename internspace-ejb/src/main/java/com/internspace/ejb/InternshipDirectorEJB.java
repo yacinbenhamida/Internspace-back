@@ -32,6 +32,7 @@ import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileArchive;
+import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.fyp.FYPSubject;
@@ -573,7 +574,11 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		
 		em.persist(s);
 		em.flush();*/
-		servicemodif.getAllFilesModification();
+		
+		FYPFileModification f = em.find(FYPFileModification.class, id);
+		if(f.getIsChanged().equals(true)) {
+			f.setIsConfirmed(true);
+		}
 		
 	}
 
