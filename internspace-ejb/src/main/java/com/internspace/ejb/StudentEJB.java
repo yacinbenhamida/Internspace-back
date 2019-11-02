@@ -401,16 +401,19 @@ public class StudentEJB implements StudentEJBLocal{
 	public FYPFile addFYPSheet(FYPFile file, long id) {
 		
 		Student std = em.find(Student.class, id);
-		List<FYPFile> ff =em.createQuery("SELECT c.fypFile from Student c  where c.id=:id").setParameter("id", id).getResultList();
+		List<Integer> ff =em.createQuery("SELECT c.fypFile.id from Student c  where c.id=:id").setParameter("id", id).getResultList();
 
-		if(std!= null && ff==null ) {
+		if(std!= null ) {
+			for(int i=0;i<ff.size();i++) {
+				if(ff.size()<1) {
+			  em.persist(file);
 			file.setStudent(std);
 			modifFyle.addFYPSheet(file);
 		
 		    em.persist(file);
 			std.setFypFile(file);
 		    em.persist(std);
-		}
+		}}}
 		return em.find(FYPFile.class, file.getId());
 		
 	
