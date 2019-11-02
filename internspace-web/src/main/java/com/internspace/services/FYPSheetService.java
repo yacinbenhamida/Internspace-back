@@ -1,6 +1,7 @@
 package com.internspace.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -146,6 +147,15 @@ public class FYPSheetService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheets() {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheets()).build();
+	}
+	
+	@GET
+	@Path("confirmed")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllAcceptedSheets() {
+			List<FYPFile> sheets = fypSheetService.getAllSheets().stream()
+					.filter(x->x.getFileStatus().equals(FYPFileStatus.confirmed)).collect(Collectors.toList());		
+			return Response.status(Response.Status.OK).entity(sheets).build();
 	}
 	
 	@GET

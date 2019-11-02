@@ -6,9 +6,9 @@ import com.internspace.entities.fyp.FYPCategory;
 
 @Local
 public interface FYPCategoryEJBLocal {
-	public FYPCategory approveCategory(FYPCategory category);
+	public FYPCategory approveCategory(long id);
 	public FYPCategory suggestCategory(FYPCategory category);
-	public boolean deleteCategory(FYPCategory category);
+	public boolean deleteCategory(long id);
 	public FYPCategory addCategory(FYPCategory category);
 	public FYPCategory editCategory(FYPCategory category);
 }
