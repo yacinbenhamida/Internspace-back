@@ -17,6 +17,7 @@ import javax.ws.rs.PUT;
 
 import com.internspace.ejb.abstraction.QuizEJBLocal;
 import com.internspace.entities.fyp.quiz.Quiz;
+import com.internspace.entities.fyp.quiz.QuizQuestion;
 import com.internspace.entities.fyp.quiz.StudentQuiz;
 import com.internspace.entities.fyp.quiz.StudentQuizResponse;
 
@@ -101,6 +102,24 @@ public class QuizService {
 		return Response.status(Response.Status.OK).entity("Successfully DELETED Quiz for ID: " + quizId).build();
 	}
 	
+	@POST
+	@Path("/question/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addQuestionToQuiz(
+			@QueryParam(value = "quiz") long quizId,
+			QuizQuestion question
+			) {
+
+		Quiz quiz = service.getQuizById(quizId);
+		
+		if(quiz == null)
+			return Response.status(Status.BAD_REQUEST).entity("Please provide a valid quiz id, got: " + quizId)
+					.build();
+		
+		service.addQuestion(quiz, question);
+
+		return Response.status(Status.OK).entity(question).build();
+	}
 	
 	// Student Quiz Section
 
@@ -143,7 +162,7 @@ public class QuizService {
 			@QueryParam(value = "response") long responseId,
 			@QueryParam(value = "check") boolean toChecked)
 	{
-		StudentQuizResponse userQuizResponse = service.getOrCreateUserQuestionResponse(studentId, responseId);
+		StudentQuizResponse userQuizResponse = service.getOrCreateStudentQuestionResponse(studentId, responseId);
 
 		if (userQuizResponse == null) {
 			
@@ -154,8 +173,26 @@ public class QuizService {
 		System.out.println("INPUT: " + responseId + "|" + toChecked);
 
 		userQuizResponse.setIsChecked(toChecked);
-		service.updateUserQuizResponse(userQuizResponse);
+		service.updateStudentQuizResponse(userQuizResponse);
 
 		return Response.status(Response.Status.OK).entity("userQuizResponse with id: " + userQuizResponse.getId() + " is now with checked=" + userQuizResponse.getIsChecked()).build();
 	}
+	
+	@POST
+	@Path("/student/finish-quiz")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response studentFinishQuiz(
+			@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "quiz") long quizId)
+	{
+		float score = service.refreshStudentQuizScore(studentId, quizId);
+
+		if(score < 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Make sure to finish your quiz before finishing: " + quizId).build();
+		
+		return Response.status(Response.Status.OK).entity("Quiz finished with a score of: " + score).build();
+	}
+	
+	
 }

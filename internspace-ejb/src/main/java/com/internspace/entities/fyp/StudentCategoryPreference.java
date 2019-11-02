@@ -40,6 +40,21 @@ public class StudentCategoryPreference implements Serializable {
 	FYPCategory category;
 
 	/*
+	 * Construction
+	 */
+
+	public StudentCategoryPreference() {
+
+	}
+
+	public StudentCategoryPreference(Student student, FYPCategory category, int skillScore) {
+		super();
+		this.student = student;
+		this.category = category;
+		this.skillScore = skillScore;
+	}
+
+	/*
 	 * Getters & Setters
 	 */
 
