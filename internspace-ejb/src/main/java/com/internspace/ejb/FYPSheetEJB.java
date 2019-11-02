@@ -224,8 +224,20 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		
 		editFYPSheet(file);
 		file.getProblematic();
-		//serviceModif
+		List<FYPFile> fm = serviceModif.getAllFilesModification();
 		
+		for(int i=0;i<fm.size();i++) {
+			if(file.equals(fm.get(i))) {
+				if(file.getProblematic().equals(fm.get(i).getProblematic())) {
+					System.out.println("modif mineur");
+				}
+				else
+				{
+				//serviceModif.
+					System.out.println("modif major");
+				}
+			}
+		}
 		//if(file.setFeatures(features);)
 		
 	}

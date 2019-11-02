@@ -32,7 +32,7 @@ public class Quiz implements Serializable {
 	@Column(name = "title")
 	private String title;
 
-	@Column(name = "description", columnDefinition = "text default 'A quiz to prove your expertise.'")
+	@Column(name = "description")
 	private String description;
 
 	@ManyToOne(cascade = CascadeType.PERSIST, optional = false)

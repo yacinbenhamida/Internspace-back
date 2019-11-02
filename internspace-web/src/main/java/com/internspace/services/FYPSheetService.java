@@ -164,6 +164,17 @@ public class FYPSheetService {
 		FYPFileStatus ff = fypSheetService.etatChanged(id);
 		return 	Response.status(Response.Status.OK).entity(ff).build();
 	}
+	// consulter modif mineur ou major
 	
+	
+	@PUT
+	@Path("major")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+
+	public Response modificationMajeur(FYPFile file) {
+		 fypSheetService.modificationMajeur(file);
+		return 	Response.status(Response.Status.OK).entity("bien").build();
+	}
 
 }

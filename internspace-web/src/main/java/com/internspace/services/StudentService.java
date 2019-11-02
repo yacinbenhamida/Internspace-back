@@ -18,6 +18,7 @@ import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
@@ -179,5 +180,13 @@ public class StudentService {
 	@Path("StudentfypfileById")
 	public List<Student> getAllStudentFile(@QueryParam(value = "id") long id){
 		 return Studentservice.getAllStudentFile(id);
+	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("Studentfypfile")
+	public List<FYPFile> getAllStudentFileByFil(@QueryParam(value = "id") long id){
+		 return Studentservice.getAllStudentFileByFil(id);
 	};
 }
