@@ -10,6 +10,7 @@ import com.internspace.ejb.abstraction.InternshipConventionEJBLocal;
 
 import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.university.University;
+import com.internspace.entities.users.Student;
 
 
 @Stateless
@@ -19,10 +20,17 @@ public class IternshipConventionEJB implements InternshipConventionEJBLocal {
 	EntityManager em;
 
 	@Override
-	public void addInternshipConvention(InternshipConvention inter) {
+	public void addInternshipConvention(InternshipConvention inter,long id) {
+
+		Student std = em.find(Student.class, id);
+		if(std!= null) {
+			if(std.getInternshipConvention() == null) {
+				inter.setStudent(std);
+				em.persist(inter);
+				}
 		
-		System.out.println("Adding: " + inter);
-		em.persist(inter);
+		
+		}
 	
 	
 	}
@@ -37,8 +45,10 @@ public class IternshipConventionEJB implements InternshipConventionEJBLocal {
 	public int removeConvention(long  id) {
 		
 		InternshipConvention u = em.find(InternshipConvention.class, id);
+	
 		System.out.println("Debug : "+u);
-		if(u != null) {
+		if(u != null ) {
+			
 			em.remove(u);
 			return 1;
 		}

@@ -9,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -30,10 +31,10 @@ public class InternshipConventionService {
 	@Path("add")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response  addIntershipConvention(InternshipConvention ic) {
+	public Response  addIntershipConvention(InternshipConvention ic,@QueryParam(value = "id") long id) {
 		
 		
-		internshipConvention.addInternshipConvention(ic);
+		internshipConvention.addInternshipConvention(ic,id);
 		return Response.status(Status.OK).entity(ic).build();
 	}
 
@@ -53,7 +54,7 @@ public class InternshipConventionService {
 	public Response deleteUniversity(@PathParam(value="id") long id) {
 		int result = internshipConvention.removeConvention(id);
 		if(result == 1) {
-			return Response.status(Response.Status.OK).entity("University removed.").build();
+			return Response.status(Response.Status.OK).entity("demande de stage eat annulée.").build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).entity("Could not delete id : "+id).build();
 	}

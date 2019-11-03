@@ -251,8 +251,10 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("acceptModifMajor")
-	public void acceptModification(@QueryParam(value = "id") long id){
+	public Response acceptModification(@QueryParam(value = "id") long id){
 		service.acceptModification(id);
+		
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
 	};
 	
 }

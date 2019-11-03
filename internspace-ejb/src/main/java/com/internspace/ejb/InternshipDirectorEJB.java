@@ -576,7 +576,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		em.flush();*/
 		
 		FYPFileModification f = em.find(FYPFileModification.class, id);
-		if(f.getIsChanged().equals(true)) {
+		if(f.getIsChanged()== true) {
 			f.setIsConfirmed(true);
 		}
 		
