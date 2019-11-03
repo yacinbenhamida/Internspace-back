@@ -18,6 +18,7 @@ import org.json.JSONArray;
 
 import com.internspace.ejb.abstraction.NotificationEJBLocal;
 import com.internspace.entities.exchanges.Notification;
+import com.internspace.rest.utilities.filters.Secured;
 
 @Path("notifications")
 public class NotificationService {
@@ -62,6 +63,7 @@ public class NotificationService {
 	}
 	@GET
 	@Path("history/{userId}")
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getNotificationHistoryOfUser(@PathParam("userId")long userId) {
 		List<Notification> res = service.getNotificationHistoryOfUser(userId);
@@ -73,7 +75,7 @@ public class NotificationService {
 		return Response.status(Response.Status.NOT_FOUND).entity("no records").build();
 	}
 
-	
+	@Secured
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listAll() {

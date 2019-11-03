@@ -14,8 +14,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.ejb.abstraction.UserEJBLocal;
+import com.internspace.entities.users.Student;
 import com.internspace.entities.users.User;
+import com.internspace.entities.users.User.UserType;
 
 import java.time.ZoneId;
 
@@ -35,6 +38,8 @@ public class AuthenticationEndPoint {
 	
 	@EJB
 	UserEJBLocal userService;
+	@EJB
+	StudentEJBLocal studentService;
 	
 	User connectedUser;
 	
@@ -69,6 +74,13 @@ public class AuthenticationEndPoint {
 		System.out.println("Authenticating user...");
 		if(userService.verifyLoginCredentials(username, password) != null) {
 			connectedUser = userService.verifyLoginCredentials(username, password);
+			if(connectedUser.getUserType().equals(UserType.student)) {
+				Student stud = studentService.getStudentById(connectedUser.getId());
+				if(stud.getIsAutorised()== true && stud.getIsDisabled() == false ) {
+					return 1;
+				}
+				return 0;
+			}
 			System.out.println(connectedUser);
 			return 1;
 		}

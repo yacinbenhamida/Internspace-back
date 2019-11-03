@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,14 +32,14 @@ public class Quiz implements Serializable {
 	@Column(name = "title")
 	private String title;
 
-	@Column(name = "description", columnDefinition = "text default 'A quiz to prove your expertise.'")
+	@Column(name = "description")
 	private String description;
 
 	@ManyToOne(cascade = CascadeType.PERSIST, optional = false)
 	@JoinColumn(name = "category", insertable = true, updatable = true)
 	private FYPCategory category;
 
-	@OneToMany(mappedBy = "quiz", orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "quiz", orphanRemoval = true, cascade = CascadeType.ALL, fetch =FetchType.EAGER)
 	private List<QuizQuestion> questions;
 
 	@Column(name = "required_min_level", columnDefinition = "int default 1")

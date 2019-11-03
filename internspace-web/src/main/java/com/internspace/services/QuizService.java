@@ -17,6 +17,9 @@ import javax.ws.rs.PUT;
 
 import com.internspace.ejb.abstraction.QuizEJBLocal;
 import com.internspace.entities.fyp.quiz.Quiz;
+import com.internspace.entities.fyp.quiz.QuizQuestion;
+import com.internspace.entities.fyp.quiz.StudentQuiz;
+import com.internspace.entities.fyp.quiz.StudentQuizResponse;
 
 @Path("quiz")
 public class QuizService {
@@ -99,11 +102,97 @@ public class QuizService {
 		return Response.status(Response.Status.OK).entity("Successfully DELETED Quiz for ID: " + quizId).build();
 	}
 	
+	@POST
+	@Path("/question/add")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addQuestionToQuiz(
+			@QueryParam(value = "quiz") long quizId,
+			QuizQuestion question
+			) {
+
+		Quiz quiz = service.getQuizById(quizId);
+		
+		if(quiz == null)
+			return Response.status(Status.BAD_REQUEST).entity("Please provide a valid quiz id, got: " + quizId)
+					.build();
+		
+		service.addQuestion(quiz, question);
+
+		return Response.status(Status.OK).entity(question).build();
+	}
 	
 	// Student Quiz Section
-	
-	public Response getQuizzesByCategory()
+
+	@GET
+	@Path("/student/quiz")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getQuizByCategoryAndLevel(@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "category") long categoryId, @QueryParam(value = "level") int quizLevel)
+
 	{
+		StudentQuiz studentQuiz = service.getStudentQuizByCategoryAndLevel(studentId, categoryId, quizLevel);
 		
+		if (studentQuiz == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Can't find a matching StudentQuiz...").build();
+		
+		return Response.status(Response.Status.OK).entity(studentQuiz).build();
 	}
+	
+	@GET
+	@Path("/student/start-quiz")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOrCreateStudentQuiz(@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "quiz") long quizId) {
+		
+		StudentQuiz studentQuiz = service.getOrCreateStudentQuiz(studentId, quizId);
+		
+		if(studentQuiz == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Failed to get or create a StudentQuiz for student id: " + studentId + " | quiz id: " + quizId).build();
+
+		return Response.status(Response.Status.OK).entity(studentQuiz).build();
+	}
+	
+	@POST
+	@Path("/student/answer")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateUserQuestionResponse(
+			@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "response") long responseId,
+			@QueryParam(value = "check") boolean toChecked)
+	{
+		StudentQuizResponse userQuizResponse = service.getOrCreateStudentQuestionResponse(studentId, responseId);
+
+		if (userQuizResponse == null) {
+			
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Got non-valid user quiz response with responseId: " + responseId).build();
+		}
+
+		System.out.println("INPUT: " + responseId + "|" + toChecked);
+
+		userQuizResponse.setIsChecked(toChecked);
+		service.updateStudentQuizResponse(userQuizResponse);
+
+		return Response.status(Response.Status.OK).entity("userQuizResponse with id: " + userQuizResponse.getId() + " is now with checked=" + userQuizResponse.getIsChecked()).build();
+	}
+	
+	@POST
+	@Path("/student/finish-quiz")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response studentFinishQuiz(
+			@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "quiz") long quizId)
+	{
+		float score = service.refreshStudentQuizScore(studentId, quizId);
+
+		if(score < 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Make sure to finish your quiz before finishing: " + quizId).build();
+		
+		return Response.status(Response.Status.OK).entity("Quiz finished with a score of: " + score).build();
+	}
+	
+	
 }

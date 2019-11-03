@@ -1,6 +1,7 @@
 package com.internspace.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -149,6 +150,15 @@ public class FYPSheetService {
 	}
 	
 	@GET
+	@Path("confirmed")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllAcceptedSheets() {
+			List<FYPFile> sheets = fypSheetService.getAllSheets().stream()
+					.filter(x->x.getFileStatus().equals(FYPFileStatus.confirmed)).collect(Collectors.toList());		
+			return Response.status(Response.Status.OK).entity(sheets).build();
+	}
+	
+	@GET
 	@Path("pending")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheetsPending() {
@@ -164,6 +174,29 @@ public class FYPSheetService {
 		FYPFileStatus ff = fypSheetService.etatChanged(id);
 		return 	Response.status(Response.Status.OK).entity(ff).build();
 	}
+	// consulter modif mineur ou major
 	
+	
+	@PUT
+	@Path("major")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 
+	public Response modificationMajeur(FYPFile file) {
+		 fypSheetService.modificationMajeur(file);
+		return 	Response.status(Response.Status.OK).entity("bien").build();
+	}
+
+	
+	@PUT
+	@Path("editt")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editFYPSheett(FYPFile file) {
+		FYPFile res = fypSheetService.editFYPSheett(file);
+ 
+			return Response.status(Response.Status.OK).entity(res).build();
+		
+		
+	}
 }

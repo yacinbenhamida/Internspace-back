@@ -10,7 +10,7 @@ import com.internspace.entities.fyp.InternshipConvention;
 @Local
 public interface InternshipConventionEJBLocal {
 	
-	public void addInternshipConvention(InternshipConvention inter);
+	public void addInternshipConvention(InternshipConvention inter, long id);
 	public  List<InternshipConvention> getAllInternshipConvention();
 	public int removeConvention(long  id);
 

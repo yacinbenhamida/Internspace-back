@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
@@ -24,7 +25,7 @@ import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPSheetHistory;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
-
+@Stateless
 public class StudentEJB implements StudentEJBLocal{
 
 	
@@ -401,19 +402,27 @@ public class StudentEJB implements StudentEJBLocal{
 	public FYPFile addFYPSheet(FYPFile file, long id) {
 		
 		Student std = em.find(Student.class, id);
-		List<FYPFile> ff =em.createQuery("SELECT c.fypFile from Student c  where c.id=:id").setParameter("id", id).getResultList();
-
-		if(std!= null && ff==null ) {
+	//	List<FYPFile> ff =em.createQuery("SELECT c.fypFile.id from Student c  where c.id=:id").setParameter("id", id).getResultList();
+		List<FYPFile> file1 =	getAllStudentFileByFil(id);
+		if(std!= null ) {
+			
+				if(file1.isEmpty()) {
+			em.persist(file);
 			file.setStudent(std);
 			modifFyle.addFYPSheet(file);
 		
-		    em.persist(file);
+		   // em.persist(file);
 			std.setFypFile(file);
 		    em.persist(std);
+		    
+		    return file;
+			
+		    
 		}
-		return em.find(FYPFile.class, file.getId());
+				else return		file1.get(0);
+		}
 		
-	
+	return null;
 	}
 
 	@Override
@@ -424,6 +433,20 @@ public class StudentEJB implements StudentEJBLocal{
 		return em.createQuery("SELECT s from "+Student.class.getName()+" s  where s.fypFile.id =:id").setParameter("id", id).getResultList();
 		
 		
+	}
+
+
+	@Override
+	public List<FYPFile> getAllStudentFileByFil(long id) {
+		
+		 List<FYPFile> f = em.createQuery("SELECT c.fypFile from Student c  where c.id=:id").setParameter("id", id).getResultList();
+		 
+         return f;
+	}
+
+	@Override
+	public Student getStudentById(long id) {
+		return em.find(Student.class, id);
 	}
 
 	

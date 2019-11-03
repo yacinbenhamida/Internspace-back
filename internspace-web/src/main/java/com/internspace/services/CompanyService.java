@@ -33,6 +33,7 @@ import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
 import com.internspace.entities.users.Company;
+import com.internspace.rest.utilities.filters.Secured;
 
 @Path("company")
 public class CompanyService {
@@ -46,6 +47,7 @@ public class CompanyService {
 	// Company Section
 
 	@POST
+	@Secured
 	@Path("/add")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addComapny(Company company) {
@@ -73,6 +75,7 @@ public class CompanyService {
 
 	@PUT
 	@Path("update")
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateCompany(Company updateCompany) {
 		if (updateCompany.getId() == 0)
@@ -92,6 +95,7 @@ public class CompanyService {
 
 	@DELETE
 	@Path("/delete")
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteCompany(@QueryParam(value = "company") long companyId) {
 		if (companyId == 0)
@@ -109,6 +113,7 @@ public class CompanyService {
 
 	@DELETE
 	@Path("/delete/name")
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteCompanyByName(@QueryParam(value = "company") String companyName) {
 		if (companyName.isEmpty())
@@ -132,6 +137,7 @@ public class CompanyService {
 
 	@POST
 	@Path("/subjects/add")
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addSubject(@QueryParam(value = "title") String title, @QueryParam(value = "content") String content,
 			@QueryParam(value = "max_applicants") int maxApplicants, @QueryParam(value = "company") long companyId,
@@ -459,5 +465,63 @@ public class CompanyService {
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 
 	}
+	
+	// Subscription
+	
+	@POST
+	@Path("/company/subscribe")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response subscribe(Company company)
+	{
+		if (company == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Please, provide a valid company").build();
 
+		List<Company> foundCompanies = service.findCompaniesByName(company.getName(), 1, false); 
+		
+		if(foundCompanies != null && foundCompanies.size() > 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("A similar company already exists").build();
+			
+		// Explicitly set it to be not real
+		company.setIsReal(false);
+		service.createCompany(company);
+		
+		String outputMsg = "";
+		boolean success = true;
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+	}
+
+	
+	@POST
+	@Path("/company/set_approval")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response approveCompany(
+			@QueryParam(value = "name") String companyName,
+			@QueryParam(value = "approve") boolean toApproved)
+	{
+		if(companyName == null || companyName.isEmpty())
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Please provide a valid name.").build();
+			
+		List<Company> foundCompanies = service.findCompaniesByName(companyName, 1, false); 
+		
+		if(foundCompanies == null || foundCompanies.size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Company with such name doesn't exist: " + companyName).build();
+			
+		Company company = foundCompanies.get(0);
+		
+		if(company.getIsReal().equals(toApproved))
+			if(foundCompanies == null || foundCompanies.size() == 0)
+				return Response.status(Response.Status.OK)
+						.entity("Failed, Company " + companyName + " is already " + (toApproved ? "approved" : "not approved")).build();
+		
+		company.setIsReal(toApproved);
+		service.updateCompany(company);		
+		
+		return Response.status(Response.Status.OK)
+				.entity("Company " + companyName + " is now " + (toApproved ? "approved" : "not approved")).build();
+
+	}
 }

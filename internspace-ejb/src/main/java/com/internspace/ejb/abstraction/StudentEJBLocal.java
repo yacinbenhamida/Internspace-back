@@ -38,10 +38,11 @@ public interface StudentEJBLocal {
 	public List<Employee> getDirector(String cin);
 	public List<FYPFile> getAllSheetsPendingStudent();
 	public List<FYPFile> getAllSheetsPendingByStudent(String cin);
-	public  List<Student> getAllStudentFile(long id);
+	public List<Student> getAllStudentFile(long id);
+	public List<FYPFile> getAllStudentFileByFil(long id);
 	
 	
-	
+	public Student getStudentById(long id);
 	
 
 }

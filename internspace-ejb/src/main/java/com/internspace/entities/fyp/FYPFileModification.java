@@ -36,6 +36,9 @@ public class FYPFileModification {
 	@Column(name = "confirmed", columnDefinition = "boolean default false")
 	Boolean isConfirmed;
 	
+	@Column(name = "changed", columnDefinition = "boolean default false")
+	Boolean isChanged;
+	
 	@OneToMany(mappedBy = "fypMod", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	Set<FYPFeature> features;
 	
@@ -78,6 +81,18 @@ public class FYPFileModification {
 
 	public void setFeatures(Set<FYPFeature> features) {
 		this.features = features;
+	}
+
+	public Boolean getIsChanged() {
+		return isChanged;
+	}
+
+	public void setIsChanged(Boolean isChanged) {
+		this.isChanged = isChanged;
+	}
+
+	public Set<FYPFeature> getFeatures() {
+		return features;
 	}
 	
 	

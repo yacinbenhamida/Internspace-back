@@ -30,6 +30,8 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
         Set<FYPFeature> set = new HashSet<FYPFeature>(ff);
 
 		f.setProblematic(file.getProblematic());
+	
+		
 		f.setFyp(file);
 		
 		f.setFeatures(set);
@@ -37,5 +39,24 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
 		em.persist(f);
 		return em.find(FYPFile.class, file.getId());
 	}
+
+	@Override
+	public List<FYPFile> getAllFilesModification() {
+		return em.createQuery("SELECT f.fyp from FYPFileModification f").getResultList();
+		
+	}
+
+	@Override
+	public FYPFile editFYPSheet(FYPFile file) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FYPFileModification> getAll() {
+		return em.createQuery("SELECT f from FYPFileModification f").getResultList();
+	}
+
+	
 
 }

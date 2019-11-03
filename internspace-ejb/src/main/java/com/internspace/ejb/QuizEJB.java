@@ -3,7 +3,6 @@ package com.internspace.ejb;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import com.internspace.ejb.abstraction.QuizEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
+import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.quiz.QuestionResponse;
 import com.internspace.entities.fyp.quiz.Quiz;
 import com.internspace.entities.fyp.quiz.QuizQuestion;
@@ -55,8 +55,15 @@ public class QuizEJB implements QuizEJBLocal {
 	@Override
 	public void addQuestion(Quiz quiz, QuizQuestion question) {
 		quiz.getQuestions().add(question);
-		em.persist(quiz);
-
+		
+		question.setQuiz(quiz);
+		for(QuestionResponse response : question.getResponses())
+		{
+			response.setQuestion(question);
+		}
+		
+		// em.merge(question);
+		em.persist(em.contains(quiz) ? quiz : em.merge(quiz));
 	}
 
 	@Override
@@ -84,35 +91,90 @@ public class QuizEJB implements QuizEJBLocal {
 
 		StudentQuiz studentQuiz = null;
 
+		Student student = em.find(Student.class, studentId);
+
+		if (student == null) {
+			System.out.println("Got a non-valid student id: " + studentId + ".");
+			return null;
+		}
+		Quiz quiz = em.find(Quiz.class, quizId);
+
+		if (quiz == null) {
+			System.out.println("Got a non-valid quiz id: " + quizId + ".");
+			return null;
+		}
+
 		// Does it exist?
 		if (studentQuizs == null || studentQuizs.size() == 0) {
 			// Then create one
 
-			Student student = em.find(Student.class, studentId);
-
-			if (student == null) {
-				System.out.println("Got a non-valid student id: " + studentId + ".");
-				return null;
-			}
-
-			Quiz quiz = em.find(Quiz.class, quizId);
-
-			if (quiz == null) {
-				System.out.println("Got a non-valid quiz id: " + quizId + ".");
-				return null;
-			}
-
 			studentQuiz = new StudentQuiz(student, quiz, 1);
-			
+
 			em.persist(studentQuiz);
 
 		} else {
 			studentQuiz = studentQuizs.get(0);
 		}
 
+		// Always do this
+		for (QuestionResponse questionResponse : getQuestionResponsesOfQuiz(quiz.getId())) {
+			getOrCreateStudentQuestionResponse(studentId, questionResponse.getId());
+		}
+		
 		return studentQuiz;
 	}
 
+	@Override
+	public List<QuestionResponse> getQuestionResponsesOfQuiz(long quizId)
+	{
+		List<QuestionResponse> questionResponses = em.createQuery("SELECT QR FROM " + QuestionResponse.class.getName() + " QR"
+				+ " WHERE QR.question.quiz.id = :quizId", QuestionResponse.class)
+				.setParameter("quizId", quizId)
+				.getResultList();
+		
+		return questionResponses;
+	}
+	
+	@Override
+	public StudentQuizResponse getOrCreateStudentQuestionResponse(long studentId, long responseId)
+	{
+		List<StudentQuizResponse> studentQuizResponses = em
+				.createQuery("SELECT UQR FROM " + StudentQuizResponse.class.getName() + " UQR"
+						+ " WHERE UQR.student.id = :studentId AND UQR.response.id = :responseId", StudentQuizResponse.class)
+				.setParameter("studentId", studentId)
+				.setParameter("responseId", responseId)
+				.getResultList();
+
+		StudentQuizResponse studentQuizResponse = null;
+
+		// Does it exist?
+		if (studentQuizResponses == null || studentQuizResponses.size() == 0) {
+			// Then create one
+
+			Student student = em.find(Student.class, studentId);
+
+			if (student == null) {
+				System.out.println("Got a non-valid Student id: " + studentId + ".");
+				return null;
+			}
+
+			QuestionResponse response = em.find(QuestionResponse.class, responseId);
+
+			if (response == null) {
+				System.out.println("Got a non-valid response id: " + responseId + ".");
+				return null;
+			}
+
+			studentQuizResponse = new StudentQuizResponse(student, response, false);
+			em.persist(studentQuizResponse);
+
+		} else {
+			studentQuizResponse = studentQuizResponses.get(0);
+		}
+
+		return studentQuizResponse;
+	}
+	
 	@Override
 	public Quiz getQuizOfCategoryWithLevel(long categoryId, int quizLevel)
 	{
@@ -250,6 +312,187 @@ public class QuizEJB implements QuizEJBLocal {
 		return quizzes;
 		
 	}
+
 	
+	@Override
+	public StudentQuiz getStudentQuizByCategoryAndLevel(long studentId, long categoryId, int quizLevel) {
+		
+		Quiz quiz = getQuizOfCategoryWithLevel(categoryId, quizLevel);
+		
+		if(quiz == null)
+			return null;
+		
+		// StudentQuiz
+		return getOrCreateStudentQuiz(studentId, quiz.getId());
+	}
+	
+	@Override
+	public void updateStudentQuizResponse(StudentQuizResponse userQuizResponse)
+	{
+		em.persist(em.contains(userQuizResponse) ? userQuizResponse : em.merge(userQuizResponse));
+	}
+
+	@Override
+	public StudentCategoryPreference getOrCreateStudentCategoryPreference(long studentId, long categoryId)
+	{
+		List<StudentCategoryPreference> scps = em
+				.createQuery("SELECT SCP FROM " + StudentCategoryPreference.class.getName() + " SCP"
+						+ " WHERE SCP.student.id = :studentId AND SCP.category.id = :categoryId", StudentCategoryPreference.class)
+				.setParameter("studentId", studentId)
+				.setParameter("categoryId", categoryId)
+				.getResultList();
+
+		StudentCategoryPreference scp = null;
+
+		// Does it exist?
+		if (scps == null || scps.size() == 0) {
+			// Then create one
+
+			Student student = em.find(Student.class, studentId);
+
+			if (student == null) {
+				System.out.println("Got a non-valid student id: " + studentId + ".");
+				return null;
+			}
+
+			FYPCategory category = em.find(FYPCategory.class, categoryId);
+
+			if (category == null) {
+				System.out.println("Got a non-valid category id: " + categoryId + ".");
+				return null;
+			}
+
+			// 0 for actual relation level, to start with quiz 1, and so...
+			scp = new StudentCategoryPreference(student, category, 0);
+			em.persist(scp);
+
+		} else {
+			scp = scps.get(0);
+		}
+
+		return scp;
+	}
+	
+	@Override
+	public float refreshStudentQuizScore(long studentId, long quizId) {
+		
+		System.out.println("SHOWING QUIZ RESULT!");
+		Map<QuizQuestion, List<StudentQuizResponse>> quizQToUserResponseMap;
+		
+		StudentQuiz studentQuiz = getOrCreateStudentQuiz(studentId, quizId);
+		
+		if(studentQuiz == null)
+			return -1f;
+
+		quizQToUserResponseMap = getStudentQuizQuestionResponseMap(studentId, quizId);
+		
+		// Invalid
+		if (quizQToUserResponseMap == null)
+			return -1f;
+
+		float correctQuestionsCount = 0;
+		float questionsCount = quizQToUserResponseMap.keySet().size();
+
+		System.out.println("questionsCount: " + questionsCount);
+		
+		for (QuizQuestion key : quizQToUserResponseMap.keySet()) {
+
+			boolean questionAnsweredCorrectly = true;
+
+			for (StudentQuizResponse uqr : quizQToUserResponseMap.get(key)) {
+				// We at least found a wrong answer
+				System.out.println("Checking uqr.isChecked: " + uqr.getIsChecked() + " WITH isCorrect: " + uqr.getResponse().getIsCorrect());
+				
+				if (uqr.getIsChecked() != uqr.getResponse().getIsCorrect()) {
+					questionAnsweredCorrectly = false;
+					break;
+				}
+			}
+
+			if (questionAnsweredCorrectly)
+				++correctQuestionsCount;
+		}
+		
+		float correctAnswersPercentage = 0f;
+		correctAnswersPercentage = (int) (correctQuestionsCount * 100 / questionsCount);
+
+		studentQuiz.setScore((int) correctAnswersPercentage);
+
+		StudentCategoryPreference scp = getOrCreateStudentCategoryPreference(studentId, studentQuiz.getQuiz().getCategory().getId());
+		
+		// Check if this percentage is enough to pass the quiz.
+		if (correctAnswersPercentage >= studentQuiz.getQuiz().getMinCorrectQuestionsPercentage()) {
+			scp.setSkillScore(Math.max(scp.getSkillScore(), studentQuiz.getQuiz().getRequiredMinLevel() + 1));
+			updateStudentCategoryPreference(scp);
+		}
+
+		return correctAnswersPercentage;
+	}
+
+	@Override
+	public void updateStudentCategoryPreference(StudentCategoryPreference scp)
+	{
+		em.persist(em.contains(scp) ? scp : em.merge(scp));
+	}
+	
+	
+	@Override
+	public QuizQuestion getNextQuestionOrFinishStudentQuiz(long studentId, long quizId, int currQuestuionIdx) {
+
+		System.out.println("nextQuestion called!");
+
+		StudentQuiz studentQuiz = getOrCreateStudentQuiz(studentId, quizId);
+		
+		List<QuizQuestion> quizQuestions = getQuestionsByQuiz(quizId);
+
+		if (quizQuestions == null || quizQuestions.size() == 0)
+			return null;
+
+		int targetQuestionIndex = Math.max(0,
+				Math.min(quizQuestions.size() - 1, studentQuiz.getCurrentQuestionIndex() + 1));
+		
+		System.out.println(targetQuestionIndex);
+
+		boolean finished = targetQuestionIndex == studentQuiz.getCurrentQuestionIndex();
+
+		// Refresh student quiz score and return same object to inform that there weren't any new
+		if (finished) {
+			refreshStudentQuizScore(studentId, quizId);
+			return quizQuestions.get(targetQuestionIndex);
+		}
+
+		// Update the index
+		studentQuiz.setCurrentQuestionIndex(targetQuestionIndex);
+		updateStudentQuiz(studentQuiz);
+
+		// QuizQuestion quizQuestion =
+		// quizQuestions.get(userQuiz.getCurrentQuestionIndex());
+
+		return quizQuestions.get(targetQuestionIndex);
+	}
+
+	@Override
+	public QuizQuestion tryGetPrevQuestion(long studentId, long quizId, int curQuestionIdx) {
+		System.out.println("previousQuestion called!");
+
+		StudentQuiz studentQuiz = getOrCreateStudentQuiz(studentId, quizId);
+		List<QuizQuestion> quizQuestions = getQuestionsByQuiz(quizId);
+		
+		if (quizQuestions == null || quizQuestions.size() == 0)
+			return null;
+
+		// Refresh student quiz score and return same object to inform that there weren't any new
+		if (studentQuiz.getCurrentQuestionIndex() <= 0) {
+			studentQuiz.setCurrentQuestionIndex(0);
+			updateStudentQuiz(studentQuiz);
+			return quizQuestions.get(0);
+		}
+
+		int targetQuestionIndex = studentQuiz.getCurrentQuestionIndex() - 1;
+		studentQuiz.setCurrentQuestionIndex(targetQuestionIndex);
+		updateStudentQuiz(studentQuiz);
+
+		return quizQuestions.get(targetQuestionIndex);
+	}
 
 }
