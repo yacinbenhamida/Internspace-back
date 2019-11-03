@@ -480,15 +480,18 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 	
 
-	//pour verifier l'existance de la company return links from google
+	/**********************************************************************************************************************************
+	 *	//pour verifier l'existance de la company return links from google															  *
+	 **********************************************************************************************************************************/
+	
 	@Override
 	public Boolean GetNameAndCountry(long id){
 		Company c =em.find(Company.class,id);
 		List<String> ls = new ArrayList<String>();
 		Boolean verified = false;
 		try{
-
-			ProcessBuilder pb = new ProcessBuilder("/Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py","inwi","maroc");
+			// /Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py","inwi","macroc"
+			ProcessBuilder pb = new ProcessBuilder("/Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py",c.getName(),c.getCountry());
 			Process p = pb.start(); 
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -507,7 +510,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 	
 	
-	//Get panding FYPFile and change the status of comapny depends on the results of the Script Python ( use the before function )
+	/**********************************************************************************************************************************
+	 *	//Get panding FYPFile and change the status of comapny depends on the results of the Script Python ( use the before function )*
+	 **********************************************************************************************************************************/
+	 
 	@Override
 	public List<Object[]> getPendingFYPFile() {
 		
