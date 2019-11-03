@@ -28,7 +28,7 @@ public class Company extends User {
 	String address;
 	String country;
 	//verify if the company is real or not
-	@Column(name = "isReal", columnDefinition = "boolean default false")
+	@Column(name = "is_real", columnDefinition = "boolean default false")
 	Boolean isReal;
 	// This is the principal supervisor email.
 	// This will be used by InternshipConvention if not inserted in there.
