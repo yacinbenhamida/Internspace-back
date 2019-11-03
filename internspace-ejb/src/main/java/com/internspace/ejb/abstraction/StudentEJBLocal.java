@@ -42,7 +42,7 @@ public interface StudentEJBLocal {
 	public List<FYPFile> getAllStudentFileByFil(long id);
 	
 	
-	
+	public Student getStudentById(long id);
 	
 
 }
