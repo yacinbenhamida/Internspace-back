@@ -80,4 +80,20 @@ public class Site implements Serializable {
 		this.address = address;
 	}
 	
+
+	@Override
+	public String toString() {
+		return "Site [address=" + address + ", departements=" + departements + ", id=" + id + ", internshipDirector="
+				+ internshipDirector + ", name=" + name + ", University ID=" + university.getId() + "]";
+	}
+
+	public University getUniversity() {
+		return university;
+	}
+
+	public void setUniversity(University university) {
+		this.university = university;
+	}
+	
+	
 }

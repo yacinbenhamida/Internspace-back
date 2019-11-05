@@ -109,6 +109,8 @@ public class FYPFile implements Serializable {
 	@JoinTable(name = "fypfiles_categories", joinColumns = @JoinColumn(name = "fypfile_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	Set<FYPCategory> categories;
 
+	@OneToOne(mappedBy = "fyp_file_defense")
+	private FYPDefense defense;
 	/*
 	 * Getters & Setters
 	 */

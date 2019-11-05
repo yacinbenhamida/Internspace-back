@@ -43,6 +43,22 @@ public class WelshPowellEJB implements WelshPowellEJBLocal{
 		+ "ae DE D E weight:1 \n"
 		+ "ae EF E F weight:1 \n"
 		;
+		/*static String my_graph = 
+		"DGS004\n" 
+		+ "my 0 0\n" 
+		+ "an 11 \n" 
+		+ "an 2 \n"
+		+ "an 3 \n"
+		+ "an D \n"
+		+ "an E \n"
+		+ "an F \n"
+		+ "ae 112 11 2 weight:1 \n"
+		+ "ae 11D 11 D weight:1 \n"
+		+ "ae 23 2 3 weight:1 \n"
+		+ "ae 3F 3 F weight:10 \n"
+		+ "ae DE D E weight:1 \n"
+		+ "ae EF E F weight:1 \n"
+		;*/
 	@Override
 	public String welsh() throws IOException, ElementNotFoundException, GraphParseException {
 		Graph graph = new DefaultGraph("Welsh Powell Test");
@@ -63,6 +79,11 @@ public class WelshPowellEJB implements WelshPowellEJBLocal{
 			result += "Node "+n.getId()+ " : color " +n.getAttribute("color");
 		}
 		return result;
+	}
+	@Override
+	public String generateFYPDefenseGraph() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

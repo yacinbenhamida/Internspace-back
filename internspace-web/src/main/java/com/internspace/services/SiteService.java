@@ -21,35 +21,33 @@ public class SiteService {
 	SiteEJBLocal siteServices;
 	
 	@POST
-	@Path("add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addSite(Site site) {
 		int result = siteServices.addSite(site);
 		if(result == 1) {
-			return Response.status(Response.Status.OK).entity(site).build();
+			return Response.status(Response.Status.OK).entity("Successfully added Site:\n"+site.toString()).build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
 	}
 	
 	@PUT
-	@Path("update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateSite(Site site) {
 		int result = siteServices.updateSite(site);
 		if(result == 1) {
-			return Response.status(Response.Status.OK).entity(site).build();
+			return Response.status(Response.Status.OK).entity("Successfully updated Site:\n"+site.toString()).build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
 	}
 	
 	@DELETE
-	@Path("delete/{id}")
+	@Path("{id}")
 	public Response deleteSite(@PathParam(value="id") long id) {
 		int result = siteServices.deleteSite(id);
 		if(result == 1) {
-			return Response.status(Response.Status.OK).entity("Site removed.").build();
+			return Response.status(Response.Status.OK).entity("Successfully removed Site.\n").build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).entity("Could not delete id : "+id).build();
 	}
