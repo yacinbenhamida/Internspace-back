@@ -61,6 +61,9 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		List<Student> ls = getAllStudentLateYear();
 		
+		if(ls == null)
+			return null;
+		
 		for (int i=0;i<ls.size();i++) {
 			if(ls.get(i).getCin().equals(cin) && ls.get(i).getIsSaved()==false ) {
 				System.out.println("ok");
@@ -172,6 +175,9 @@ public class StudentEJB implements StudentEJBLocal{
 				}
 			}}
 		
+		
+		if(ls1 == null)
+			return;
 		
 		for(int j=0;j<ls1.size();j++) {
 			if(ls1.get(j).getCin().equals(cin)) {

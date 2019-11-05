@@ -27,7 +27,7 @@ public class InternshipConventionEJB implements InternshipConventionEJBLocal {
 		String queryStr = "SELECT FROM IC " +  InternshipConvention.class.getName() + " WHERE"
 				+ " IC.student.id = :studentId";
 		
-		List<InternshipConvention> ics = em.createQuery("queryStr").setParameter("studentId", id).getResultList();
+		List<InternshipConvention> ics = em.createQuery(queryStr).setParameter("studentId", id).getResultList();
 		
 		
 		// If an internship convention of this student exists then leave.
