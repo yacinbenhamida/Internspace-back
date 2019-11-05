@@ -10,5 +10,4 @@ public interface SiteEJBLocal {
 	public List<Site> getAllSites();
 	int updateSite(Site site);
 	int deleteSite(long id);
-	int setInternshipDirector(long idSite, long idEmployee);
 }

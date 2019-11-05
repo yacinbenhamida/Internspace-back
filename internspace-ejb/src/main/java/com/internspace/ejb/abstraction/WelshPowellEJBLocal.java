@@ -10,4 +10,5 @@ import org.graphstream.stream.GraphParseException;
 @Local
 public interface WelshPowellEJBLocal {
 	String welsh() throws IOException, ElementNotFoundException, GraphParseException;
+	String generateFYPDefenseGraph();
 }

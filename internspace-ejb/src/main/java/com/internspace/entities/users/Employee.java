@@ -15,9 +15,12 @@ import javax.persistence.Table;
 
 import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.Site;
+import com.internspace.entities.university.University;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.internspace.entities.fyp.FYPDefense;
 import com.internspace.entities.fyp.FYPIntervention;
 
 @Entity
@@ -51,6 +54,8 @@ public class Employee extends User implements Serializable {
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "department_id")
 	Departement department;
+	
+	
 
 	/*
 	 * Getters & Setters

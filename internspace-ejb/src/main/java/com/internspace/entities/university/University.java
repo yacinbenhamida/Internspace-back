@@ -145,4 +145,12 @@ public class University implements Serializable {
 		this.currentUniversitaryYear = currentUniversitaryYear;
 	}
 
+	@Override
+	public String toString() {
+		return "University [currentUniversitaryYear=" + currentUniversitaryYear + ", fypClassYear=" + fypClassYear
+				+ ", id=" + id + ", location=" + location + ", logoUrl=" + logoUrl + ", name=" + name + ", openingYear="
+				+ openingYear + ", owner=" + owner + ", sites=" + sites + "]";
+	}
+
+	
 }

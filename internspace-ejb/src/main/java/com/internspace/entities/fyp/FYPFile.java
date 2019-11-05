@@ -107,6 +107,8 @@ public class FYPFile implements Serializable {
 	@ManyToMany(mappedBy = "fypFiles")
 	Set<FYPCategory> categories;
 
+	@OneToOne(mappedBy = "fyp_file_defense")
+	private FYPDefense defense;
 	/*
 	 * Getters & Setters
 	 */
