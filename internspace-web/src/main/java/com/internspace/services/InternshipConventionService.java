@@ -54,7 +54,7 @@ public class InternshipConventionService {
 	public Response deleteUniversity(@PathParam(value="id") long id) {
 		int result = internshipConvention.removeConvention(id);
 		if(result == 1) {
-			return Response.status(Response.Status.OK).entity("demande de stage eat annulée.").build();
+			return Response.status(Response.Status.OK).entity("demande de stage est annulée.").build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).entity("Could not delete id : "+id).build();
 	}

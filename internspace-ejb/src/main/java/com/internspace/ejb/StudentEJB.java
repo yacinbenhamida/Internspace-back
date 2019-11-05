@@ -449,6 +449,24 @@ public class StudentEJB implements StudentEJBLocal{
 		return em.find(Student.class, id);
 	}
 
+	@Override
+	public Student editStudent(Student std) {
+		return  em.merge(std);
+	}
+
+	@Override
+	public int removeStudent(long id) {
+Student s = em.find(Student.class, id);
+		
+		System.out.println("Debug : "+s);
+		if(s != null ) {
+			
+			em.remove(s);
+			return 1;
+		}
+		return 0;
+	}
+
 	
 	
 
