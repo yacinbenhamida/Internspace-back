@@ -140,9 +140,11 @@ public class Student extends User {
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
+	/*
 	public StudyClass getStudyClass() {
 		return studyClass;
 	}
+	*/
 	public void setStudyClass(StudyClass studyClass) {
 		this.studyClass = studyClass;
 	}

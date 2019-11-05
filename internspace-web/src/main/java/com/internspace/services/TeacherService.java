@@ -65,6 +65,7 @@ public class TeacherService {
 				
 }
 	
+	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

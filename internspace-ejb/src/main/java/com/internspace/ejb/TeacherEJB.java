@@ -23,7 +23,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 @Override
 	public List<FYPFile> getPendingFYPFiles() {
 		String ch="pending";
-		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.status=:x ").setParameter("x", ch).getResultList();
+		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=:x ").setParameter("x", false).getResultList();
 	}
 
 @Override
