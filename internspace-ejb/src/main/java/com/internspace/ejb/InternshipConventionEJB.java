@@ -35,6 +35,7 @@ public class InternshipConventionEJB implements InternshipConventionEJBLocal {
 		
 		List<InternshipConvention> ics = em.createQuery("SELECT s.internshipConvention FROM " +  Student.class.getName() + "s WHERE  s.student.id =: studentId").setParameter("studentId", id).getResultList();
 if(ics.size() <0 )
+	inter.setStudent(std);
 		
 		em.persist(inter);
 
