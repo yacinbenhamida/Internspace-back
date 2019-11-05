@@ -100,4 +100,12 @@ public class InternshipConvention implements Serializable {
 		this.companySupervisorEmail = companySupervisorEmail;
 	}
 
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
 }

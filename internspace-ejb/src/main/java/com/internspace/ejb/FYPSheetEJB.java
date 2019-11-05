@@ -3,19 +3,41 @@ package com.internspace.ejb;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.internspace.ejb.abstraction.FYPFeaturesEJBLocal;
+import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
+import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
+import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
+import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
+import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Student;
 @Stateless
 public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@PersistenceContext
 	EntityManager service;
-
+	
+	@Inject
+	FYPSheetHistoryEJBLocal serviceHistory;
+	@Inject
+	StudentEJBLocal serviceStudent;
+	@Inject
+	InternshipDirectorEJBLocal serviceDirector;
+	@Inject
+	FYPFileModificationEJBLocal serviceModif;
+	
+	@Inject
+	FYPFeaturesEJBLocal features;
+	
 	@Override
 	public FYPFile addFYPSheet(FYPFile file) {
 		service.persist(file);
@@ -46,7 +68,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public FYPFile getFypFileOfStudent(long studId) {
-		Query q = service.createQuery("SELECT f from FYPFile fa, Student s where s.id = :id AND fa.id = s.fypFile.id")
+		Query q = service.createQuery("SELECT fa from FYPFile fa, Student s where s.id = :id AND fa.id = s.fypFile.id")
 				.setParameter("id", studId);
 		List<Object> list = q.getResultList();
 		if(!list.isEmpty()) {
@@ -78,8 +100,9 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllSheetsWithNoMarks() {
-		Query q =   service.createQuery("SELECT f from FYPFile f where (f.finalMark = NULL OR f.finalMark = 0 ) group by f.id"
-				+ " HAVING (SELECT COUNT(i.id) FROM FYP_INTERVENTION i where i.internshipSheet.id = f.id AND (i.givenMark != NULL OR f.givenMark != 0) )=0");
+		Query q =   service.createQuery("SELECT f from FYPFile f where f.finalMark = NULL OR f.finalMark = 0  group by f.id"
+				+ " HAVING (SELECT COUNT(i.id) FROM fyp_intervention i where i.fypFile.id = f.id "
+				+ " AND (i.givenMark = NULL OR i.givenMark = 0) )>0");
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -89,7 +112,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@Override
 	public List<FYPFile> getFYPSheetsWithNoSupervisors() {
 		Query q = service.createQuery("SELECT f from FYPFile f group by f.id "
-				+ "HAVING (SELECT COUNT(i.id) from FYP_INTERVENTION i where i.internshipSheet.id = f.id) = 0");
+				+ "HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.fypFile.id = f.id AND i.teacherRole = 'supervisor' ) = 0");
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -119,8 +142,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@Override
 	public List<FYPFile> getFYPSheetsOfTeacher(long idTeacher) {
 		Query q =  service.createQuery("SELECT f from FYPFile f group by f.id"
-				+ " HAVING (SELECT COUNT(i.id) from FYP_INTERVENTION i where i.teacher.id = :idt"
-				+ " AND i.internshipSheet.id = f.id) > 0").setParameter("idt", idTeacher);
+				+ " HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.teacher.id = :idt"
+				+ " AND i.fypFile.id = f.id) > 0").setParameter("idt", idTeacher);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -135,18 +158,123 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	@Override
 	public FYPFile assignFYPFileToStudent(FYPFile file, long studentId) {
 		Student s = service.find(Student.class, studentId);
-		file.setStudent(s);
 		s.setFypFile(file);
 		service.persist(s);
-		service.persist(file);
-		service.flush();
 		return service.find(FYPFile.class, file.getId());
 	}
 
+	
+	// my work
+	
 	@Override
 	public List<FYPFile> getAllSheetsPending() {
 		
 		return service.createQuery("SELECT f from FYPFile f  where f.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
 	}
+
+	
+	@Override
+	public FYPFileStatus etatChanged(long id) {
+		
+		String subject = "Votre fiche PFE est acceptée " ;
+		String subject1 = "Votre fiche PFE est refusée" ;
+		String text = "mail d'etat" ;
+		FYPFile f = service.find(FYPFile.class, id);
+		Mail_API mail = new Mail_API();
+		serviceHistory.getAllFiles();
+		for(int i=0;i<serviceHistory.getAllFiles().size();i++) {
+			if(serviceHistory.getAllFiles().get(i).getId()!=f.getId()) {
+		if(f.getFileStatus().equals(FYPFileStatus.confirmed) ||f.getFileStatus().equals(FYPFileStatus.declined)) {
+			
+			serviceHistory.addFYPSheet(f);
+			service.persist(f);
+			service.flush();
+			//List<FYPFile> lc =  serviceStudent.getAllStudentFileCin(cin);
+			//List<Student> ls11 = serviceStudent.getAllStudentCin(cin);
+			
+			
+		}}
+			
+			
+			
+		}
+		List<Student> lf = serviceStudent.getAllStudentFile(id);
+		for(int j=0;j<lf.size();j++) {
+			
+			if( f.getFileStatus().equals(FYPFileStatus.confirmed) ) {
+		try {
+			mail.sendMail(lf.get(j).getEmail(), text, subject);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			}
+		else if( f.getFileStatus().equals(FYPFileStatus.declined)){
+			try {
+				mail.sendMail(lf.get(j).getEmail(), text, subject1);
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		}
+		
+		return f.getFileStatus();
+		
+	}
+
+	@Override
+	public void modificationMajeur(FYPFile file) {
+
+		
+		editFYPSheet(file);
+		file.getProblematic();
+		List<FYPFile> fm = serviceModif.getAllFilesModification();
+		
+		for(int i=0;i<fm.size();i++) {
+			if(file.equals(fm.get(i))) {
+				if(file.getProblematic().equals(fm.get(i).getProblematic())) {
+					System.out.println("modif mineur");
+				}
+				else
+				{
+				//serviceModif.
+					System.out.println("modif major");
+				}
+			}
+		}
+		//if(file.setFeatures(features);)
+		
+	}
+	@Override
+	public FYPFile editFYPSheett(FYPFile file) {
+		List<FYPFileModification> fm= service.createQuery("SELECT f from FYPFileModification f").getResultList();
+		 service.merge(file);
+		for(int i =0 ;i<fm.size();i++){
+			
+			if(file.getId()==fm.get(i).getFyp().getId()) {
+				
+				if((file.getProblematic().equals(fm.get(i).getProblematic())) && file.getFeatures().equals(fm.get(i).getFeatures())) {
+					return file;
+				}
+				else
+				{
+					
+					fm.get(i).setProblematic(file.getProblematic());
+					fm.get(i).setFeatures(file.getFeatures());
+					fm.get(i).setIsChanged(true);
+					features.addFYPFeatures(file.getFeatures());
+					//file.getFeatures().iterator().next().setFypFile(file);
+					//features.addFYPFeature(file.getFeatures().iterator().next());
+			
+				}
+			}
+			
+		}
+		
+		return null;
+	}
+
+	
 
 }

@@ -24,12 +24,15 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
+import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.Notification;
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileArchive;
+import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.fyp.FYPSubject;
@@ -52,17 +55,28 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	Process mProcess;
 	@Inject
 	FYPFileArchiveEJBLocal serviceArchive;
+	@Inject
+	FYPFileModificationEJBLocal servicemodif;
 
 	@Override
 	public List<Student> getLateStudentsList(int year) {
+		String sql;
 		//return em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.classYear =:year AND s.isCreated =false").setParameter("year", year).getResultList();
 		List<StudyClass> ls = em.createQuery("FROM StudyClass").getResultList();
-		String sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
+		if(year==0) {
+			sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
+					+ " WHERE S.isCreated = :mybool";
+			return em.createQuery(sql, Student.class)
+					.setParameter("mybool", false).getResultList();
+		}
+		else {
+			sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
 				+ " WHERE Y.startDate = :year"
 				+ " AND S.isCreated = :mybool";
+		
 		return em.createQuery(sql, Student.class)
 		.setParameter("year", year).setParameter("mybool", false).getResultList();
-	}
+	}}
 
 	
 	@Override
@@ -104,31 +118,174 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			lf.addAll(em.createQuery("SELECT fypFile FROM " + FYPSubject.class.getName()  + " c WHERE c.company =:company").setParameter("company", it.next()).getResultList());
 	      }
 		 //li.forEach(x->lf.add(x.getFypFile())); // Na7it l get khatr yrajaali f fypFile eli aando getSubject eli yrajaa f fypFile :( | achraf
-		 return lf;
+		if(!lf.isEmpty()) 
+		return lf;
+		return null;
 		
 	
 	}
+	
 
 	@Override
-	public List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state) {
+	public List<FYPFile> getFYPFileListByCategory(String category) {
+		List<FYPFile> ls = new ArrayList<FYPFile>();
+		FYPCategory cc  =(FYPCategory)em.createQuery("FROM FYPCategory f WHERE f.name =:name").setParameter("name",category).getSingleResult();
+		 if(cc!= null)
+			 ls = em.createQuery("FROM FYPFile f WHERE :c MEMBER OF f.categories").setParameter("c", cc).getResultList();
+		return ls;
+	}
+
+	
+
+	@Override
+	public List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state,String category ) {
 		List<FYPFile> lf = new ArrayList();
 		List<FYPFile> lff = new ArrayList();
+		List<FYPFile> lfff = new ArrayList();
+		List<FYPFile> lByCat = new ArrayList();
 		List<FYPFile> rs = new ArrayList();
+		boolean tata = true ;
+		
 		if(year == 0) {
+			if(category==null) {
+				lf.addAll(getFYPFileListByCountry(location));
+				for (int i = 0; i < lf.size (); i++) {
+					if(lf.get(i).getFileStatus()==state)
+						rs.add(lf.get(i));
+				}
+			}
+			else if(state==null) {
+				lf.addAll(getFYPFileListByCountry(location));
+				lByCat = getFYPFileListByCategory(category);
+				for ( int i =0 ; i< lf.size(); i++) {
+					for (int j =0 ; j< lByCat.size(); j++) {
+						if(lf.get(i)==lByCat.get(j))
+							rs.add(lf.get(i));
+					}
+				}
+			}
+			else if (location == null) {
+				lByCat = getFYPFileListByCategory(category);
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lByCat.get(j).getFileStatus() == state)
+						rs.add(lByCat.get(j));
+				}
+				
+			}
+			else {
 			lf.addAll(getFYPFileListByCountry(location));
 			for (int i = 0; i < lf.size (); i++) {
 				if(lf.get(i).getFileStatus()==state)
-					rs.add(lf.get(i));
+					lfff.add(lf.get(i));
+			}
+			lByCat = getFYPFileListByCategory(category);
+			for ( int i =0 ; i< lfff.size(); i++) {
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lfff.get(i)==lByCat.get(j))
+						rs.add(lfff.get(i));
+				}
+			}
+			}
+			
+		}
+		/*******************************************************/
+		else if(location==null){
+				if(category == null) {
+					lf.addAll(getFYPFileListByYear(year));
+					for (int i = 0; i < lf.size (); i++) {
+						if(lf.get(i).getFileStatus()==state)
+							rs.add(lf.get(i));
+					}
+				}
+				else if (state==null) {
+					lf.addAll(getFYPFileListByYear(year));
+					lByCat = getFYPFileListByCategory(category);
+					for (int j =0 ; j< lf.size(); j++) {
+						for(int i = 0 ; i< lByCat.size();i++ )
+						if(lf.get(j)== lByCat.get(i))
+							rs.add(lf.get(i));
+					}
+				}
+				
+				else {
+			lf.addAll(getFYPFileListByYear(year));
+			for (int i = 0; i < lf.size (); i++) {
+				if(lf.get(i).getFileStatus()==state)
+					lfff.add(lf.get(i));
+			}
+			lByCat = getFYPFileListByCategory(category);
+			for ( int i =0 ; i< lfff.size(); i++) {
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lfff.get(i)==lByCat.get(j))
+						rs.add(lfff.get(i));
+				}
 			}
 		}
-		else if(location==null){
+		}
+		/*******************************************************/
+		else if(state==null){
+			if(category==null) {
+				lf.addAll(getFYPFileListByCountry(location));
+				lff = getFYPFileListByYear(year);
+				for(int i=0 ; i<lff.size(); i++)
+				{
+					for(int j=0 ; j<lf.size(); j++) {
+						if(lff.get(i).equals(lf.get(j)))
+							rs.add(lff.get(i));
+					}
+				}
+			}
+			else {
+			lf.addAll(getFYPFileListByCountry(location));
+			lff = getFYPFileListByYear(year);
+			for(int i=0 ; i<lff.size(); i++)
+			{
+				for(int j=0 ; j<lf.size(); j++) {
+					if(lff.get(i).equals(lf.get(j)))
+						lfff.add(lff.get(i));
+				}
+			}
+			lByCat = getFYPFileListByCategory(category);
+			for ( int i =0 ; i< lfff.size(); i++) {
+				for (int j =0 ; j< lByCat.size(); j++) {
+					if(lfff.get(i)==lByCat.get(j))
+						rs.add(lfff.get(i));
+				}
+			}
+			
+		}
+		}
+		/*******************************************************/
+		else if(category==null){
+			lf.addAll(getFYPFileListByCountry(location));
+			lff = getFYPFileListByYear(year);
+			for(int i=0 ; i<lff.size(); i++)
+			{
+				for(int j=0 ; j<lf.size(); j++) {
+					if(lff.get(i).equals(lf.get(j)))
+						lfff.add(lff.get(i));
+				}
+			}
+			for ( int i =0 ; i< lfff.size(); i++) {
+				if(lfff.get(i).getFileStatus()==state)
+					rs.add(lfff.get(i));
+			}
+		}
+		
+			/*lf.addAll(getFYPFileListByCountry(location));
+			for (int i = 0; i < lf.size (); i++) {
+				if(lf.get(i).getFileStatus()==state)
+					rs.add(lf.get(i));
+			}*/
+
+		/*else if((location==null) & (category == null)){
 			lf.addAll(getFYPFileListByYear(year));
 			for (int i = 0; i < lf.size (); i++) {
 				if(lf.get(i).getFileStatus()==state)
 					rs.add(lf.get(i));
 			}
 		}
-		else{
+		else if((state==null) & (category == null)){
 			lf.addAll(getFYPFileListByCountry(location));
 			lff = getFYPFileListByYear(year);
 			for(int i=0 ; i<lff.size(); i++)
@@ -139,7 +296,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 				}
 			}
 			
-		}
+		}*/
 			
 		return rs;
 	}
@@ -169,10 +326,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		f.setFileStatus(FYPFileStatus.declined);
 		Student i = (Student) em.createQuery("FROM Student s WHERE s.fypFile = :file").setParameter("file", f).getSingleResult();
 		Notification n = new Notification();
-		n.setStudent(i);
+		n.setSender(i);
 		n.setContent("Refus de votre fiche PFE , verifier votre email pour plus d'information");
 		em.persist(f);
-		em.persist(n);
+		//em.persist(n);
 		em.flush(); 
 		Mailer mail = new Mailer();
 		//List<Student> ls =em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.internship =:intern").setParameter("intern", i).getResultList();
@@ -266,7 +423,6 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	public FYPFile FilterWaitingForDefensePlanningList(String cin, String nom) {
 		List<FYPFile> xx = WaitingForDefensePlanningList();
 		List<Long> ls;
-		
 		if(nom==null)
 		ls = em.createQuery("SELECT s.fypFile.id FROM " + Student.class.getName() + " s"
 				+ " WHERE s.cin =:cin ").setParameter("cin", cin).getResultList();
@@ -290,7 +446,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsSupervisor(int nb,int id) {
+	public void FixActionNumberAsSupervisor(int nb,long id) {
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForSupervisors(nb);
 		
@@ -298,7 +454,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsProtractor(int nb, int id) {
+	public void FixActionNumberAsProtractor(int nb, long id) {
 		// TODO Auto-generated method stub
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForProtractors(nb);
@@ -306,7 +462,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsPreValidator(int nb, int id) {
+	public void FixActionNumberAsPreValidator(int nb, long id) {
 		// TODO Auto-generated method stub
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForPreValidators(nb);
@@ -314,50 +470,71 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void FixActionNumberAsJuryPresident(int nb, int id) {
+	public void FixActionNumberAsJuryPresident(int nb, long id) {
 		// TODO Auto-generated method stub
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForPresidents(nb);
 	}
 
+	
 	//pour la localisation sur la map
 	@Override
 	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys() {
 		return em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='confirmed'").getResultList();
-		//"SELECT f.fypFile , f.company , f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus='confirmed'"
 	}
 	
-	
-	//pour verifier l'existance de la company
-	@Override
-	public Company GetNameAndCountry(long id){
-		Company c =em.find(Company.class,id);
-		String [] params= {c.getName(),c.getCountry()};		
-		//ProcessBuilder command = new ProcessBuilder("python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py",""+params);
-		/*try {
-			System.out.println(command.start().getOutputStream().toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		/*Process p = null;
-			try {
-				p = Runtime.getRuntime().exec(command + params );
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-			/*BufferedReader stdInput = new BufferedReader(new 
-	                InputStreamReader(p.getInputStream()));
-			System.out.println(stdInput); 
-			//return (List<String>) stdInput;
-		System.out.println("hello"+c);*/
-		 return c;
-	}
 
+	/**********************************************************************************************************************************
+	 *	//pour verifier l'existance de la company return links from google															  *
+	 **********************************************************************************************************************************/
+	
+	@Override
+	public Boolean GetNameAndCountry(long id){
+		Company c =em.find(Company.class,id);
+		List<String> ls = new ArrayList<String>();
+		Boolean verified = false;
+		try{
+			// /Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py","inwi","macroc"
+			ProcessBuilder pb = new ProcessBuilder("/Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py",c.getName(),c.getCountry());
+			Process p = pb.start(); 
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+	
+			
+			while ((s = in.readLine()) != null) {
+				ls.add(s);
+			}
+			
+			}catch(Exception e){System.out.println(e);}
+		if(ls.size()>=1)
+			verified=true;
+
+				 return verified;
+	}
 	
 	
+	/**********************************************************************************************************************************
+	 *	//Get panding FYPFile and change the status of comapny depends on the results of the Script Python ( use the before function )*
+	 **********************************************************************************************************************************/
+	 
+	@Override
+	public List<Object[]> getPendingFYPFile() {
+		
+		List<Object[]> list = em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='pending'").getResultList();
+		for (Object[] objects : list) {
+			Company c = (Company)objects[1];
+			if(c.getIsReal()==false) {
+				c.setIsReal(this.GetNameAndCountry(c.getId()));
+				em.persist(c);
+			}
+		}
+		em.flush();
+		
+		return list;
+	}
 	
+
 	
 	/*******************************
 	* Not the work of Mahmoud !!!! *
@@ -365,16 +542,15 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	
 
 	@Override
-	public void acceptPFE(long id) {
+	public Student acceptPFE(long id) {
 		Student s= em.find(Student.class, id);
 		if (s.getIsSaved()==true) {
 		s.setIsAutorised(true);
 		em.persist(s);
-		em.flush();}
-		else
-		{
-			System.out.println("this student is not created");
+		em.flush();
+		return s;
 		}
+		return null;
 		
 	}
 
@@ -393,7 +569,34 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 
+	@Override
+	public void acceptModification(long id) {
+		/*FYPFileStatus f = null;
+		FYPFile s= em.find(FYPFile.class, id);
+		if(s.getFileStatus().equals(f.pending))
+		{
+			s.setIsConfirmed(true);
+		}
+		
+		em.persist(s);
+		em.flush();*/
+		
+		FYPFileModification f = em.find(FYPFileModification.class, id);
+		if(f.getIsChanged()== true) {
+			f.setIsConfirmed(true);
+		}
+		
+	}
+
+
+
+		
+	}
+
+
+
+
 
 	
 
-}
+

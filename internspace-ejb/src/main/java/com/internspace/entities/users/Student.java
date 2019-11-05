@@ -37,6 +37,9 @@ public class Student extends User {
 	@Column(name="cin")
 	String cin;
 	
+	@Column(name="pass_generated")
+	String passGenerated;
+	
 	@Column(name = "is_created", columnDefinition = "boolean default false")
 	Boolean isCreated;
 	
@@ -58,18 +61,11 @@ public class Student extends User {
 	 * Associations
 	 */
 
-	/*
-	 * @OneToOne
-	 * 
-	 * @JoinColumn(name = "internship_id") Internship internship;
-	 */
 
 	@OneToOne
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
 	
-	@OneToOne(mappedBy = "student")
-	InternshipConvention internshipConvention;
 
 	@ManyToOne
 	@JoinColumn(name = "study_class_id")
@@ -105,8 +101,20 @@ public class Student extends User {
 	 * public boolean isHasSubmittedAreport() { return hasSubmittedAReport; }
 	 * 
 	 */
+	
+	
 	public Boolean getIsSaved() {
 		return isSaved;
+	}
+
+	
+
+	public String getPassGenerated() {
+		return passGenerated;
+	}
+
+	public void setPassGenerated(String passGenerated) {
+		this.passGenerated = passGenerated;
 	}
 
 	public void setIsSaved(Boolean isSaved) {
@@ -191,12 +199,18 @@ public class Student extends User {
 		this.cin = cin;
 	}
 
-	/*public FYPFile getFypFile() {
-		return fypFile;
-	}*/
 
 	public void setFypFile(FYPFile fypFile) {
 		this.fypFile = fypFile;
+	}
+
+	/*
+	public InternshipConvention getInternshipConvention() {
+		return internshipConvention;
+	}
+	 */
+	public void setInternshipConvention(InternshipConvention internshipConvention) {
+		this.internshipConvention = internshipConvention;
 	}
 	
 	

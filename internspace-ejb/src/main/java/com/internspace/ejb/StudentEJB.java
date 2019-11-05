@@ -2,26 +2,44 @@ package com.internspace.ejb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
+import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
+import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
+import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPSheetHistory;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
-
+@Stateless
 public class StudentEJB implements StudentEJBLocal{
 
 	
 	@PersistenceContext
 	EntityManager em;
+	
+	@Inject
+	InternshipDirectorEJBLocal serv;
+	
+	@Inject
+	FYPSheetHistoryEJBLocal hist;
+	@Inject
+	FYPFileModificationEJBLocal modifFyle;
+	
 	
 	@Override
 	public void addStudent(Student std) {
@@ -31,7 +49,31 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		
 	}
+	
+	@Override
+	public List<Student> getAllStudentLateYear() {
+		
+		return em.createQuery("SELECT s from Student s where s.studyClass.classYear=:year").setParameter("year", 5).getResultList();
+	}
 
+	@Override
+	public Student enregistrerAuPlatforme(String cin) {
+		
+		List<Student> ls = getAllStudentLateYear();
+		
+		for (int i=0;i<ls.size();i++) {
+			if(ls.get(i).getCin().equals(cin) && ls.get(i).getIsSaved()==false ) {
+				System.out.println("ok");
+				ls.get(i).setIsSaved(true);
+				
+				return ls.get(i);
+			
+			}
+	}
+		
+		return null;
+	}
+		
 	@Override
 	public List<Student> getAll() {
 		return em.createQuery("SELECT c from Student c").getResultList();
@@ -64,8 +106,42 @@ public class StudentEJB implements StudentEJBLocal{
 	@Override
 	public void sendMail(String text,String cin) {
 		
-		String subject = "vous êtes autorisé a passer votre PFE " ;
-		String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
+		
+		   Random rand = new Random();
+		   String Xsi ="abcdefghijklmnopqrstuvwxyz";
+		   final String Gamm ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";  
+		   final String Iot = "1234567890";
+		   final String Zeta="&~#|`-_)('/?,;:.";
+		   String demo =""; 
+		   double x =0;
+		   
+		   for (int k=0;k<100;k++){
+				demo="";
+			//randomisation des caractères selon leur nombre par type définis ,entre six et dix caratères
+			        while ((demo.length() != 6)&& (demo.length() != 7)&& (demo.length() != 8)&& (demo.length() != 9)&& (demo.length() != 10)) {
+			//selection aleatoire du type de caractère puis selection parmis les differents modèles de caractères              
+			              int rPick=rand.nextInt(4);
+			           if (rPick ==0) {
+				      int erzat=rand.nextInt(25);
+			              demo+=Xsi.charAt(erzat);
+			         } else if (rPick == 1) {
+				      int erzat=rand.nextInt(9);
+				      demo+=Iot.charAt(erzat);
+			         } else if (rPick==2) {
+			              int erzat=rand.nextInt(25);
+			              demo+=Gamm.charAt(erzat);
+			         }else if (rPick==3) {
+			              int erzat=rand.nextInt(15);
+			              demo+=Zeta.charAt(erzat);
+				}
+				}
+		   }
+		
+		   
+	  
+		
+		
+		
 		
 		
 		Mail_API mail = new Mail_API();
@@ -76,9 +152,17 @@ public class StudentEJB implements StudentEJBLocal{
 		List<Student> ls4 = new ArrayList();
 		
 		
+		
+			String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
+		    
+		
 		for(int i=0;i<ls.size();i++) {
 			if(ls.get(i).getCin().equals(cin)) {
 				ls3.add(ls.get(i));
+				  String subject = "vous êtes autorisé a passer votre PFE "
+				    		+ "voici votre mot de passe " + demo ;
+				  
+				  ls.get(i).setPassGenerated(demo);
 				//ls3.forEach(x->mail.send(x.getEmail(),text,subject));
 				try {
 					mail.sendMail(ls.get(i).getEmail(), text, subject);
@@ -137,7 +221,14 @@ public class StudentEJB implements StudentEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllStudentFileCin(String cin) {
-		return em.createQuery("SELECT fypFile from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
+		return em.createQuery("SELECT c.fypFile from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
+		
+	}
+	
+	
+	@Override
+	public List<FYPFeature> getAllStudentFileCinFeatures(String cin) {
+		return em.createQuery("SELECT c.fypFile.features from Student c  where c.isAutorised=:isAutorised AND c.cin=:cin").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
 		
 	}
 
@@ -157,11 +248,43 @@ public class StudentEJB implements StudentEJBLocal{
 		List<FYPFile> lc =  getAllStudentFileCin(cin);
 		List<Student> ls11 = getAllStudentCin(cin);
 		
+		List<FYPFile> lh = hist.getAllFiles();
+		
+	
+		
 		for(int i=0;i<lc.size();i++) {
 			FYPFileStatus fs = lc.get(i).getFileStatus();
+			for(int k=0;k<lh.size();k++) {
+				if(lc.get(i).equals(lh.get(k))) {
+					
+					if(lh.get(k).getFileStatus().equals(fs.confirmed)) {
+						
+						try {
+							mail.sendMail(ls11.get(i).getEmail(), text, subject);
+						} catch (MessagingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+					}
+					else
+						if(lh.get(k).getFileStatus().equals(fs.declined)) {
+							
+							
+							try {
+								mail.sendMail(ls11.get(i).getEmail(), text, subject1);
+							} catch (MessagingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					
+				}
+			}
 			
 		
-				System.out.println("changed"+lc.get(i).getFileStatus());
+		/*		System.out.println("changed"+lc.get(i).getFileStatus());
 			  if(lc.get(i).getFileStatus().equals(ff.pending)) {
 				
 				if(lc.get(i).getIsArchived()==true) {
@@ -199,7 +322,7 @@ public class StudentEJB implements StudentEJBLocal{
 			  
 			  
 			
-			}
+			}*/
 		}
 		}
 
@@ -213,13 +336,15 @@ public class StudentEJB implements StudentEJBLocal{
 	public List<Employee> getDirector(String cin) {
 		//List <String> list = new ArrayList();
 		List<FYPFile> ls = getAllStudentFileCin(cin);
-		for(int i=0;i<ls.size();i++) {
+	
+				for(int i=0;i<ls.size();i++) {
 			if(ls.get(i).getIsArchived()) {
 				
 				/*************************************************************************************
 				* getInterventions() ta3mél boucle infini f listing mte3 FYPFile .. make it with SQL *
 				*************************************************************************************/
-				List<FYPIntervention> lf = ls.get(i).getInterventions();
+				List<FYPIntervention> lf  = em.createQuery("SELECT c.interventions from "+ FYPFile.class.getName()+" c  where c.student.isAutorised=:isAutorised AND c.student.cin=:cin ").setParameter("isAutorised", true).setParameter("cin", cin).getResultList();
+				//List<FYPIntervention> lf = ls.get(i).getInterventions();
 				for(int j=0;j<lf.size();j++) {
 					/*String name = lf.get(j).getTeacher().getUsername();
 					String email = lf.get(j).getTeacher().getEmail();
@@ -239,9 +364,111 @@ public class StudentEJB implements StudentEJBLocal{
 		//return em.createQuery("SELECT c.teacher.firstName,c.teacher.email from "+ FYPIntervention.class.getName()+" c  ").getResultList();
 		return null;
 	}
-		
-	
 
+	@Override
+	public List<FYPFile> getAllSheetsPendingStudent() {
+		
+		
+		return em.createQuery("SELECT s.fypFile.title,s from "+Student.class.getName()+" s  where s.fypFile.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
+	
+		
+	}
+
+	@Override
+	public List<FYPFile> getAllSheetsPendingByStudent(String cin) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Student authentification(String cin, String password) {
+		List<Student> ls = getAllStudentAutorised();
+		List <String>  name = new ArrayList();
+		for (int i=0;i<ls.size();i++) {
+			if(ls.get(i).getCin().equals(cin) && ls.get(i).getPassGenerated().equals(password)) {
+				
+				String FirstName  = ls.get(i).getFirstName();
+				String LastName = ls.get(i).getLastName();
+				
+				name.add(FirstName);
+				name.add(LastName);
+			}
+		}
+		
+		return  (Student) name;
+	}
+
+	@Override
+	public FYPFile addFYPSheet(FYPFile file, long id) {
+		
+		Student std = em.find(Student.class, id);
+	//	List<FYPFile> ff =em.createQuery("SELECT c.fypFile.id from Student c  where c.id=:id").setParameter("id", id).getResultList();
+		List<FYPFile> file1 =	getAllStudentFileByFil(id);
+		if(std!= null ) {
+			
+				if(file1.isEmpty()) {
+			em.persist(file);
+			file.setStudent(std);
+			modifFyle.addFYPSheet(file);
+		
+		   // em.persist(file);
+			std.setFypFile(file);
+		    em.persist(std);
+		    
+		    return file;
+			
+		    
+		}
+				else return		file1.get(0);
+		}
+		
+	return null;
+	}
+
+	@Override
+	public List<Student> getAllStudentFile(long id) {
+		
+		FYPFile std = em.find(FYPFile.class, id);
+		
+		return em.createQuery("SELECT s from "+Student.class.getName()+" s  where s.fypFile.id =:id").setParameter("id", id).getResultList();
+		
+		
+	}
+
+
+	@Override
+	public List<FYPFile> getAllStudentFileByFil(long id) {
+		
+		 List<FYPFile> f = em.createQuery("SELECT c.fypFile from Student c  where c.id=:id").setParameter("id", id).getResultList();
+		 
+         return f;
+	}
+
+	@Override
+	public Student getStudentById(long id) {
+		return em.find(Student.class, id);
+	}
+
+	@Override
+	public Student editStudent(Student std) {
+		return  em.merge(std);
+	}
+
+	@Override
+	public int removeStudent(long id) {
+Student s = em.find(Student.class, id);
+		
+		System.out.println("Debug : "+s);
+		if(s != null ) {
+			
+			em.remove(s);
+			return 1;
+		}
+		return 0;
+	}
+
+	
+	
 
 	
 	

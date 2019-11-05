@@ -30,7 +30,7 @@ public class Employee extends User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Role {
-		internshipsDirector, departmentHead, teacher, admin, superAdmin,
+		internshipsDirector, departmentHead, teacher, admin,
 
 	}
 

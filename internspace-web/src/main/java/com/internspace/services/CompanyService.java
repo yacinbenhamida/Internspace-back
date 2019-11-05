@@ -1,8 +1,13 @@
 package com.internspace.services;
 
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonReader;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -18,18 +23,17 @@ import javax.ws.rs.PUT;
 // To consume other Web Services
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 
 import com.internspace.ejb.abstraction.CompanyEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
-import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.fyp.StudentFYPSubject.ApplianceStatus;
 import com.internspace.entities.users.Company;
+import com.internspace.rest.utilities.filters.Secured;
 
 @Path("company")
 public class CompanyService {
@@ -43,6 +47,7 @@ public class CompanyService {
 	// Company Section
 
 	@POST
+	@Secured
 	@Path("/add")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addComapny(Company company) {
@@ -70,6 +75,7 @@ public class CompanyService {
 
 	@PUT
 	@Path("update")
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateCompany(Company updateCompany) {
 		if (updateCompany.getId() == 0)
@@ -89,6 +95,7 @@ public class CompanyService {
 
 	@DELETE
 	@Path("/delete")
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteCompany(@QueryParam(value = "company") long companyId) {
 		if (companyId == 0)
@@ -106,6 +113,7 @@ public class CompanyService {
 
 	@DELETE
 	@Path("/delete/name")
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteCompanyByName(@QueryParam(value = "company") String companyName) {
 		if (companyName.isEmpty())
@@ -129,6 +137,7 @@ public class CompanyService {
 
 	@POST
 	@Path("/subjects/add")
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addSubject(@QueryParam(value = "title") String title, @QueryParam(value = "content") String content,
 			@QueryParam(value = "max_applicants") int maxApplicants, @QueryParam(value = "company") long companyId,
@@ -237,7 +246,13 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Can't find suject to delete with ID: " + subjectId).build();
 
-		service.deleteSubject(subject);
+		boolean success = service.deleteSubject(subject);
+		
+		if(!success)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Won't delete this subject, it is already linked to a fyp file... | subjectId: " + subjectId).build();
+
+		
 		return Response.status(Response.Status.OK).entity("Successfully DELETED Subject for ID: " + subjectId).build();
 	}
 
@@ -298,7 +313,7 @@ public class CompanyService {
 	 */
 	@GET
 	@Path("/subjects/suggestion/student")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSuggestedSubjectsByStudent(@QueryParam(value = "student") long studentId,
 			@QueryParam(value = "filter-untaken") boolean filterUntaken) {
 		
@@ -321,8 +336,6 @@ public class CompanyService {
         	Invocation.Builder invocationBuilder 
         	  = subjectSuggestionWebTarget.request(MediaType.APPLICATION_JSON);
         	
-        	List<FYPSubject> subjects = null;
-        	
         	Response response 
         	  = invocationBuilder
         	  .get();
@@ -330,8 +343,21 @@ public class CompanyService {
         	
         	String responseStr = response.readEntity(String.class);
         	System.out.println(responseStr);
+        	JsonReader jsonReader = Json.createReader(new StringReader(responseStr));
+        	JsonArray subjectsIds = jsonReader.readArray();
         	
-        	return Response.ok(responseStr).build();
+        	List<FYPSubject> subjects = new ArrayList<FYPSubject>();
+        	
+        	// Get subjects now...
+            for (int i = 0; i < subjectsIds.size(); i++) {
+               Long id = Long.parseLong(subjectsIds.get(i).toString());
+               FYPSubject subject = service.findSubject(id);
+               
+               if(subject != null)
+            	   subjects.add(subject);
+            }
+        	
+        	return Response.ok(subjects).build();
         	
         } catch (Exception e) {
  
@@ -352,11 +378,12 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
 
-		boolean success = service.tryApplyOnSubject(subjectId, studentId);
+		boolean success = service.tryApplyOnSubject(studentId, subjectId);
 
 		String outputMsg = "Successfully applied.";
+		
 		if (!success)
-			outputMsg = "Failed to apply, you might be already applied, accepted or rejected ";
+			outputMsg = "Failed to apply, you might be already applied, accepted or rejected. also check if given student and subject ids are valid...";
 
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}
@@ -370,11 +397,11 @@ public class CompanyService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Check ID inputs, got (" + studentId + "," + subjectId + ")").build();
 
-		boolean success = service.tryUnapplyOnSubject(subjectId, studentId);
+		boolean success = service.tryUnapplyOnSubject(studentId, subjectId);
 
 		String outputMsg = "Successfully unapplied.";
 		if (!success)
-			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected ";
+			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected. also check if given student and subject ids are valid... ";
 
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 	}
@@ -430,7 +457,7 @@ public class CompanyService {
 
 		boolean success = service.refuseStudentAppliance(studentId, subjectId, reason);
 
-		String outputMsg = "Successfully refused students' appliance.";
+		String outputMsg = "Successfully refused student's appliance.";
 
 		if (!success)
 			outputMsg = "Failed to accept, it might be already none, accepted or matching doesn't exist.";
@@ -438,5 +465,63 @@ public class CompanyService {
 		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
 
 	}
+	
+	// Subscription
+	
+	@POST
+	@Path("/company/subscribe")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response subscribe(Company company)
+	{
+		if (company == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Please, provide a valid company").build();
 
+		List<Company> foundCompanies = service.findCompaniesByName(company.getName(), 1, false); 
+		
+		if(foundCompanies != null && foundCompanies.size() > 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("A similar company already exists").build();
+			
+		// Explicitly set it to be not real
+		company.setIsReal(false);
+		service.createCompany(company);
+		
+		String outputMsg = "";
+		boolean success = true;
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+	}
+
+	
+	@POST
+	@Path("/company/set_approval")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response approveCompany(
+			@QueryParam(value = "name") String companyName,
+			@QueryParam(value = "approve") boolean toApproved)
+	{
+		if(companyName == null || companyName.isEmpty())
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Please provide a valid name.").build();
+			
+		List<Company> foundCompanies = service.findCompaniesByName(companyName, 1, false); 
+		
+		if(foundCompanies == null || foundCompanies.size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Company with such name doesn't exist: " + companyName).build();
+			
+		Company company = foundCompanies.get(0);
+		
+		if(company.getIsReal().equals(toApproved))
+			if(foundCompanies == null || foundCompanies.size() == 0)
+				return Response.status(Response.Status.OK)
+						.entity("Failed, Company " + companyName + " is already " + (toApproved ? "approved" : "not approved")).build();
+		
+		company.setIsReal(toApproved);
+		service.updateCompany(company);		
+		
+		return Response.status(Response.Status.OK)
+				.entity("Company " + companyName + " is now " + (toApproved ? "approved" : "not approved")).build();
+
+	}
 }

@@ -1,6 +1,7 @@
 package com.internspace.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -11,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -18,6 +20,7 @@ import javax.ws.rs.core.Response.Status;
 import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 
 @Path("fypsheet")
 public class FYPSheetService {
@@ -147,11 +150,53 @@ public class FYPSheetService {
 	}
 	
 	@GET
+	@Path("confirmed")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllAcceptedSheets() {
+			List<FYPFile> sheets = fypSheetService.getAllSheets().stream()
+					.filter(x->x.getFileStatus().equals(FYPFileStatus.confirmed)).collect(Collectors.toList());		
+			return Response.status(Response.Status.OK).entity(sheets).build();
+	}
+	
+	@GET
 	@Path("pending")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheetsPending() {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheetsPending()).build();
 	}
 	
+	
+	// consulter l'etat de sa fichePFE et l'envoi d'un mail
+	@GET
+	@Path("etat")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response etatChanged(@QueryParam(value = "id") long id) {
+		FYPFileStatus ff = fypSheetService.etatChanged(id);
+		return 	Response.status(Response.Status.OK).entity(ff).build();
+	}
+	// consulter modif mineur ou major
+	
+	
+	@PUT
+	@Path("major")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 
+	public Response modificationMajeur(FYPFile file) {
+		 fypSheetService.modificationMajeur(file);
+		return 	Response.status(Response.Status.OK).entity("bien").build();
+	}
+
+	
+	@PUT
+	@Path("editt")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editFYPSheett(FYPFile file) {
+		FYPFile res = fypSheetService.editFYPSheett(file);
+ 
+			return Response.status(Response.Status.OK).entity(res).build();
+		
+		
+	}
 }

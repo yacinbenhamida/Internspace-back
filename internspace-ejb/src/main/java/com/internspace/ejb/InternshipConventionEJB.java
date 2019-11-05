@@ -10,20 +10,31 @@ import com.internspace.ejb.abstraction.InternshipConventionEJBLocal;
 
 import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.university.University;
+import com.internspace.entities.users.Student;
 
 
 @Stateless
-public class IternshipConventionEJB implements InternshipConventionEJBLocal {
+public class InternshipConventionEJB implements InternshipConventionEJBLocal {
 	
 	@PersistenceContext
 	EntityManager em;
 
 	@Override
-	public void addInternshipConvention(InternshipConvention inter) {
+	public void addInternshipConvention(InternshipConvention inter,long id) {
+
+		Student std = em.find(Student.class, id);
 		
-		System.out.println("Adding: " + inter);
+		String queryStr = "SELECT FROM IC " +  InternshipConvention.class.getName() + " WHERE"
+				+ " IC.student.id = :studentId";
+		
+		List<InternshipConvention> ics = em.createQuery("queryStr").setParameter("studentId", id).getResultList();
+		
+		
+		// If an internship convention of this student exists then leave.
+		if(ics != null && ics.size() > 0)
+			return;
+		
 		em.persist(inter);
-	
 	
 	}
 
@@ -37,8 +48,10 @@ public class IternshipConventionEJB implements InternshipConventionEJBLocal {
 	public int removeConvention(long  id) {
 		
 		InternshipConvention u = em.find(InternshipConvention.class, id);
+	
 		System.out.println("Debug : "+u);
-		if(u != null) {
+		if(u != null ) {
+			
 			em.remove(u);
 			return 1;
 		}

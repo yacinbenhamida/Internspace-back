@@ -37,8 +37,8 @@ public interface CompanyEJBLocal {
 	List<FYPSubject> getFypSubjectsByCompany(long companyId, boolean filterUntaken);
 	FYPSubject findSubject(long subjectId);
 	void updateSubject(FYPSubject subject);
-	void deleteSubject(FYPSubject subject);
-	void deleteSubjectById(long subjectId);
+	boolean deleteSubject(FYPSubject subject);
+	boolean deleteSubjectById(long subjectId);
 	
 	/*
 	 * Advanced

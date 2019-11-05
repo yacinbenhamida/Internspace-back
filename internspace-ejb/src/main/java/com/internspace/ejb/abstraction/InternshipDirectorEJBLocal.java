@@ -21,8 +21,10 @@ public interface InternshipDirectorEJBLocal {
 	List<FYPFile> getFYPFileListByState(FYPFileStatus state);
 	List<FYPFile> getFYPFileListByYear(int year);
 	List<FYPFile> getFYPFileListByCountry(String location);
-	List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state);
+	List<FYPFile> getFYPFileListByCategory(String category);
+	List<FYPFile> getFYPFileListSpecifique(int year , String location, FYPFileStatus state, String category);
 	List<FYPFile> getFYPFileListCurrentYear(FYPFileStatus state);
+	List<Object[]> getPendingFYPFile();
 	void acceptFile(long id);
 	void refuseFile(long id, String text);
 	void acceptCancelingDemand(long id);
@@ -34,17 +36,25 @@ public interface InternshipDirectorEJBLocal {
 	public Boolean ValidateSubmittedAReport(long id);
 	public List<FYPFile> WaitingForDefensePlanningList();
 	public FYPFile FilterWaitingForDefensePlanningList(String cin, String nom);
-	public  void FixActionNumberAsSupervisor(int nb, int id);
-	public  void FixActionNumberAsProtractor(int nb, int id);
-	public  void FixActionNumberAsPreValidator(int nb, int id);
-	public  void FixActionNumberAsJuryPresident(int nb, int id);
-	public Company GetNameAndCountry (long id);
+	public  void FixActionNumberAsSupervisor(int nb, long id);
+	public  void FixActionNumberAsProtractor(int nb, long id);
+	public  void FixActionNumberAsPreValidator(int nb, long id);
+	public  void FixActionNumberAsJuryPresident(int nb, long id);
+	public Boolean GetNameAndCountry (long id);
 	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys();
+	
+	
+	
+	
 	
 	//partie teb3a rayén
 	//Le directeur des stages pourra rendre l’étudiant autorisé à passer son PFE.
-	void acceptPFE(long id);
+	public Student acceptPFE(long id);
 	public Employee getInternshipDirectorById(long id);
+	//acept modification majeure
+	void acceptModification(long id);
+	
+	
 	
 	
 	

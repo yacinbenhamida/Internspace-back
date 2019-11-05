@@ -9,14 +9,17 @@ import com.internspace.entities.users.Company;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
 @Entity
@@ -44,23 +47,24 @@ public class FYPSubject implements Serializable {
 	@Column(name = "max_applicants", columnDefinition = "int default 1")
 	int maxApplicants;
 
-	// This is useful to, for example, make a subject in Canada offered by a Tunisian company
+	// This is useful to, for example, make a subject in Canada offered by a
+	// Tunisian company
 	String country;
-	
+
 	// This won't be the best option because
 	// When we update max applicants, we might want to change
 	// Cur applicants count, which would lead to
 	// Conspiracy with ground-truth
 	/*
-	@Column(name = "curr_applicants_count", columnDefinition = "int default 1")
-	int curApplicantsCount;
+	 * @Column(name = "curr_applicants_count", columnDefinition = "int default 1")
+	 * int curApplicantsCount;
 	 */
-	
+
 	/*
 	 * Associations
 	 */
-
-	@OneToOne(mappedBy = "subject")
+	
+	@OneToOne(mappedBy = "subject", optional = true, orphanRemoval = true)
 	FYPFile fypFile; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
 	@ManyToOne
@@ -71,7 +75,8 @@ public class FYPSubject implements Serializable {
 	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
 	Set<StudentFYPSubject> studentSubjects;
 
-	@ManyToMany(mappedBy = "subjects")
+	@ManyToMany
+	@JoinTable(name = "subjects_categories", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	Set<FYPCategory> categories;
 
 	/*
@@ -101,7 +106,7 @@ public class FYPSubject implements Serializable {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public int getMaxApplicants() {
 		return maxApplicants;
 	}
@@ -132,5 +137,13 @@ public class FYPSubject implements Serializable {
 	public void setFypFile(FYPFile fypFile) {
 		this.fypFile = fypFile;
 	}
+
+	/*public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}*/
 
 }
