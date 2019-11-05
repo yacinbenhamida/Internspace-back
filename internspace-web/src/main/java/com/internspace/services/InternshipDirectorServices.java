@@ -90,7 +90,7 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allFYPFileByCategory")
-	public Response getFYPFileListByYear(@QueryParam(value = "category")String category){
+	public Response getFYPFileListByCategory(@QueryParam(value = "category")String category){
 		 return Response.status(Status.OK).entity(service.getFYPFileListByCategory(category)).build();
 	};
 	
