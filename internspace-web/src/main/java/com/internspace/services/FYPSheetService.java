@@ -169,7 +169,12 @@ public class FYPSheetService {
 	public Response getAllSheetsPending() {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheetsPending()).build();
 	}
-	
+	@GET
+	@Path("withNoMarks")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response allFYPfilesWatingForMarkFrom() {
+		return Response.status(Response.Status.OK).entity(fypSheetService.allFYPfilesWatingForMarkFrom()).build();
+	}
 	
 	// consulter l'etat de sa fichePFE et l'envoi d'un mail
 	@GET
