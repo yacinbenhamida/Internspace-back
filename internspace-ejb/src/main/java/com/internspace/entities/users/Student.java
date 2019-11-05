@@ -61,18 +61,11 @@ public class Student extends User {
 	 * Associations
 	 */
 
-	/*
-	 * @OneToOne
-	 * 
-	 * @JoinColumn(name = "internship_id") Internship internship;
-	 */
 
 	@OneToOne
 	@JoinColumn(name = "fyp_file_id")
 	FYPFile fypFile;
 	
-	@OneToOne(mappedBy = "student")
-	InternshipConvention internshipConvention;
 
 	@ManyToOne
 	@JoinColumn(name = "study_class_id")
@@ -206,9 +199,6 @@ public class Student extends User {
 		this.cin = cin;
 	}
 
-	/*public FYPFile getFypFile() {
-		return fypFile;
-	}*/
 
 	public void setFypFile(FYPFile fypFile) {
 		this.fypFile = fypFile;
