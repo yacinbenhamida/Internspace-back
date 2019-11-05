@@ -275,6 +275,13 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		return null;
 	}
 
+	@Override
+	public List<FYPFile> allFYPfilesWatingForMarkFrom() {
+		Query query = service.createQuery("SELECT f from FYPFile f, fyp_intervention interv where f.id = interv.fypFile.id AND"
+				+ " interv.givenMark = 0 AND (interv.teacherRole = 'reporter' OR interv.teacherRole='reporter')");
+			return query.getResultList();
+	}
+
 	
 
 }

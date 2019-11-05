@@ -149,13 +149,16 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 	public FYPIntervention editInterventionActorRole(long fypinterventionId, String newRole) {
 		FYPIntervention intervention = manager.find(FYPIntervention.class, fypinterventionId);
 		if(intervention != null ) {
+				if(intervention.getGivenMark()>0) {
+					return null;
+				}
 			intervention.setTeacherRole(convertRole(newRole));
 			intervention.setAssignmentDate(LocalDate.now());
 			switch (newRole.toString()) {
-			case "juryPresident": intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForPresidents());break;
-			case "preValidator " : 	intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForPreValidators());break;
-			case "reporter" : intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForProtractors());break;
-			case "supervisor" : intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForSupervisors());break;
+				case "juryPresident": intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForPresidents());break;
+				case "preValidator " : 	intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForPreValidators());break;
+				case "reporter" : intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForProtractors());break;
+				case "supervisor" : intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForSupervisors());break;
 			}
 			manager.merge(intervention); 
 			manager.flush();
