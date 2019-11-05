@@ -15,6 +15,7 @@ public interface FYPSheetEJBLocal {
 	public boolean removeFYPSheet(long fypsId);
 	public FYPFile editFYPSheet(FYPFile toEdit);
 	public FYPFile assignFYPFileToStudent(FYPFile file,long studentId);
+	public List<FYPFile> allFYPfilesWatingForMarkFrom();
 	
 	public FYPFile getFYFileById(long fypfileId);
 	public FYPFile getFypFileOfStudent(long studId);

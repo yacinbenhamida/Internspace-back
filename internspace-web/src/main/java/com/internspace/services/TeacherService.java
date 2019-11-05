@@ -65,6 +65,7 @@ public class TeacherService {
 				
 }
 	
+	@POST
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -81,13 +82,25 @@ public class TeacherService {
 	}
 	
 	@PUT
-	@Path("edit")
+	@Path("/edit/{id}/{id2}")
 	
-	public void editFYPSheet(@QueryParam(value="id")long id) {
-		service.ValidateMajorModification(id);
+	public void editFYPSheet(@PathParam(value="id")long id,@PathParam(value="id2")long id2) {
+		service.ValidateMajorModification(id,id2);
 		
 		
 	}
+	@GET
+	@Path("/pre_valid/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetprevalidatedFypFile(@PathParam (value="id") long id)
+	{
+		List<FYPFile> fypfiles=service.getPrevalidatedFiles(id);
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
 	
 	
 	

@@ -24,7 +24,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 @Override
 	public List<FYPFile> getPendingFYPFiles() {
 		String ch="pending";
-		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.status=:x ").setParameter("x", ch).getResultList();
+		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=:x ").setParameter("x", false).getResultList();
 	}
 
 @Override
@@ -38,27 +38,41 @@ public class TeacherEJB implements TeacherEJBLocal {
 
 @Override 
 	public List<FYPFile> getSupervisedFYPfiles(long id) {
-		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor')").setParameter("id",id).getResultList();
+		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor')").setParameter("id",id).getResultList();
 	}
 
 @Override
 	public List<FYPFile> getprotractoredFYPfiles(long id) {
-	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
+	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
 	}
 
 @Override
-	public void ValidateMajorModification(long id ) {
-	FYPFile F=em.find(FYPFile.class, id);
-	FYPFileModification ff=em.find(FYPFileModification.class, id);
-	F.setFeatures(ff.getFeatures());
+	public void ValidateMajorModification(long id ,long id2) {
+	FYPFile f = em.find(FYPFile.class, id);
+	FYPFileModification ff=em.find(FYPFileModification.class, id2);
 	ff.setIsChanged(Boolean.TRUE);
 	ff.setIsConfirmed(Boolean.TRUE);
+	//f.setFeatures(ff.getFeatures());
+	f.setProblematic(ff.getProblematic());
+	em.merge(f);
+	em.merge(ff);	
+	em.flush();
 		
+	
 	}
 @Override
 	public void ProposeFYPCategory(FYPCategory F) {
 
 em.persist(F);		
 	}
+
+@Override
+public List<FYPFile> getPrevalidatedFiles(long id) {
+	
+	return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=true  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
+
+}
+
+
 
 }

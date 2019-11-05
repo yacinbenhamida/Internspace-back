@@ -57,12 +57,12 @@ public class FYPInterventionService {
 		}
 		return Response.status(Response.Status.NOT_FOUND).entity("no records").build(); 
 	}
-	@PUT
-	@Path("edit/{role}")
+	@GET
+	@Path("edit/{idInt}/{role}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editInterventionActorRole(FYPIntervention intervention,@PathParam("role")String newRole) {
-		FYPIntervention intervention2 = service.editInterventionActorRole(intervention.getId(), intervention.getTeacher().getId(), newRole);
+	public Response editInterventionActorRole(@PathParam("role")String newRole,@PathParam("idInt")long idInt) {
+		FYPIntervention intervention2 = service.editInterventionActorRole(idInt, newRole);
 		if(intervention2 != null) {
 			return Response.status(Response.Status.OK).entity(intervention2).build();
 		}
