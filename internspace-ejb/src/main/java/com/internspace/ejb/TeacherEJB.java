@@ -52,7 +52,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 	FYPFileModification ff=em.find(FYPFileModification.class, id2);
 	ff.setIsChanged(Boolean.TRUE);
 	ff.setIsConfirmed(Boolean.TRUE);
-	f.setFeatures(ff.getFeatures());
+	//f.setFeatures(ff.getFeatures());
 	f.setProblematic(ff.getProblematic());
 	em.merge(f);
 	em.merge(ff);
