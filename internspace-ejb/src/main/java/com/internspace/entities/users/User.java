@@ -1,15 +1,21 @@
 package com.internspace.entities.users;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Table;
+
+import com.internspace.entities.exchanges.Notification;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 // To ensure TPC (type-per-class)
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -126,6 +132,5 @@ public class User implements Serializable {
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
-
 
 }
