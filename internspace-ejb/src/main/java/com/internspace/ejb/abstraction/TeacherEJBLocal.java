@@ -17,6 +17,7 @@ public interface TeacherEJBLocal {
 	List<FYPFile> getprotractoredFYPfiles(long id);
 	void ValidateMajorModification(long  f,long dd);
 	void ProposeFYPCategory(FYPCategory F);
+	List<FYPFile> getPrevalidatedFiles(long id);
 	
 	
 	

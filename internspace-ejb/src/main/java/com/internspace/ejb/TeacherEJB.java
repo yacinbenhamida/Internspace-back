@@ -38,12 +38,12 @@ public class TeacherEJB implements TeacherEJBLocal {
 
 @Override 
 	public List<FYPFile> getSupervisedFYPfiles(long id) {
-		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor')").setParameter("id",id).getResultList();
+		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor')").setParameter("id",id).getResultList();
 	}
 
 @Override
 	public List<FYPFile> getprotractoredFYPfiles(long id) {
-	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
+	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
 	}
 
 @Override
@@ -55,7 +55,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 	f.setFeatures(ff.getFeatures());
 	f.setProblematic(ff.getProblematic());
 	em.merge(f);
-	em.merge(ff);
+	em.merge(ff);	
 	em.flush();
 		
 	
@@ -65,5 +65,14 @@ public class TeacherEJB implements TeacherEJBLocal {
 
 em.persist(F);		
 	}
+
+@Override
+public List<FYPFile> getPrevalidatedFiles(long id) {
+	
+	return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=true  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
+
+}
+
+
 
 }
