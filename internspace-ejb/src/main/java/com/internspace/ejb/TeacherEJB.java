@@ -12,6 +12,7 @@ import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.fyp.FYPFileModification;
 
 
 
@@ -42,20 +43,17 @@ public class TeacherEJB implements TeacherEJBLocal {
 
 @Override
 	public List<FYPFile> getprotractoredFYPfiles(long id) {
-	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'protractor')").setParameter("id",id).getResultList();
+	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.internshipSheet.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
 	}
 
 @Override
-	public FYPFile ValidateMajorModification(long id ) {
-	FYPFile f = em.find(FYPFile.class, id);
+	public void ValidateMajorModification(long id ) {
+	FYPFile F=em.find(FYPFile.class, id);
+	FYPFileModification ff=em.find(FYPFileModification.class, id);
+	F.setFeatures(ff.getFeatures());
+	ff.setIsChanged(Boolean.TRUE);
+	ff.setIsConfirmed(Boolean.TRUE);
 		
-	if (f.getFileStatus().equals("pending"))
-		{
-		em.merge(f);
-		em.flush();
-		 return em.find(FYPFile.class, f.getId());
-		}
-		return null;
 	}
 @Override
 	public void ProposeFYPCategory(FYPCategory F) {

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -78,6 +79,19 @@ public class TeacherService {
 		service.ProposeFYPCategory(category);
 		return Response.status(Status.OK).entity(category).build();
 	}
+	
+	@PUT
+	@Path("edit")
+	
+	public void editFYPSheet(@QueryParam(value="id")long id) {
+		service.ValidateMajorModification(id);
+		
+		
+	}
+	
+	
+	
+	
 	
 	
 }

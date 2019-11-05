@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.PaymentEJBLocal;
 import com.internspace.entities.university.Payments;
@@ -25,6 +26,7 @@ import com.paypal.base.rest.PayPalRESTException;
 
 @Stateless
 public class PaymentEJB implements PaymentEJBLocal {
+	@PersistenceContext
 	EntityManager em;
 	private String cId ="AbjSMnIhwuiUhsiZcsw2zuNXyUkQRPXfvT-7iOmn4zI5ERWPU2J229dHIe3rHswtKucl7vDUVwAxniuZ";
 	  private static String crunchifySecret = "EMXlrVMs0vCjcZW882fJ4QI6zZki7XyYGWAOmNnyQ9GiIc_2wUIFchu4MFrhCyrjXfa2Q4sjRSobFwHy";
@@ -32,11 +34,13 @@ public class PaymentEJB implements PaymentEJBLocal {
 	  private static String executionMode = "sandbox"; // sandbox or production
 	 @Override
 	public void PaymentPayPalAPI(long totale,long idU) {
-		/* Payments p= new Payments();
+		 Payments p= new Payments();
 		 p.setPaymentDate(LocalDate.now());
-		 University u=em.find(University.class, idU);
+		 University u=em.find(University.class,idU);
+		 System.out.println(u);
 		 p.setUniversity(u);
-		 em.persist(p);*/
+		 em.persist(p);
+		 em.flush();
 		/*
 		 * Flow would look like this: 
 		 * 1. Create Payer object and set PaymentMethod 
@@ -64,14 +68,14 @@ public class PaymentEJB implements PaymentEJBLocal {
 		// Set Payment Details Object
 		Details crunchifyDetails = new Details();
 		crunchifyDetails.setShipping("2.22");
-		crunchifyDetails.setSubtotal(totale+"");
+		crunchifyDetails.setSubtotal("3.33");
 		crunchifyDetails.setTax("1.11");
  
 		// Set Payment amount
 		long tot=totale+2+1;
 		Amount crunchifyAmount = new Amount();
 		crunchifyAmount.setCurrency("USD");
-		crunchifyAmount.setTotal(tot+"");
+		crunchifyAmount.setTotal("6.66");
 		crunchifyAmount.setDetails(crunchifyDetails);
  
 		// Set Transaction information
@@ -105,7 +109,7 @@ public class PaymentEJB implements PaymentEJBLocal {
 			PaymentExecution crunchifyPaymentExecution = new PaymentExecution();
  
 			// Set your PayerID. The ID of the Payer, passed in the `return_url` by PayPal.
-			crunchifyPaymentExecution.setPayerId("<!---- Add your PayerID here ---->");
+			crunchifyPaymentExecution.setPayerId(crunchifyPaymentExecution.getPayerId());
  
 			// This call will fail as user has to access Payment on UI. Programmatically
 			// there is no way you can get Payer's consent.
