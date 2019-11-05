@@ -555,6 +555,10 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	@Override
 	public Student acceptPFE(long id) {
 		Student s= em.find(Student.class, id);
+		
+		if(s == null)
+			return null;
+		
 		if (s.getIsSaved()==true) {
 		s.setIsAutorised(true);
 		em.persist(s);
@@ -622,6 +626,8 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 					}
 				}}
 			
+			if(ls1 == null)
+				return null;
 			
 			for(int j=0;j<ls1.size();j++) {
 				if(ls1.get(j).getCin().equals(s.getCin())) {
@@ -679,7 +685,11 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		em.flush();*/
 		
 		FYPFileModification f = em.find(FYPFileModification.class, id);
-		if(f.getIsChanged()== true) {
+		
+		if(f == null)
+			return;
+		
+		if(f.getIsChanged()== false) {
 			f.setIsConfirmed(true);
 		}
 		

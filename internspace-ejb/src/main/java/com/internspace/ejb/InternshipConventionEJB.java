@@ -12,54 +12,59 @@ import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.university.University;
 import com.internspace.entities.users.Student;
 
-
 @Stateless
 public class InternshipConventionEJB implements InternshipConventionEJBLocal {
-	
+
 	@PersistenceContext
 	EntityManager em;
 
 	@Override
-	public void addInternshipConvention(InternshipConvention inter,long id) {
+	public void addInternshipConvention(InternshipConvention inter, long id) {
 
 		Student std = em.find(Student.class, id);
-		
-		/*String queryStr = "SELECT FROM IC " +  InternshipConvention.class.getName() + " WHERE"
-				+ " IC.student.id =: studentId";
-		
-		List<InternshipConvention> ics = em.createQuery(queryStr).setParameter("studentId", id).getResultList();
-		
-		
-		// If an internship convention of this student exists then leave.
-		if(ics == null )*/
-		
-		List<InternshipConvention> ics = em.createQuery("SELECT s.internshipConvention FROM " +  Student.class.getName() + "s WHERE  s.student.id =: studentId").setParameter("studentId", id).getResultList();
-if(ics.size() <0 )
-		
+
+		/*
+		 * String queryStr = "SELECT FROM IC " + InternshipConvention.class.getName() +
+		 * " WHERE" + " IC.student.id =: studentId";
+		 * 
+		 * List<InternshipConvention> ics =
+		 * em.createQuery(queryStr).setParameter("studentId", id).getResultList();
+		 * 
+		 * 
+		 * // If an internship convention of this student exists then leave. if(ics ==
+		 * null )
+		 */
+
+		List<InternshipConvention> ics = em.createQuery(
+				"SELECT SI FROM " + InternshipConvention.class.getName() + " SI WHERE  SI.student.id = :studentId")
+				.setParameter("studentId", id).getResultList();
+		if (ics != null && ics.size() > 0)
+			return;
+
 		em.persist(inter);
 
-	
 	}
 
 	@Override
 	public List<InternshipConvention> getAllInternshipConvention() {
-		
+
 		return em.createQuery("SELECT c from InternshipConvention c").getResultList();
-		
+
 	}
+
 	@Override
-	public int removeConvention(long  id) {
-		
+	public int removeConvention(long id) {
+
 		InternshipConvention u = em.find(InternshipConvention.class, id);
-	
-		System.out.println("Debug : "+u);
-		if(u != null ) {
-			
+
+		System.out.println("Debug : " + u);
+		if (u != null) {
+
 			em.remove(u);
 			return 1;
 		}
 		return 0;
-		
+
 	}
 
 }
