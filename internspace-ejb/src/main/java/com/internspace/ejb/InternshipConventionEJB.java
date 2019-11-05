@@ -24,17 +24,20 @@ public class InternshipConventionEJB implements InternshipConventionEJBLocal {
 
 		Student std = em.find(Student.class, id);
 		
-		String queryStr = "SELECT FROM IC " +  InternshipConvention.class.getName() + " WHERE"
-				+ " IC.student.id = :studentId";
+		/*String queryStr = "SELECT FROM IC " +  InternshipConvention.class.getName() + " WHERE"
+				+ " IC.student.id =: studentId";
 		
 		List<InternshipConvention> ics = em.createQuery(queryStr).setParameter("studentId", id).getResultList();
 		
 		
 		// If an internship convention of this student exists then leave.
-		if(ics != null && ics.size() > 0)
-			return;
+		if(ics == null )*/
+		
+		List<InternshipConvention> ics = em.createQuery("SELECT s.internshipConvention FROM " +  Student.class.getName() + "s WHERE  s.student.id =: studentId").setParameter("studentId", id).getResultList();
+if(ics.size() <0 )
 		
 		em.persist(inter);
+
 	
 	}
 

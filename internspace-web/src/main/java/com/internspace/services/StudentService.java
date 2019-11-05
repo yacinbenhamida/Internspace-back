@@ -133,6 +133,8 @@ public class StudentService {
 		 return Studentservice.getAllStudentNodisabled();
 	};
 	
+	
+	//mail de refus
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("mail")

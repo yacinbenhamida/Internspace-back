@@ -78,6 +78,9 @@ public class Student extends User {
 	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
 	Set<StudentFYPSubject> studentSubjects;
 	
+	@OneToOne(mappedBy = "student", fetch = FetchType.LAZY)
+	InternshipConvention internshipConvention;
+	
 	public Student() {
 		// TODO Auto-generated constructor stub
 	}
