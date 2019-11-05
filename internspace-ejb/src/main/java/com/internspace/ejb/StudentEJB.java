@@ -107,7 +107,7 @@ public class StudentEJB implements StudentEJBLocal{
 	public void sendMail(String text,String cin) {
 		
 		
-		   Random rand = new Random();
+		/*   Random rand = new Random();
 		   String Xsi ="abcdefghijklmnopqrstuvwxyz";
 		   final String Gamm ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";  
 		   final String Iot = "1234567890";
@@ -137,7 +137,7 @@ public class StudentEJB implements StudentEJBLocal{
 				}
 		   }
 		
-		   
+		   */
 	  
 		
 		
@@ -153,31 +153,18 @@ public class StudentEJB implements StudentEJBLocal{
 		
 		
 		
-			String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
+			String subject1 = "Vous n'êtes pas autorisé a passer le PFE "+text ;
 		    
-		
+		String text1=" refus de PFE";
 		for(int i=0;i<ls.size();i++) {
-			if(ls.get(i).getCin().equals(cin)) {
-				ls3.add(ls.get(i));
-				  String subject = "vous êtes autorisé a passer votre PFE "
-				    		+ "voici votre mot de passe " + demo ;
-				  
-				  ls.get(i).setPassGenerated(demo);
-				//ls3.forEach(x->mail.send(x.getEmail(),text,subject));
-				try {
-					mail.sendMail(ls.get(i).getEmail(), text, subject);
-				} catch (MessagingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}}
+	
 		
 		
 		for(int j=0;j<ls1.size();j++) {
 			if(ls1.get(j).getCin().equals(cin)) {
 				ls4.add(ls1.get(j));
 				try {
-					mail.sendMail(ls1.get(j).getEmail(), text, subject1);
+					mail.sendMail(ls1.get(j).getEmail(), text1, subject1);
 				} catch (MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -186,6 +173,7 @@ public class StudentEJB implements StudentEJBLocal{
 			}
 		}
 		}
+	}
 		
 		
 		
