@@ -15,11 +15,11 @@ public class UserEJB implements UserEJBLocal{
 	@Override
 	public User verifyLoginCredentials(String username, String password) {
 		System.out.println(username + " "+password);
-		Query query = em.createQuery("select u from User u where u.username = :username AND u.password = :password")
+		Query query = em.createQuery("select DISTINCT(u) from User u where u.username = :username AND u.password = :password")
 				.setParameter("username",username).setParameter("password", password);
 		if(!query.getResultList().isEmpty()) {
 			System.out.println("user found, authenticating");
-			return (User) query.getSingleResult();
+			return (User) query.getResultList().get(0);
 		}
 		System.out.println("user not found...");
 		return null;

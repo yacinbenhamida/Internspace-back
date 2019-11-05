@@ -15,6 +15,8 @@ public interface StudentEJBLocal {
 	
 	
 	public void addStudent(Student std);
+	public Student editStudent(Student std);
+	public int removeStudent(long  id);
 	public  List<Student> getAll();
 	public  List<Student> getAllStudentSaved();
 	public  List<Student> getAllStudentLateYear();

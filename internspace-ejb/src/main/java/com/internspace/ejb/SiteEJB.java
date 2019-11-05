@@ -18,7 +18,6 @@ public class SiteEJB implements SiteEJBLocal{
 
 	@Override
 	public int addSite(Site site) {
-		System.out.println("addSite: " + site);
 		em.persist(site);
 		return 1;
 	}
@@ -44,16 +43,6 @@ public class SiteEJB implements SiteEJBLocal{
 		return 0;
 	}
 
-	@Override
-	public int setInternshipDirector(long idSite, long idEmployee) {
-		Query query = em.createQuery("UPDATE SITE s SET s.internshipDirector_user_id=:idEmployee"
-				+ "WHERE s.site_id=:idSite ");
-		query.setParameter("idEmployee", idEmployee);
-		query.setParameter("idDepartement", idSite);
-		int result = query.executeUpdate();
-		System.out.println("result:"+result);
-		return result;
-	}
 	
 	
 }

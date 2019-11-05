@@ -28,7 +28,7 @@ public class UniversityService {
 	public Response addUniversity(University university) {
 		int result = universityServices.addUniversity(university);
 		if(result == 1) {
-			return Response.status(Response.Status.OK).entity(university).build();
+			return Response.status(Response.Status.OK).entity("Successfully added University: \n"+university.toString()).build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
 	}
@@ -39,7 +39,7 @@ public class UniversityService {
 	public Response updateUniversity(University university) {
 		int result = universityServices.updateUniversity(university);
 		if(result == 1) {
-			return Response.status(Response.Status.OK).entity(university).build();
+			return Response.status(Response.Status.OK).entity("Successfully updated University: \n"+university.toString()).build();
 		}
 		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
 	}

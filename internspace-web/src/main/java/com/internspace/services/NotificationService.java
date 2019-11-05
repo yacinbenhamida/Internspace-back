@@ -54,7 +54,9 @@ public class NotificationService {
 	
 	@DELETE
 	@Path("delete/{id}")
-	public Response deleteNotification(long id) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteNotification(
+			@PathParam("id") long id) {
 		boolean result = service.removeNotification(id);
 		if(result) {
 			return Response.status(Response.Status.OK).entity("removed").build();
@@ -63,7 +65,6 @@ public class NotificationService {
 	}
 	@GET
 	@Path("history/{userId}")
-	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getNotificationHistoryOfUser(@PathParam("userId")long userId) {
 		List<Notification> res = service.getNotificationHistoryOfUser(userId);
@@ -75,7 +76,6 @@ public class NotificationService {
 		return Response.status(Response.Status.NOT_FOUND).entity("no records").build();
 	}
 
-	@Secured
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listAll() {

@@ -100,9 +100,9 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllSheetsWithNoMarks() {
-		Query q =   service.createQuery("SELECT f from FYPFile f where f.finalMark = NULL OR f.finalMark = 0  group by f.id"
-				+ " HAVING (SELECT COUNT(i.id) FROM fyp_intervention i where i.fypFile.id = f.id "
-				+ " AND (i.givenMark = NULL OR i.givenMark = 0) )>0");
+		Query q =   service.createQuery("SELECT f from FYPFile f where (f.finalMark = NULL OR f.finalMark = 0) AND f.fileStatus = 'confirmed' "
+				+ " AND ((SELECT COUNT(i.id) FROM fyp_intervention i where (i.fypFile.id = f.id)  AND (i.givenMark = NULL OR i.givenMark = 0)) > 0 "
+				+ " OR  (SELECT COUNT(i.id) FROM fyp_intervention i where i.fypFile.id = f.id) = 0)");
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -273,6 +273,13 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		}
 		
 		return null;
+	}
+
+	@Override
+	public List<FYPFile> allFYPfilesWatingForMarkFrom() {
+		Query query = service.createQuery("SELECT f from FYPFile f, fyp_intervention interv where f.id = interv.fypFile.id AND"
+				+ " interv.givenMark = 0 AND (interv.teacherRole = 'reporter' OR interv.teacherRole='reporter')");
+			return query.getResultList();
 	}
 
 	

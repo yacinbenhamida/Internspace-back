@@ -11,8 +11,9 @@ import javax.persistence.TypedQuery;
 
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPSubject;
-
+import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.university.University;
 import com.internspace.entities.users.Company;
@@ -329,4 +330,8 @@ public class DashboardEJB implements DashboardEJBLocal {
 		return out;
 	}
 
+
+
+
+	
 }

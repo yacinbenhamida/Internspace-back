@@ -130,8 +130,13 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	public List<FYPFile> getFYPFileListByCategory(String category) {
 		List<FYPFile> ls = new ArrayList<FYPFile>();
 		FYPCategory cc  =(FYPCategory)em.createQuery("FROM FYPCategory f WHERE f.name =:name").setParameter("name",category).getSingleResult();
-		 if(cc!= null)
-			 ls = em.createQuery("FROM FYPFile f WHERE :c MEMBER OF f.categories").setParameter("c", cc).getResultList();
+		 
+		if(cc == null)
+			return null;
+		
+		System.out.println("category: " + cc.getName());
+		if(cc!= null)
+			 ls = em.createQuery("FROM FYPFile f  JOIN FETCH f.categories CS WHERE CS.name = :name").setParameter("name", category).getResultList();
 		return ls;
 	}
 

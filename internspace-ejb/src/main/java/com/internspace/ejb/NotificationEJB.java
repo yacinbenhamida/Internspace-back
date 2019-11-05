@@ -23,8 +23,8 @@ public class NotificationEJB implements NotificationEJBLocal{
 	public Notification addNotification(long idFrom, long idTo, String content) {
 		Notification notification = new Notification();
 		notification.setContent(content);
-		User reciever = em.find(Student.class, idTo);
-		User sender = em.find(Employee.class, idFrom);
+		User reciever = em.find(User.class, idTo);
+		User sender = em.find(User.class, idFrom);
 		notification.setSender(sender);
 		notification.setReciever(reciever);
 		notification.setSeen(false);

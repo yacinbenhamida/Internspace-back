@@ -153,9 +153,14 @@ public class FYPSheetService {
 	@Path("confirmed")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllAcceptedSheets() {
+		if(fypSheetService.getAllSheets()!=null) {
 			List<FYPFile> sheets = fypSheetService.getAllSheets().stream()
-					.filter(x->x.getFileStatus().equals(FYPFileStatus.confirmed)).collect(Collectors.toList());		
-			return Response.status(Response.Status.OK).entity(sheets).build();
+					.filter(x->x.getFileStatus().equals(FYPFileStatus.confirmed) && x.getFileStatus()!=null ).collect(Collectors.toList());	
+			if(sheets!=null) {
+				return Response.status(Response.Status.OK).entity(sheets).build();
+			}
+			}
+			return Response.status(Response.Status.OK).entity("norecords").build();
 	}
 	
 	@GET
@@ -164,7 +169,12 @@ public class FYPSheetService {
 	public Response getAllSheetsPending() {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheetsPending()).build();
 	}
-	
+	@GET
+	@Path("withNoMarks")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response allFYPfilesWatingForMarkFrom() {
+		return Response.status(Response.Status.OK).entity(fypSheetService.allFYPfilesWatingForMarkFrom()).build();
+	}
 	
 	// consulter l'etat de sa fichePFE et l'envoi d'un mail
 	@GET
