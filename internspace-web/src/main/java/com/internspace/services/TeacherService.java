@@ -81,10 +81,10 @@ public class TeacherService {
 	}
 	
 	@PUT
-	@Path("edit")
+	@Path("/edit/{id}/{id2}")
 	
-	public void editFYPSheet(@QueryParam(value="id")long id) {
-		service.ValidateMajorModification(id);
+	public void editFYPSheet(@PathParam(value="id")long id,@PathParam(value="id2")long id2) {
+		service.ValidateMajorModification(id,id2);
 		
 		
 	}
