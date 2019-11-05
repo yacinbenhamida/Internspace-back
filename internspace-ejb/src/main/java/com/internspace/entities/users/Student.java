@@ -214,10 +214,11 @@ public class Student extends User {
 		this.fypFile = fypFile;
 	}
 
+	/*
 	public InternshipConvention getInternshipConvention() {
 		return internshipConvention;
 	}
-
+	 */
 	public void setInternshipConvention(InternshipConvention internshipConvention) {
 		this.internshipConvention = internshipConvention;
 	}

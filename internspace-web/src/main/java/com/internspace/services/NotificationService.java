@@ -54,7 +54,9 @@ public class NotificationService {
 	
 	@DELETE
 	@Path("delete/{id}")
-	public Response deleteNotification(long id) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteNotification(
+			@PathParam("id") long id) {
 		boolean result = service.removeNotification(id);
 		if(result) {
 			return Response.status(Response.Status.OK).entity("removed").build();

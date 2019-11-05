@@ -14,7 +14,7 @@ import com.internspace.entities.users.Student;
 
 
 @Stateless
-public class IternshipConventionEJB implements InternshipConventionEJBLocal {
+public class InternshipConventionEJB implements InternshipConventionEJBLocal {
 	
 	@PersistenceContext
 	EntityManager em;
@@ -23,15 +23,18 @@ public class IternshipConventionEJB implements InternshipConventionEJBLocal {
 	public void addInternshipConvention(InternshipConvention inter,long id) {
 
 		Student std = em.find(Student.class, id);
-		if(std!= null) {
-			if(std.getInternshipConvention() == null) {
-				inter.setStudent(std);
-				em.persist(inter);
-				}
+		
+		String queryStr = "SELECT FROM IC " +  InternshipConvention.class.getName() + " WHERE"
+				+ " IC.student.id = :studentId";
+		
+		List<InternshipConvention> ics = em.createQuery("queryStr").setParameter("studentId", id).getResultList();
 		
 		
-		}
-	
+		// If an internship convention of this student exists then leave.
+		if(ics != null && ics.size() > 0)
+			return;
+		
+		em.persist(inter);
 	
 	}
 
