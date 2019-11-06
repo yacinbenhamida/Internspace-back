@@ -252,9 +252,11 @@ public class InternshipDirectorServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("acceptModifMajor")
 	public Response acceptModification(@QueryParam(value = "id") long id){
-		service.acceptModification(id);
-		
+		boolean res= service.acceptModification(id);
+		if (res == true)
 		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		else
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("FypFile not exist or already confirmed").build();
 	};
 	
 }

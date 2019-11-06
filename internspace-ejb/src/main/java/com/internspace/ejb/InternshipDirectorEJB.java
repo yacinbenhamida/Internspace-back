@@ -673,7 +673,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void acceptModification(long id) {
+	public boolean acceptModification(long id) {
 		/*FYPFileStatus f = null;
 		FYPFile s= em.find(FYPFile.class, id);
 		if(s.getFileStatus().equals(f.pending))
@@ -686,13 +686,15 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		
 		FYPFileModification f = em.find(FYPFileModification.class, id);
 		
-		if(f == null)
-			return;
-		
-		if(f.getIsChanged()== false) {
-			f.setIsConfirmed(true);
+		if(f == null || f.getIsConfirmed() == true)
+		{
+			return false;
 		}
-		
+		if(f.getIsChanged()== true) {
+			f.setIsConfirmed(true);
+			return true;
+		}
+		return false;
 	}
 
 

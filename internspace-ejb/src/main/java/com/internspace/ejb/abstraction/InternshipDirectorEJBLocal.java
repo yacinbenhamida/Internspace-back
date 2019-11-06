@@ -52,7 +52,7 @@ public interface InternshipDirectorEJBLocal {
 	public Student acceptPFE(long id);
 	public Employee getInternshipDirectorById(long id);
 	//acept modification majeure
-	void acceptModification(long id);
+	boolean acceptModification(long id);
 	
 	
 	
