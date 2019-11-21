@@ -260,7 +260,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 			if(file.getId()==fm.get(i).getFyp().getId()) {
 				
 				if((file.getProblematic().equals(fm.get(i).getProblematic())) && file.getFeatures().equals(fm.get(i).getFeatures())) {
-					return file;
+					return fm.get(i).getFyp();
 				}
 				else
 				{
@@ -271,6 +271,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 					features.addFYPFeatures(file.getFeatures());
 					//file.getFeatures().iterator().next().setFypFile(file);
 					//features.addFYPFeature(file.getFeatures().iterator().next());
+					return fm.get(i).getFyp();
 			
 				}
 			}

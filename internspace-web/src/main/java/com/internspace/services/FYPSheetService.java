@@ -205,7 +205,7 @@ public class FYPSheetService {
 	public Response editFYPSheett(FYPFile file) {
 		FYPFile res = fypSheetService.editFYPSheett(file);
  
-			return Response.status(Response.Status.OK).entity("Modification Major"+res).build();
+			return Response.status(Response.Status.OK).entity("Modification Major").build();
 		
 		
 	}

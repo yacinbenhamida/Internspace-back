@@ -30,6 +30,8 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
         Set<FYPFeature> set = new HashSet<FYPFeature>(ff);
 
 		f.setProblematic(file.getProblematic());
+		f.setIsChanged(false);
+		f.setIsConfirmed(false);
 	
 		
 		f.setFyp(file);
