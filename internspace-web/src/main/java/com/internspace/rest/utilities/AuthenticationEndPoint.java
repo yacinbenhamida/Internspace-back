@@ -41,10 +41,10 @@ public class AuthenticationEndPoint {
 	@EJB
 	StudentEJBLocal studentService;
 	
-	User connectedUser;
+	User connectedUser = new User();
 	
 	@POST
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	//// this is a first alternative (with formParam)
 	public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String password) {
@@ -56,7 +56,7 @@ public class AuthenticationEndPoint {
 			// authenticate(cred.getUsername(), cred.getPassword());
 			if(found == 1) {
 				// Issue a token for the user
-				String token = issueToken(username);
+				Token token = issueToken(username);
 				// String token = issueToken(cred.getUsername());
 				// Return the token on the response
 				return Response.ok(token).build();
@@ -89,7 +89,7 @@ public class AuthenticationEndPoint {
 
 	}
 
-	private String issueToken(String username) {
+	private Token issueToken(String username) {
 		// Issue a token (can be a random String persisted to a database or a JWT token)
 		// The issued token must be associated to a user
 		// Return the issued token
@@ -99,14 +99,17 @@ public class AuthenticationEndPoint {
 		System.out.println("the key is : " + key.hashCode());
 
 		System.out.println("uriInfo.getAbsolutePath().toString() : " + uriInfo.getAbsolutePath().toString());
-		System.out.println("Expiration date: " + toDate(LocalDateTime.now().plusMinutes(15L)));
+		System.out.println("Expiration date: " + toDate(LocalDateTime.now().plusMinutes(120L)));
 
 		String jwtToken = Jwts.builder().setSubject(username).setIssuer(uriInfo.getAbsolutePath().toString())
-				.setIssuedAt(new Date()).setExpiration(toDate(LocalDateTime.now().plusMinutes(15L)))
+				.setIssuedAt(new Date()).setExpiration(toDate(LocalDateTime.now().plusMinutes(120L)))
 				.signWith(SignatureAlgorithm.HS512, key).compact();
-
+		Token result = new Token(jwtToken, toDate(LocalDateTime.now().plusMinutes(120L)));
+		result.setUser(userService.getUserByUsername(username));
 		System.out.println("the returned token is : " + jwtToken);
-		return jwtToken;
+		System.out.println("the fully updated token is "+result);
+		
+		return result;
 	}
 
 	// ======================================
