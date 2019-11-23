@@ -31,7 +31,10 @@ public class FYPDefense implements Serializable {
 	@Column(name = "fyp_defense_id")
 	long id;
 	
-	@Temporal(TemporalType.DATE)
+	@Column(name = "classroom")
+	String classroom;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	Date defenseDate;
 	
 	@OneToOne
@@ -60,6 +63,14 @@ public class FYPDefense implements Serializable {
 
 	public void setFyp_file_defense(FYPFile fyp_file_defense) {
 		this.fyp_file_defense = fyp_file_defense;
+	}
+
+	public String getClassroom() {
+		return classroom;
+	}
+
+	public void setClassroom(String classroom) {
+		this.classroom = classroom;
 	}
 	
 	

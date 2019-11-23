@@ -114,8 +114,10 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("authentification")
-	public void authentification(@QueryParam(value = "cin") String cin,@QueryParam(value = "password") String password){
-		Studentservice.authentification(cin,password);
+	public Student authentification(@QueryParam(value = "cin") String cin,@QueryParam(value = "password") String password){
+		Student s= Studentservice.authentification(cin,password);
+		
+		return s;
 	};
 	
 

@@ -224,9 +224,9 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public void modificationMajeur(FYPFile file) {
+	public Boolean modificationMajeur(FYPFile file) {
 
-		
+		boolean res = false;
 		editFYPSheet(file);
 		file.getProblematic();
 		List<FYPFile> fm = serviceModif.getAllFilesModification();
@@ -234,15 +234,20 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		for(int i=0;i<fm.size();i++) {
 			if(file.equals(fm.get(i))) {
 				if(file.getProblematic().equals(fm.get(i).getProblematic())) {
-					System.out.println("modif mineur");
+					
+					return res;
+					
 				}
 				else
 				{
-				//serviceModif.
-					System.out.println("modif major");
+					res= true;
+				return res;
+					
 				}
 			}
 		}
+		return res;
+	
 		//if(file.setFeatures(features);)
 		
 	}
@@ -255,7 +260,7 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 			if(file.getId()==fm.get(i).getFyp().getId()) {
 				
 				if((file.getProblematic().equals(fm.get(i).getProblematic())) && file.getFeatures().equals(fm.get(i).getFeatures())) {
-					return file;
+					return fm.get(i).getFyp();
 				}
 				else
 				{
@@ -266,13 +271,14 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 					features.addFYPFeatures(file.getFeatures());
 					//file.getFeatures().iterator().next().setFypFile(file);
 					//features.addFYPFeature(file.getFeatures().iterator().next());
+					return fm.get(i).getFyp();
 			
 				}
 			}
 			
 		}
 		
-		return null;
+		return file;
 	}
 
 	@Override

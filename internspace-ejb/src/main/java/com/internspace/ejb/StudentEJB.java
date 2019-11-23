@@ -326,8 +326,7 @@ public class StudentEJB implements StudentEJBLocal {
 	public List<FYPFile> getAllSheetsPendingStudent() {
 
 		return em
-				.createQuery("SELECT s.fypFile.title,s from " + Student.class.getName()
-						+ " s  where s.fypFile.fileStatus =:status")
+				.createQuery("SELECT s.fypFile.title,s from " + Student.class.getName()	+ " s  where s.fypFile.fileStatus =:status")
 				.setParameter("status", FYPFileStatus.pending).getResultList();
 
 	}
@@ -342,18 +341,21 @@ public class StudentEJB implements StudentEJBLocal {
 	public Student authentification(String cin, String password) {
 		List<Student> ls = getAllStudentAutorised();
 		List<String> name = new ArrayList();
+		List<Student> std = new ArrayList();
 		for (int i = 0; i < ls.size(); i++) {
 			if (ls.get(i).getCin().equals(cin) && ls.get(i).getPassGenerated().equals(password)) {
 
 				String FirstName = ls.get(i).getFirstName();
 				String LastName = ls.get(i).getLastName();
-
+                std.add(ls.get(i));
 				name.add(FirstName);
 				name.add(LastName);
+				
+				return ls.get(i);
 			}
 		}
 
-		return (Student) name;
+		return null ;
 	}
 
 	@Override

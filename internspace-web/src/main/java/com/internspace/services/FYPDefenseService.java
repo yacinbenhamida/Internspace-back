@@ -1,6 +1,7 @@
 package com.internspace.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -58,7 +59,7 @@ public class FYPDefenseService {
 		String defensesGraph = defenseService.generateDefensesGraph(listDefenses);
 		String coloredDefensesGraph = "";
 		try {
-			coloredDefensesGraph = defenseService.getColoredDefensesGraph(defensesGraph);
+			coloredDefensesGraph = defenseService.getColoredDefensesGraph(defensesGraph).toString();
 		} catch (ElementNotFoundException | IOException | GraphParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,5 +68,19 @@ public class FYPDefenseService {
 		return Response.status(Response.Status.OK)
 				.entity(coloredDefensesGraph).build();
 		
+	}
+
+	@GET
+	@Path("getDefensesPlanning")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDefensesPlanning(List<FYPDefense> defensesList) {
+		List<String> classRoomsList = new ArrayList<String>();
+		classRoomsList.add("A1");
+		classRoomsList.add("A2");
+		defenseService.getDefensesPlanning(defensesList,classRoomsList);
+		return Response.status(Response.Status.OK)
+		.entity("Updated Planning").build();
+
 	}
 }

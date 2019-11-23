@@ -193,8 +193,8 @@ public class FYPSheetService {
 	@Consumes(MediaType.APPLICATION_JSON)
 
 	public Response modificationMajeur(FYPFile file) {
-		 fypSheetService.modificationMajeur(file);
-		return 	Response.status(Response.Status.OK).entity("bien").build();
+		 Boolean res = fypSheetService.modificationMajeur(file);
+		return 	Response.status(Response.Status.OK).entity("Modification major"+ res).build();
 	}
 
 	
@@ -205,7 +205,7 @@ public class FYPSheetService {
 	public Response editFYPSheett(FYPFile file) {
 		FYPFile res = fypSheetService.editFYPSheett(file);
  
-			return Response.status(Response.Status.OK).entity(res).build();
+			return Response.status(Response.Status.OK).entity("Modification Major").build();
 		
 		
 	}

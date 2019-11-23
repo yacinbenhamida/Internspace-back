@@ -34,7 +34,7 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getAll();
 	public List<FYPFile> getAllSheetsPending();
 	public FYPFileStatus etatChanged(long id);
-	public void modificationMajeur(FYPFile file);
+	public Boolean modificationMajeur(FYPFile file);
 	public FYPFile editFYPSheett(FYPFile file);
 
 
