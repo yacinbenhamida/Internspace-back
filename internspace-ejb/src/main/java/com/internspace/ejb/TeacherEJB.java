@@ -23,8 +23,8 @@ public class TeacherEJB implements TeacherEJBLocal {
 	
 @Override
 	public List<FYPFile> getPendingFYPFiles() {
-		String ch="pending";
-		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=:x ").setParameter("x", false).getResultList();
+		
+		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.fileStatus = :status").setParameter("status", FYPFileStatus.pending).getResultList();
 	}
 
 @Override
@@ -38,7 +38,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 
 @Override 
 	public List<FYPFile> getSupervisedFYPfiles(long id) {
-		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor')").setParameter("id",id).getResultList();
+		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor	')").setParameter("id",id).getResultList();
 	}
 
 @Override
@@ -57,22 +57,16 @@ public class TeacherEJB implements TeacherEJBLocal {
 	em.merge(f);
 	em.merge(ff);	
 	em.flush();
-		
-	
 	}
 @Override
 	public void ProposeFYPCategory(FYPCategory F) {
-
 em.persist(F);		
 	}
 
 @Override
 public List<FYPFile> getPrevalidatedFiles(long id) {
-	
-	return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=true  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
-
+	return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=true  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id , n.teacherRole='supervisor'").setParameter("id",id).getResultList();
 }
-
 
 
 }
