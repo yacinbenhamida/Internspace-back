@@ -169,10 +169,6 @@ public class FYPFile implements Serializable {
 		this.isPrevalidated = isPrevalidated;
 	}
 
-	public FYPFileStatus getFileStatus() {
-		return fileStatus;
-	}
-
 	public void setFileStatus(FYPFileStatus fileStatus) {
 		this.fileStatus = fileStatus;
 	}

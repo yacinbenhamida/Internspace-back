@@ -18,7 +18,7 @@ import javax.ws.rs.POST;
 import com.internspace.ejb.abstraction.DashboardEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
-
+import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
@@ -153,6 +153,7 @@ public class DashboardService {
 				.header("Access-Control-Max-Age", "1209600").build();
 	}
 	
+	// CURRENT
 	@GET
 	@Path("/company/category/evolution")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -168,6 +169,28 @@ public class DashboardService {
 
 	}
 	
+	// USED
+	@GET
+	@Path("/helper/categories")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCategories() {
+		List<FYPCategory> categories = service.getCategories();
+		
+		return Response.ok(categories).status(200).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Max-Age", "1209600").build();
+	}
+	
+	@GET
+	@Path("/helper/uys")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUniversitaryYears() {
+		List<UniversitaryYear> uys = service.getUniversitaryYears();
+		
+		return Response.ok(uys).status(200).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Max-Age", "1209600").build();
+	}
+	
+	// USED
 	@GET
 	@Path("/internship/per-country")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -101,6 +101,22 @@ public class TeacherService {
 			        .build();
 				
 }
+	@GET
+	@Path("/pending")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetPendingFypFile()
+	{
+		List<FYPFile> fypfiles=service.getPendingFYPFiles();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	
+	
+	
+	
 	
 	
 	
