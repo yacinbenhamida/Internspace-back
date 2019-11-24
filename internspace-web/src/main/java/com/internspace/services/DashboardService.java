@@ -168,6 +168,17 @@ public class DashboardService {
 
 	}
 	
+	@GET
+	@Path("/internship/per-country")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentInternshipPerCountry(@QueryParam("uni") long uniId)
+	{
+		Map<String, List<Student>> out = service.getStudentInternshipPerCountry(uniId);
+				
+		return Response.ok(out).status(200).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Max-Age", "1209600").build();
+		
+	}
 
 
 }

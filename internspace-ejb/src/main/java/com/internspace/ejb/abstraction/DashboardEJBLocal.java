@@ -25,6 +25,6 @@ public interface DashboardEJBLocal {
 	List<FYPCategory> getMostRequestedCategoriesByCompanies();
 	List<FYPCategory> getMostRequestedCategoriesByStudentsOfUni(long uniId);
 	Map<Long, List<FYPSubject>> getInternshipEvolutionPerUYByCategory(long uniId, long categoryId);
-	
+	Map<String, List<Student>> getStudentInternshipPerCountry(long uniId);
 	
 }

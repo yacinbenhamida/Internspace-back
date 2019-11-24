@@ -331,7 +331,53 @@ public class DashboardEJB implements DashboardEJBLocal {
 	}
 
 
+	@Override
+	public Map<String, List<Student>> getStudentInternshipPerCountry(long uniId)
+	{
+		Map<String, List<Student>> out = new HashMap<String, List<Student>>();
+		
+		University uni = em.find(University.class, Long.valueOf(uniId));
 
+		if (uni == null)
+			return null;
+		
+		List<String> uniqueCountryNames = em.createQuery("SELECT DISTINCT(S.country) FROM " + FYPSubject.class.getName() + " S"
+				+ " WHERE "
+				//+ " S.fypFile.student.studyClass.universitaryYear.id = :uniYear"
+				//+ " AND S.fypFile.student.studyClass.classYear = :studyClassYear"
+				+ " S.fypFile.student.studyClass.classOption.departement.site.university.id = :uniId"
+				//+ " AND :category MEMBER OF S.categories"
+				, String.class)
+				//.setParameter("uniYear", uyId)
+				//.setParameter("studyClassYear", uni.getFypClassYear())
+				.setParameter("uniId", uniId)
+				.getResultList();
+		
+		for(String countryName : uniqueCountryNames)
+		{
+			// System.out.println("uniYear: " + uyId + " | studyClassYear: " + uni.getFypClassYear() + " | uniId: " + uniId);
+			
+			List<Student> students = em.createQuery("FROM " + Student.class.getName() + " S"
+					+ " WHERE S.fypFile.subject.country = :countryName",
+					Student.class)
+					.setParameter("countryName", countryName)
+					.getResultList();
+			
+			if(students == null)
+				continue;
+			
+			float allCount = students.size();
+			
+			System.out.println("got allCount: " + allCount);
+			
+			if (allCount == 0)
+				continue;
+			
+			out.put(countryName, students);
+		}
+
+		return out;
+	}
 
 	
 }
