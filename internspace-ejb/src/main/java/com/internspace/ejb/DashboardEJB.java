@@ -358,9 +358,11 @@ public class DashboardEJB implements DashboardEJBLocal {
 			// System.out.println("uniYear: " + uyId + " | studyClassYear: " + uni.getFypClassYear() + " | uniId: " + uniId);
 			
 			List<Student> students = em.createQuery("FROM " + Student.class.getName() + " S"
-					+ " WHERE S.fypFile.subject.country = :countryName",
-					Student.class)
+					+ " WHERE S.fypFile.subject.country = :countryName"
+					+ " AND S.studyClass.classOption.departement.site.university.id = :uniId"
+					, Student.class)
 					.setParameter("countryName", countryName)
+					.setParameter("uniId", uniId)
 					.getResultList();
 			
 			if(students == null)
