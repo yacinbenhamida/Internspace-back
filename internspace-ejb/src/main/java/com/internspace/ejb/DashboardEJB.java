@@ -383,4 +383,18 @@ public class DashboardEJB implements DashboardEJBLocal {
 	}
 
 	
+	// HELPERS
+	
+	@Override
+	public List<FYPCategory> getCategories()
+	{
+		return em.createQuery("FROM " + FYPCategory.class.getName(), FYPCategory.class).getResultList();
+	}
+	
+	@Override
+	public List<UniversitaryYear> getUniversitaryYears()
+	{
+		return em.createQuery("FROM " + UniversitaryYear.class.getName(), UniversitaryYear.class).getResultList();
+	}
+	
 }
