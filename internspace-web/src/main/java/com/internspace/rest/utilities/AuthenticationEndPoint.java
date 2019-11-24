@@ -64,6 +64,7 @@ public class AuthenticationEndPoint {
 			return Response.status(Status.UNAUTHORIZED).build();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 	}
@@ -71,17 +72,20 @@ public class AuthenticationEndPoint {
 	private int authenticate(String username, String password) {
 		// Authenticate against a database, LDAP, file or whatever
 		// Throw an Exception if the credentials are invalid
-		System.out.println("Authenticating user...");
+		System.out.println("From WS Authenticating user...");
 		if(userService.verifyLoginCredentials(username, password) != null) {
 			connectedUser = userService.verifyLoginCredentials(username, password);
+			System.out.println(connectedUser);
 			if(connectedUser.getUserType().equals(UserType.student)) {
 				Student stud = studentService.getStudentById(connectedUser.getId());
-				if(stud.getIsAutorised()== true && stud.getIsDisabled() == false ) {
-					return 1;
-				}
-				return 0;
+				if(stud.getIsAutorised() == true || stud.getIsDisabled() == true ) {
+					System.out.println("student isnt allowed to login (disabled or unauthorized)");
+					return 0;
+				}	
+				System.out.println("ws is here ");
+				return 1;
 			}
-			System.out.println(connectedUser);
+			System.out.println("logged On now : is a "+connectedUser.getUserType()+" : "+connectedUser);
 			return 1;
 		}
 		System.out.println("Auth failed...");

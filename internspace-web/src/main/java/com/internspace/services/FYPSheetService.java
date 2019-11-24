@@ -1,5 +1,6 @@
 package com.internspace.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -147,6 +148,12 @@ public class FYPSheetService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheets() {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheets()).build();
+	}
+	@GET
+	@Path("{depId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllSheetsOfDepartment(@PathParam("depId")int depId) {
+			return Response.status(Response.Status.OK).entity(fypSheetService.getFYPfilesOfDepartment(depId)).build();
 	}
 	
 	@GET
