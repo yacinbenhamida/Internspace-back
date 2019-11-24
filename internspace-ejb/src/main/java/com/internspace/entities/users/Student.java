@@ -177,6 +177,11 @@ public class Student extends User {
 		this.preferedCategories = preferedCategories;
 	}
 
+	public FYPFile getFypFile()
+	{
+		return this.fypFile;
+	}
+	
 	/*
 	 * public Set<StudentFYPSubject> getStudentSubjects() { return studentSubjects;
 	 * }
