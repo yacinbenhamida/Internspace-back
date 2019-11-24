@@ -133,4 +133,10 @@ public class User implements Serializable {
 		this.userType = userType;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", username=" + username + ", password=" + password + ", userType=" + userType + "]";
+	}
+	
 }

@@ -7,5 +7,5 @@ import com.internspace.entities.users.User;
 @Local
 public interface UserEJBLocal {
 	public User verifyLoginCredentials(String username, String password);
-	
+	public User getUserByUsername(String username);
 }

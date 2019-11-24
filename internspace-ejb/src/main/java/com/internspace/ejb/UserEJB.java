@@ -24,5 +24,9 @@ public class UserEJB implements UserEJBLocal{
 		System.out.println("user not found...");
 		return null;
 	}
+	@Override
+	public User getUserByUsername(String username) {
+		return (User) em.createQuery("select u from User u where u.username=:us").setParameter("us", username).getResultList().get(0);
+	}
 
 }

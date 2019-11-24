@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import com.internspace.ejb.abstraction.FileTemplateEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
+import com.internspace.entities.fyp.FYPFile;
 //import com.internspace.ejb.abstraction.FileTemplateEJBLocal;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.FileTemplateElement;
@@ -179,5 +180,29 @@ public class FYPTemplateService {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 	}
+	
+	@GET
+	@Path("/editor/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllByEditor(@QueryParam(value="editorId")long editorId)
+	{
+		List<FileTemplate> fypTemplates = service.getAllByEditor(editorId);
+		
+        return Response.status(Response.Status.OK).entity(fypTemplates).build();
+	}
+	
+	@GET
+	@Path("/find-file/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findFypFileByName(
+			@QueryParam(value="name")String name,
+			@QueryParam(value="n")int n,
+			@QueryParam(value="like")boolean useLike)
+	{
+		List<FYPFile> fypFile = service.findFypFileByName(name, n, useLike);
+        return Response.ok(fypFile).status(200)
+                .build();
+	}
+
 
 }
