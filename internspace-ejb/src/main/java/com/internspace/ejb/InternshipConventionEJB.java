@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.InternshipConventionEJBLocal;
-
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.university.University;
 import com.internspace.entities.users.Student;
@@ -65,6 +65,14 @@ public class InternshipConventionEJB implements InternshipConventionEJBLocal {
 		}
 		return 0;
 
+	}
+
+	@Override
+	public List<Student> getFypConventionStudent(long id) {
+		Student std = em.find(Student.class, id);
+
+		return em.createQuery("SELECT s from " + InternshipConvention.class.getName() + " s  where s.student.id =:id")
+				.setParameter("id", std.getId()).getResultList();
 	}
 
 }

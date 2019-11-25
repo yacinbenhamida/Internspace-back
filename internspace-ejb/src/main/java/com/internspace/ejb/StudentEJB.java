@@ -23,6 +23,7 @@ import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPSheetHistory;
+import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
@@ -426,6 +427,8 @@ public class StudentEJB implements StudentEJBLocal {
 		}
 		return 0;
 	}
+
+
 
 	/*
 	 * @Override public void enregistrer(long cin) {

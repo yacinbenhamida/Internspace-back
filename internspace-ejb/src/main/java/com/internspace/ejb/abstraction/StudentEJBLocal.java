@@ -7,6 +7,7 @@ import javax.ejb.Local;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
 
@@ -42,6 +43,7 @@ public interface StudentEJBLocal {
 	public List<FYPFile> getAllSheetsPendingByStudent(String cin);
 	public List<Student> getAllStudentFile(long id);
 	public List<FYPFile> getAllStudentFileByFil(long id);
+	
 	
 	
 	public Student getStudentById(long id);
