@@ -153,7 +153,8 @@ public class FYPSheetService {
 	@Path("{depId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheetsOfDepartment(@PathParam("depId")int depId) {
-			return Response.status(Response.Status.OK).entity(fypSheetService.getFYPfilesOfDepartment(depId)).build();
+			List<FYPFile> res = fypSheetService.getFYPfilesOfDepartment(depId);
+			return Response.status(Response.Status.OK).entity(res).build();
 	}
 	
 	@GET

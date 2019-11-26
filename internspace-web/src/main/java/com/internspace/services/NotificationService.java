@@ -83,4 +83,6 @@ public class NotificationService {
 				.entity(service.getAll()).build();
 		
 	}
+
+	
 }
