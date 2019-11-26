@@ -228,6 +228,10 @@ public class FYPFile implements Serializable {
 	public Set<FYPFeature> getFeatures() {
 		return features;
 	}
+
+	public FYPFileStatus getFileStatus() {
+		return fileStatus;
+	}
 	
 	
 

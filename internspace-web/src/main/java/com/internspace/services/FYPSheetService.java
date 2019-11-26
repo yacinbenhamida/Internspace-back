@@ -162,7 +162,7 @@ public class FYPSheetService {
 	public Response getAllAcceptedSheets() {
 		if(fypSheetService.getAllSheets()!=null) {
 			List<FYPFile> sheets = fypSheetService.getAllSheets().stream()
-					.filter(x->x.getFileStatus().equals(FYPFileStatus.confirmed) && x.getFileStatus()!=null ).collect(Collectors.toList());	
+					.filter(x->x.getIsConfirmed()).collect(Collectors.toList());	
 			if(sheets!=null) {
 				return Response.status(Response.Status.OK).entity(sheets).build();
 			}
