@@ -33,8 +33,7 @@ public class Classroom implements Serializable {
 	
 	@Column(name="name")
 	String name;
-	@Column(name="numberOfStudents")
-	int numberOfStudents;
+	
 
 	/*
 	 * Associations

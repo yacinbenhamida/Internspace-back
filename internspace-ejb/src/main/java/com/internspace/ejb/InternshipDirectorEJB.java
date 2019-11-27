@@ -15,10 +15,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -26,6 +28,8 @@ import javax.persistence.Query;
 import com.internspace.ejb.abstraction.FYPFileArchiveEJBLocal;
 import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
+import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.Notification;
 import com.internspace.entities.fyp.FYPCategory;
@@ -57,6 +61,8 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	FYPFileArchiveEJBLocal serviceArchive;
 	@Inject
 	FYPFileModificationEJBLocal servicemodif;
+	@Inject
+	StudentEJBLocal studentserv;
 
 	@Override
 	public List<Student> getLateStudentsList(int year) {
@@ -583,10 +589,102 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	@Override
 	public Student acceptPFE(long id) {
 		Student s= em.find(Student.class, id);
+		
+		if(s == null)
+			return null;
+		
 		if (s.getIsSaved()==true) {
 		s.setIsAutorised(true);
 		em.persist(s);
 		em.flush();
+		
+		//password auto generaed
+		Random rand = new Random();
+		   String Xsi ="abcdefghijklmnopqrstuvwxyz";
+		   final String Gamm ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";  
+		   final String Iot = "1234567890";
+		   final String Zeta="&~#|`-_)('/?,;:.";
+		   String demo =""; 
+		   double x =0;
+		   
+		   for (int k=0;k<100;k++){
+				demo="";
+			//randomisation des caractères selon leur nombre par type définis ,entre six et dix caratères
+			        while ((demo.length() != 6)&& (demo.length() != 7)&& (demo.length() != 8)&& (demo.length() != 9)&& (demo.length() != 10)) {
+			//selection aleatoire du type de caractère puis selection parmis les differents modèles de caractères              
+			              int rPick=rand.nextInt(4);
+			           if (rPick ==0) {
+				      int erzat=rand.nextInt(25);
+			              demo+=Xsi.charAt(erzat);
+			         } else if (rPick == 1) {
+				      int erzat=rand.nextInt(9);
+				      demo+=Iot.charAt(erzat);
+			         } else if (rPick==2) {
+			              int erzat=rand.nextInt(25);
+			              demo+=Gamm.charAt(erzat);
+			         }else if (rPick==3) {
+			              int erzat=rand.nextInt(15);
+			              demo+=Zeta.charAt(erzat);
+				}
+				}
+		   }
+		
+		//Mail
+		   
+		   Mail_API mail = new Mail_API();
+			List<Student> ls = studentserv.getAllStudentAutorised();
+			List<Student> ls1 = studentserv.getAllStudentNodisabled();
+			List<Student> ls2 = studentserv.getAllStudentSaved();
+			List<Student> ls3 = new ArrayList();
+			List<Student> ls4 = new ArrayList();
+			
+			
+			
+				String subject1 = "Vous n'êtes pas autorisé a paser le PFE " ;
+				String text="Bonjour Email Administration";
+			    
+			
+			for(int i=0;i<ls.size();i++) {
+				if(ls.get(i).getCin().equals(s.getCin())) {
+					ls3.add(ls.get(i));
+					  String subject = "vous êtes autorisé a passer votre PFE "
+					    		+ "voici votre mot de passe " + demo ;
+					  
+					  ls.get(i).setPassGenerated(demo);
+					//ls3.forEach(x->mail.send(x.getEmail(),text,subject));
+					try {
+						mail.sendMail(ls.get(i).getEmail(), text, subject);
+					} catch (MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}}
+			
+			if(ls1 == null)
+				return null;
+			
+			for(int j=0;j<ls1.size();j++) {
+				if(ls1.get(j).getCin().equals(s.getCin())) {
+					ls4.add(ls1.get(j));
+					try {
+						mail.sendMail(ls1.get(j).getEmail(), text, subject1);
+					} catch (MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//ls4.forEach(x->mail.send(x.getEmail(),text,subject1));
+				}
+			}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		return s;
 		}
 		return null;
@@ -609,7 +707,7 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
-	public void acceptModification(long id) {
+	public boolean acceptModification(long id) {
 		/*FYPFileStatus f = null;
 		FYPFile s= em.find(FYPFile.class, id);
 		if(s.getFileStatus().equals(f.pending))
@@ -621,10 +719,16 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		em.flush();*/
 		
 		FYPFileModification f = em.find(FYPFileModification.class, id);
+		
+		if(f == null || f.getIsConfirmed() == true)
+		{
+			return false;
+		}
 		if(f.getIsChanged()== true) {
 			f.setIsConfirmed(true);
+			return true;
 		}
-		
+		return false;
 	}
 
 

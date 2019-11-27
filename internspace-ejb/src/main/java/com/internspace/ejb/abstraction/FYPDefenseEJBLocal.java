@@ -2,7 +2,9 @@ package com.internspace.ejb.abstraction;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.internspace.entities.fyp.FYPDefense;
 import com.internspace.entities.fyp.FYPIntervention;
@@ -15,6 +17,6 @@ public interface FYPDefenseEJBLocal {
 	List<FYPIntervention> getDefenseInterventions(long idDefense);
 	List<Integer> getDefenseReporterAndSupervisorID(long idDefense);
 	String generateDefensesGraph(List<FYPDefense> defensesList);
-	String getColoredDefensesGraph(String defensesGraph) throws IOException, ElementNotFoundException, GraphParseException;
-	void getDefensesPlanning(Date day, List<FYPDefense> defensesList, List<Classroom> classRoomsList);
+	Map getColoredDefensesGraph(String defensesGraph) throws IOException, ElementNotFoundException, GraphParseException;
+	void getDefensesPlanning(List<FYPDefense> defensesList, List<String> classRoomsList);
 }

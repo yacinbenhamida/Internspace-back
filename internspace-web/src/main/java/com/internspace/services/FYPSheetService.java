@@ -1,5 +1,6 @@
 package com.internspace.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -148,6 +149,13 @@ public class FYPSheetService {
 	public Response getAllSheets() {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheets()).build();
 	}
+	@GET
+	@Path("{depId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllSheetsOfDepartment(@PathParam("depId")int depId) {
+			List<FYPFile> res = fypSheetService.getFYPfilesOfDepartment(depId);
+			return Response.status(Response.Status.OK).entity(res).build();
+	}
 	
 	@GET
 	@Path("confirmed")
@@ -155,7 +163,7 @@ public class FYPSheetService {
 	public Response getAllAcceptedSheets() {
 		if(fypSheetService.getAllSheets()!=null) {
 			List<FYPFile> sheets = fypSheetService.getAllSheets().stream()
-					.filter(x->x.getFileStatus().equals(FYPFileStatus.confirmed) && x.getFileStatus()!=null ).collect(Collectors.toList());	
+					.filter(x->x.getIsConfirmed()).collect(Collectors.toList());	
 			if(sheets!=null) {
 				return Response.status(Response.Status.OK).entity(sheets).build();
 			}
@@ -193,8 +201,8 @@ public class FYPSheetService {
 	@Consumes(MediaType.APPLICATION_JSON)
 
 	public Response modificationMajeur(FYPFile file) {
-		 fypSheetService.modificationMajeur(file);
-		return 	Response.status(Response.Status.OK).entity("bien").build();
+		 Boolean res = fypSheetService.modificationMajeur(file);
+		return 	Response.status(Response.Status.OK).entity("Modification major"+ res).build();
 	}
 
 	
@@ -205,7 +213,7 @@ public class FYPSheetService {
 	public Response editFYPSheett(FYPFile file) {
 		FYPFile res = fypSheetService.editFYPSheett(file);
  
-			return Response.status(Response.Status.OK).entity(res).build();
+			return Response.status(Response.Status.OK).entity("Modification Major").build();
 		
 		
 	}

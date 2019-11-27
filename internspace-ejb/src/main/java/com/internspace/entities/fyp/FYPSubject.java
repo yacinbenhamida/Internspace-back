@@ -138,10 +138,11 @@ public class FYPSubject implements Serializable {
 		this.fypFile = fypFile;
 	}
 
-	/*public Company getCompany() {
+	public Company getCompany() {
 		return company;
 	}
 
+	/*
 	public void setCompany(Company company) {
 		this.company = company;
 	}*/

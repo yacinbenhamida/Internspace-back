@@ -2,18 +2,22 @@ package com.internspace.ejb;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.FYPDefenseEJBLocal;
 import com.internspace.entities.fyp.FYPDefense;
@@ -101,7 +105,7 @@ public class FYPDefenseEJB implements FYPDefenseEJBLocal {
 	}
 
 	@Override
-	public String getColoredDefensesGraph(String defensesGraph)
+	public Map getColoredDefensesGraph(String defensesGraph)
 			throws IOException, ElementNotFoundException, GraphParseException {
 		Graph graph = new DefaultGraph("Welsh Powell Test");
 		StringReader reader = new StringReader(defensesGraph);
@@ -113,20 +117,67 @@ public class FYPDefenseEJB implements FYPDefenseEJBLocal {
 		WelshPowell wp = new WelshPowell("color");
 		wp.init(graph);
 		wp.compute();
-
 		System.out.println("The chromatic number of this graph is : " + wp.getChromaticNumber());
 		String result = "";
-		Map map = new HashMap<Integer, List<Integer>>(); //Key: ColorId, List: DefensesId
+		Map map = new HashMap<String, List<String>>(); // Key: ColorId, List: DefensesId
 		for (Node n : graph) {
 			// System.out.println("Node "+n.getId()+ " : color " +n.getAttribute("color"));
 			result += "Node " + n.getId() + " : color " + n.getAttribute("color");
+			if (!map.containsKey(n.getAttribute("color"))) {
+				List<String> x = new ArrayList<String>();
+				x.add(n.getId());
+				map.put(n.getAttribute("color"), x);
+			} else {
+				List<String> x = (List<String>) map.get(n.getAttribute("color"));
+				x.add(n.getId());
+				map.put(n.getAttribute("color"), x);
+			}
+			// System.out.println(map);
 		}
-		return result;
+		return map;
 	}
 
 	@Override
-	public void getDefensesPlanning(Date day, List<FYPDefense> defensesList, List<Classroom> classRoomsList) {
-		// TODO Auto-generated method stub
+	public void getDefensesPlanning(List<FYPDefense> defensesList, List<String> classRoomsList) {
+		String defensesGraph = generateDefensesGraph(defensesList);
+		Map map = null;
+		try {
+			map = getColoredDefensesGraph(defensesGraph);
+		} catch (ElementNotFoundException | IOException | GraphParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+		try {
+			date = (Date) format.parse("2019-11-6 09:00:00");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int i=0;
+		int j=9;
+		for(Object key:map.values() ) {
+			List<String> x = (List<String>) key;
+			for(String s : x) {
+				try {
+					date = (Date) format.parse("2019-11-6 "+j+":00:00");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Query q = em.createQuery("UPDATE FYPDefense d SET d.defenseDate =:dateDefense, d.classroom=:classroom WHERE d.id =:id");
+				q.setParameter("dateDefense", date);
+				q.setParameter("classroom", classRoomsList.get(i));
+				q.setParameter("id", Long.parseLong(s));
+				q.executeUpdate();
+				i++;
+			}
+			i=0;
+			j++;
+
+		}
+
 
 
 	}

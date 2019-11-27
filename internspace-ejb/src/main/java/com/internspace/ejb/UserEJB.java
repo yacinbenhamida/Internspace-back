@@ -14,15 +14,21 @@ public class UserEJB implements UserEJBLocal{
 	EntityManager em;
 	@Override
 	public User verifyLoginCredentials(String username, String password) {
-		System.out.println(username + " "+password);
-		Query query = em.createQuery("select DISTINCT(u) from User u where u.username = :username AND u.password = :password")
+		System.out.println("from ejb : "+username + " "+password);
+		Query query = em.createQuery("select u from User u where u.username = :username AND u.password = :password")
 				.setParameter("username",username).setParameter("password", password);
 		if(!query.getResultList().isEmpty()) {
-			System.out.println("user found, authenticating");
-			return (User) query.getResultList().get(0);
+			
+			User user = (User) query.getResultList().get(0);
+			System.out.println("from ejb, user found, authenticating user with id :"+user.getId());
+			return user;
 		}
 		System.out.println("user not found...");
 		return null;
+	}
+	@Override
+	public User getUserByUsername(String username) {
+		return (User) em.createQuery("select u from User u where u.username=:us").setParameter("us", username).getResultList().get(0);
 	}
 
 }

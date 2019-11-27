@@ -134,10 +134,11 @@ public class FileTemplate implements Serializable {
 		this.isFyp = isFyp;
 	}
 
+	/*
 	public Employee getEditor() {
 		return this.editor;
 	}
-	
+	*/
 	public void setEditor(Employee editor) {
 		this.editor = editor;
 	}

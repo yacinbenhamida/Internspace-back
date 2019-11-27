@@ -1,6 +1,7 @@
 package com.internspace.ejb;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class PaymentEJB implements PaymentEJBLocal {
 	 @Override
 	public void PaymentPayPalAPI(long totale,long idU) {
 		 Payments p= new Payments();
-		 p.setPaymentDate(LocalDate.now());
+		// p.setPaymentDate(LocalDate.of(2019,11,12));
 		 University u=em.find(University.class,idU);
 		 System.out.println(u);
 		 p.setUniversity(u);
@@ -93,6 +94,7 @@ public class PaymentEJB implements PaymentEJBLocal {
 		crunchifyPayment.setPayer(crunchifyPayer);
 		crunchifyPayment.setTransactions(crunchifyTransactions);
 		crunchifyPayment.setRedirectUrls(crunchifyRedirectUrls);
+		
  
 		// Pass the clientID, secret and mode. The easiest, and most widely used option.
 		APIContext crunchifyapiContext = new APIContext(cId, crunchifySecret, executionMode);
@@ -105,19 +107,23 @@ public class PaymentEJB implements PaymentEJBLocal {
  
 			// Identifier of the payment resource created 
 			crunchifyPayment.setId(myPayment.getId());
- 
+			
 			PaymentExecution crunchifyPaymentExecution = new PaymentExecution();
- 
+			System.out.println("aaaaaaaaaaaaaaaaaaaa");
+
 			// Set your PayerID. The ID of the Payer, passed in the `return_url` by PayPal.
-			crunchifyPaymentExecution.setPayerId(crunchifyPaymentExecution.getPayerId());
- 
+			crunchifyPaymentExecution.setPayerId(myPayment.getPayer().getPayerInfo().getPayerId());
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
 			// This call will fail as user has to access Payment on UI. Programmatically
 			// there is no way you can get Payer's consent.
 			Payment createdAuthPayment = crunchifyPayment.execute(crunchifyapiContext, crunchifyPaymentExecution);
- 
+			System.out.println("aaaaaaaaaaaassssssssssssssssaaaaaaaa");
+
 			// Transactional details including the amount and item details.
 			Authorization crunchifyAuthorization = createdAuthPayment.getTransactions().get(0).getRelatedResources().get(0).getAuthorization();
- 
+			System.out.println("aaaaaaaaaaaa4444444444aaaaaaaa");
+
  
 		} catch (PayPalRESTException e) {
  

@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.internspace.ejb.abstraction.FileTemplateEJBLocal;
+import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.fyp.FileTemplateElement;
 import com.internspace.entities.users.Employee;
@@ -77,6 +78,28 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 	}
 	
 	@Override
+	public List<FYPFile> findFypFileByName(String name, int n, boolean useLike)
+	{
+		if(name == "") return null;
+		
+		System.out.println("name: " + name + " | n: " + n + " | useLike: " + (useLike ? "true" : "false") + ".");
+		
+		String nameMatching;
+		nameMatching = useLike ? "LIKE '%" + name.toLowerCase() + "%'" : "= '" + name.toLowerCase() + "'";
+		
+		String queryStr = "SELECT DISTINCT FF FROM " + FYPFile.class.getName() + " FF"
+				// + " JOIN FETCH FF.features FT"
+				+ " WHERE lower(FF.title) " + nameMatching;
+
+		List<FYPFile> files = em.createQuery(queryStr, FYPFile.class).setMaxResults(n).getResultList();
+		
+		files.stream().forEach(e -> System.out.println(e));
+		
+		return files;
+	}
+	
+	
+	@Override
 	public List<FileTemplate> findTemplateVersionsByName(String name)
 	{	
 		String queryStr = "SELECT DISTINCT FT FROM " + FileTemplate.class.getName() + " FT"
@@ -121,6 +144,19 @@ public class FileTemplateEJB implements FileTemplateEJBLocal {
 		List<FileTemplate> fypTemplates = em.createQuery("SELECT distinct T from " + FileTemplate.class.getName() + " T"
 				+ " JOIN FETCH T.templateElements TE"
 				, FileTemplate.class)
+				.getResultList();
+		return fypTemplates;
+	}
+	
+	@Override
+	public List<FileTemplate> getAllByEditor(long editorId) {
+		System.out.println("Finding all FYP Templates for editor...");
+		List<FileTemplate> fypTemplates = em.createQuery("SELECT distinct T from " + FileTemplate.class.getName() + " T"
+				+ " JOIN FETCH T.templateElements TE"
+				+ " JOIN FETCH T.editor E"
+				+ " WHERE E.id = :editorId"
+				, FileTemplate.class)
+				.setParameter("editorId", editorId)
 				.getResultList();
 		return fypTemplates;
 	}

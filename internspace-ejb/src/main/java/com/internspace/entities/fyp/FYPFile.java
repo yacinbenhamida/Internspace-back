@@ -102,10 +102,10 @@ public class FYPFile implements Serializable {
 	@OneToMany(mappedBy = "fypFile", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	List<FYPIntervention> interventions;
 
-	@OneToMany(mappedBy = "fypFile")
+	@OneToMany(mappedBy = "fypFile", fetch = FetchType.EAGER)
 	Set<FYPKeyword> keywords; // Useful for NLP
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "fypfiles_categories", joinColumns = @JoinColumn(name = "fypfile_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	Set<FYPCategory> categories;
 
@@ -143,6 +143,16 @@ public class FYPFile implements Serializable {
 		return problematic;
 	}
 
+	public Set<FYPCategory> getCategories()
+	{
+		return categories;
+	}
+	
+	public Set<FYPKeyword> getKeywords()
+	{
+		return keywords;
+	}
+	
 	public void setProblematic(String problematic) {
 		this.problematic = problematic;
 	}
@@ -157,10 +167,6 @@ public class FYPFile implements Serializable {
 
 	public void setIsPrevalidated(Boolean isPrevalidated) {
 		this.isPrevalidated = isPrevalidated;
-	}
-
-	public FYPFileStatus getFileStatus() {
-		return fileStatus;
 	}
 
 	public void setFileStatus(FYPFileStatus fileStatus) {
@@ -203,6 +209,10 @@ public class FYPFile implements Serializable {
 		this.interventions = interventions;
 	}
 
+	public FYPSubject getSubject() {
+		return this.subject;
+	}
+	
 	public void setSubject(FYPSubject subject) {
 		this.subject = subject;
 	}
@@ -217,7 +227,16 @@ public class FYPFile implements Serializable {
 
 	/*public Set<FYPFeature> getFeatures() {
 		return features;
+<<<<<<< HEAD
 	}*/
+
+	public FYPFileStatus getFileStatus() {
+		return fileStatus;
+	}
+	
+
+	
+
 	
 	
 

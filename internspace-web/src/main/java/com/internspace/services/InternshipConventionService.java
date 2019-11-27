@@ -1,5 +1,7 @@
 package com.internspace.services;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.InternshipConventionEJBLocal;
 import com.internspace.entities.fyp.InternshipConvention;
+import com.internspace.entities.users.Student;
 
 
 
@@ -45,6 +48,16 @@ public class InternshipConventionService {
 		return Response.status(Status.OK)
 				.entity(internshipConvention.getAllInternshipConvention()).build();
 		
+	
+		
+	}
+	
+	@GET
+	@Path("list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Student> getStudentInternshipConvention(@QueryParam(value = "id") long id) {
+		
+		 return internshipConvention.getFypConventionStudent(id);
 	
 		
 	}

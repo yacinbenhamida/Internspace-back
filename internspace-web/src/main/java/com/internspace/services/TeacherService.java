@@ -89,6 +89,34 @@ public class TeacherService {
 		
 		
 	}
+	@GET
+	@Path("/pre_valid/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetprevalidatedFypFile(@PathParam (value="id") long id)
+	{
+		List<FYPFile> fypfiles=service.getPrevalidatedFiles(id);
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	@GET
+	@Path("/pending")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response GetPendingFypFile()
+	{
+		List<FYPFile> fypfiles=service.getPendingFYPFiles();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	
+	
+	
+	
 	
 	
 	

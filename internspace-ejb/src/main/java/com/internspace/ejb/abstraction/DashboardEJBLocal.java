@@ -8,6 +8,7 @@ import javax.ejb.Local;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.InternshipConvention;
+import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
 
@@ -25,6 +26,11 @@ public interface DashboardEJBLocal {
 	List<FYPCategory> getMostRequestedCategoriesByCompanies();
 	List<FYPCategory> getMostRequestedCategoriesByStudentsOfUni(long uniId);
 	Map<Long, List<FYPSubject>> getInternshipEvolutionPerUYByCategory(long uniId, long categoryId);
+	Map<String, List<Student>> getStudentInternshipPerCountry(long uniId);
 	
+	// Helpers
+	
+	List<FYPCategory> getCategories();
+	List<UniversitaryYear> getUniversitaryYears();
 	
 }
