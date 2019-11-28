@@ -11,13 +11,15 @@ import com.internspace.entities.fyp.FYPFile;
 public interface TeacherEJBLocal {
 	
 	List<FYPFile> getPendingFYPFiles();
-	void PrevalidateFYPFile(long  file);
+	FYPFile PrevalidateFYPFile(long  file);
 	List<FYPFile> getSupervisedFYPfiles(long id);
 
 	List<FYPFile> getprotractoredFYPfiles(long id);
+	List<FYPCategory> getAllCategories();
 	void ValidateMajorModification(long  f,long dd);
 	void ProposeFYPCategory(FYPCategory F);
 	List<FYPFile> getPrevalidatedFiles(long id);
+	
 	
 	
 	

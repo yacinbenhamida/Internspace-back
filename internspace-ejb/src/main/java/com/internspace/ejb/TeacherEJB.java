@@ -25,14 +25,14 @@ public class TeacherEJB implements TeacherEJBLocal {
 	public List<FYPFile> getPendingFYPFiles() {
 		
 		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.fileStatus = :status").setParameter("status", FYPFileStatus.pending).getResultList();
-	}
+	}		
 
 @Override
-	public void  PrevalidateFYPFile( long id ) {
+	public FYPFile  PrevalidateFYPFile( long id ) {
 	FYPFile f = em.find(FYPFile.class, id);
 	f.setIsPrevalidated(Boolean.TRUE);
-	em.merge(f);
-	em.flush();
+	em.persist(f);
+	return f;
 	
 	}
 
@@ -67,6 +67,14 @@ em.persist(F);
 public List<FYPFile> getPrevalidatedFiles(long id) {
 	return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=true  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id , n.teacherRole='supervisor'").setParameter("id",id).getResultList();
 }
+
+@Override
+public List<FYPCategory> getAllCategories() {
+	
+	return em.createQuery("FROM " + FYPCategory.class.getName()).getResultList();
+
+}
+
 
 
 }

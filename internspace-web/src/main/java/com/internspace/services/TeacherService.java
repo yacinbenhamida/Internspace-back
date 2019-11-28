@@ -20,6 +20,7 @@ import com.internspace.ejb.abstraction.TeacherEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FileTemplate;
+import com.internspace.entities.university.CompanyCoordinates;
 
 @Stateless
 @Path("teachers")
@@ -114,8 +115,30 @@ public class TeacherService {
 				
 }
 	
+
+	@GET
+	@Path("/allCat")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getallcategories()
+	{
+		List<FYPCategory> fypfiles=service.getAllCategories();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
 	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/prevalidate/{id}")
+	public Response updateArchive(@PathParam (value="id") long file ){
+		FYPFile f=service.PrevalidateFYPFile(file);
+		return Response.status(Response.Status.OK).entity("done").build();
+
+	}
 	
+		
 	
 	
 	
