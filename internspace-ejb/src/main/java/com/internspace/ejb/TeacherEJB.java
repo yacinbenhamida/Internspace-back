@@ -11,6 +11,7 @@ import com.internspace.entities.exchanges.Notification;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileModification;
 
@@ -24,7 +25,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 @Override
 	public List<FYPFile> getPendingFYPFiles() {
 		
-		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.fileStatus = :status").setParameter("status", FYPFileStatus.pending).getResultList();
+		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.fileStatus =:status").setParameter("status", FYPFileStatus.pending).getResultList();
 	}		
 
 @Override
@@ -38,12 +39,12 @@ public class TeacherEJB implements TeacherEJBLocal {
 
 @Override 
 	public List<FYPFile> getSupervisedFYPfiles(long id) {
-		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'supervisor	')").setParameter("id",id).getResultList();
+		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like :supervisor)").setParameter("id",id).setParameter("supervisor",TeacherRole.supervisor).getResultList();
 	}
 
 @Override
 	public List<FYPFile> getprotractoredFYPfiles(long id) {
-	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like 'reporter')").setParameter("id",id).getResultList();
+	return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like :reporter)").setParameter("id",id).setParameter("reporter",TeacherRole.reporter).getResultList();
 	}
 
 @Override
@@ -65,7 +66,8 @@ em.persist(F);
 
 @Override
 public List<FYPFile> getPrevalidatedFiles(long id) {
-	return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.isPrevalidated=true  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id , n.teacherRole='supervisor'").setParameter("id",id).getResultList();
+	return em.createQuery("FROM " + FYPFile.class.getName() 
+			+ " f where f.isPrevalidated=:state  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole=:preValidator)").setParameter("state",Boolean.TRUE).setParameter("id",id).setParameter("preValidator",TeacherRole.preValidator).getResultList();
 }
 
 @Override
