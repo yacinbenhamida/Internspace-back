@@ -525,6 +525,30 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 	
 	
+	@Override
+	public List<String> GetLinksOfCompany(long id){
+		Company c =em.find(Company.class,id);
+		List<String> ls = new ArrayList<String>();
+		Boolean verified = false;
+		try{
+			// /Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_BackEnd/Internspace-back/ch_Society.py","inwi","macroc"
+			ProcessBuilder pb = new ProcessBuilder("/Library/Frameworks/Python.framework/Versions/3.8/bin/python3","/Users/Mahmoud/Documents/PI_DEV/4eme - 1er semester/PI_BackEnd/Internspace-back/ch_Society.py",c.getName(),c.getCountry());
+			Process p = pb.start(); 
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String s = null;
+	
+			
+			while ((s = in.readLine()) != null) {
+				ls.add(s);
+			}
+			
+			}catch(Exception e){System.out.println(e);}
+	
+
+				 return ls;
+	}
+	
 	/**********************************************************************************************************************************
 	 *	//Get panding FYPFile and change the status of comapny depends on the results of the Script Python ( use the before function )*
 	 **********************************************************************************************************************************/
@@ -544,6 +568,16 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		
 		return list;
 	}
+	
+	 
+		@Override
+		public List<Object[]> getPendingFYPFileWithLinks() {
+			
+			List<Object[]> list = em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='pending'").getResultList();
+			
+			
+			return list;
+		}
 	
 
 	

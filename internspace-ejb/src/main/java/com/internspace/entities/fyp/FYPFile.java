@@ -225,13 +225,18 @@ public class FYPFile implements Serializable {
 		this.student = student;
 	}
 
-	public Set<FYPFeature> getFeatures() {
+	/*public Set<FYPFeature> getFeatures() {
 		return features;
-	}
+<<<<<<< HEAD
+	}*/
 
 	public FYPFileStatus getFileStatus() {
 		return fileStatus;
 	}
+	
+
+	
+
 	
 	
 
