@@ -166,4 +166,10 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		}
 		return null;
 	}
+
+	@Override
+	public List<FYPIntervention> getInterventionsOfFYPSheet(long idFYPS) {
+		Query q = manager.createQuery("SELECT i from fyp_intervention i where i.fypFile.id = :id").setParameter("id", idFYPS);
+		return q.getResultList();
+	}
 }
