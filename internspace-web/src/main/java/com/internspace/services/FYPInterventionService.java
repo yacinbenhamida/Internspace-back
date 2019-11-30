@@ -42,8 +42,8 @@ public class FYPInterventionService {
 	@Path("assign/{idt}/{idfile}/{role}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response assignTeacherToFYPSheetWithRole(@PathParam("idt")long idTeacher,@PathParam("idfile")long idFYPS,@PathParam("role")String role) {
-		System.out.println(service == null );
 		FYPIntervention intervention = service.assignTeacherToFYPSheetWithRole(idTeacher, idFYPS, role);
+		System.out.println(role);
 		if(intervention!=null) {
 			return Response.status(Response.Status.OK).entity(intervention).build(); 
 		}
