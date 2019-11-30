@@ -115,10 +115,10 @@ public class FYPSheetService {
 		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
 	}
 	@GET 
-	@Path("accepted")
+	@Path("accepted/{idDep}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllAcceptedFYPSheets() {
-		List<FYPFile> res = fypSheetService.getAllAcceptedFYPSheets();
+	public Response getAllAcceptedFYPSheets(@PathParam("idDep")long idDep) {
+		List<FYPFile> res = fypSheetService.getAllAcceptedFYPSheets(idDep);
 		if(res!=null) {
 			return Response.status(Response.Status.OK).entity(res).build();
 		}
@@ -135,10 +135,10 @@ public class FYPSheetService {
 		return Response.status(Response.Status.NOT_FOUND).entity("norecords").build();
 	}
 	@GET 
-	@Path("nosupervisors")
+	@Path("nosupervisors/{idDep}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFYPSheetsWithNoSupervisors() {
-		List<FYPFile> res = fypSheetService.getFYPSheetsWithNoSupervisors();
+	public Response getFYPSheetsWithNoSupervisors(@PathParam("idDep")long idDep) {
+		List<FYPFile> res = fypSheetService.getFYPSheetsWithNoSupervisors(idDep);
 		if(res!=null) {
 			return Response.status(Response.Status.OK).entity(res).build();
 		}
@@ -154,7 +154,7 @@ public class FYPSheetService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheetsOfDepartment(@PathParam("depId")int depId) {
 			List<FYPFile> res = fypSheetService.getFYPfilesOfDepartment(depId);
-			return Response.status(Response.Status.OK).entity(res).build();
+			return Response.status(Response.Status.OK).entity(res.toArray()).build();
 	}
 	
 	@GET
