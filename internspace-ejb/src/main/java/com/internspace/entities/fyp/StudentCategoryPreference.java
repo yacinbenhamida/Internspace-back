@@ -66,6 +66,11 @@ public class StudentCategoryPreference implements Serializable {
 		this.id = id;
 	}
 
+	public FYPCategory getCategory()
+	{
+		return this.category;
+	}
+	
 	public int getSkillScore() {
 		return skillScore;
 	}
