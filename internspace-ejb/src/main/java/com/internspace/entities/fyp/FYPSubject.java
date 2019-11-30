@@ -64,7 +64,7 @@ public class FYPSubject implements Serializable {
 	 * Associations
 	 */
 	
-	@OneToOne(mappedBy = "subject", optional = true, orphanRemoval = true)
+	@OneToOne(mappedBy = "subject", optional = true,orphanRemoval = true)
 	FYPFile fypFile; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
 	@ManyToOne
