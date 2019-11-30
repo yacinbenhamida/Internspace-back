@@ -1,5 +1,7 @@
 package com.internspace.ejb;
 
+import java.util.List;
+
 import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -7,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.UserEJBLocal;
+import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.User;
 @Stateless
 public class UserEJB implements UserEJBLocal{
@@ -29,6 +32,12 @@ public class UserEJB implements UserEJBLocal{
 	@Override
 	public User getUserByUsername(String username) {
 		return (User) em.createQuery("select u from User u where u.username=:us").setParameter("us", username).getResultList().get(0);
+	}
+	@Override
+	public List<Employee> getTeachersOFdept(long idDept) {
+		Query query = em.createQuery("select e from Employee e where e.department.id = :id")
+				.setParameter("id",idDept);
+		return query.getResultList();
 	}
 
 }

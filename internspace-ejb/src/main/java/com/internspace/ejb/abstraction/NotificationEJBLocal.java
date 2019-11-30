@@ -15,4 +15,6 @@ public interface NotificationEJBLocal {
 	public List<Notification> getNotificationHistoryOfUser(long studentId);
 	public Notification getNotifById(long id);
 	public List<Notification> getAll();
+	public List<Notification> getNotifsOfDepartment(long depId);
+	
 }

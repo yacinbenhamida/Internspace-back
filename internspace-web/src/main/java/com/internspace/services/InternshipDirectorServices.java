@@ -117,7 +117,7 @@ public class InternshipDirectorServices {
 	};
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("declineFYPFileAnnulation")
 	public void declineFYPFileAnnulation(@QueryParam(value = "id") long id, @QueryParam(value = "text") String text){
 		service.declineCancelingDemand(id, text);
@@ -145,7 +145,7 @@ public class InternshipDirectorServices {
 	};
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("disableAccount")
 	public void disableAccount(@QueryParam(value = "id") long id){
 		service.disableAccount(id);
@@ -166,7 +166,7 @@ public class InternshipDirectorServices {
 	};
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("ValidateSubmittedAReport")
 	public void ValidateSubmittedAReport(@QueryParam(value = "id") long id){
 		service.ValidateSubmittedAReport(id);
@@ -187,28 +187,28 @@ public class InternshipDirectorServices {
 	};
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("FixActionNumberAsSupervisor")
 	public void FixActionNumberAsSupervisor( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") long id){
 		service.FixActionNumberAsSupervisor(nb, id);
 	};
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("FixActionNumberAsProtractor")
 	public void FixActionNumberAsProtractor( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") long id){
 		service.FixActionNumberAsProtractor(nb, id);
 	};
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("FixActionNumberAsPreValidator")
 	public void FixActionNumberAsPreValidator( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") long id){
 		service.FixActionNumberAsPreValidator(nb, id);
 	};
 	
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("FixActionNumberAsJuryPresident")
 	public void FixActionNumberAsJuryPresident( @QueryParam(value = "nb") int nb , @QueryParam(value = "id") long id){
 		service.FixActionNumberAsJuryPresident(nb, id);
@@ -227,7 +227,21 @@ public class InternshipDirectorServices {
 	public List<FYPSubject> myList(){
 		return service.FullStudentInfoWithVerifiedCompanys();
 	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("FYPFileToGetLinks")
+	public List<Object[]>getFYPFileListWithCompanyLinks(){
+		 return service.getPendingFYPFileWithLinks();
+	};
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getLinkOfCompany")
+	public List<String>getLinksOfCompany(@QueryParam(value = "id") long id){
+		 return service.GetLinksOfCompany(id);
+	};
 	
 	
 	

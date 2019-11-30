@@ -43,6 +43,9 @@ public interface InternshipDirectorEJBLocal {
 	public Boolean GetNameAndCountry (long id);
 	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys();
 	
+	public List<Object[]> getPendingFYPFileWithLinks();
+	public List<String> GetLinksOfCompany(long id);
+	
 	
 	
 	

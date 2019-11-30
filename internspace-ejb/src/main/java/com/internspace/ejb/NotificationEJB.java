@@ -69,4 +69,12 @@ public class NotificationEJB implements NotificationEJBLocal{
 		return (Notification) em.createQuery("SELECT n from Notification n where n.id = "+id).getSingleResult();
 	}
 
+	@Override
+	public List<Notification> getNotifsOfDepartment(long depId) {
+		return em.createQuery("SELECT n from Notification n , User u, Student s where n.sender.department.id = :id AND n.id = :id "
+				+ "AND n.reciever.department.id = :id")
+				.setParameter("id", depId)
+				.getResultList();
+	}
+
 }

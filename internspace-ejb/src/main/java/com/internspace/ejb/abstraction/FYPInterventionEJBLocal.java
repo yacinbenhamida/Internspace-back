@@ -19,4 +19,5 @@ public interface FYPInterventionEJBLocal {
 	public boolean deleteIntervention(long idInt);
 	public List<Employee> getTeachersWhoPrefer(String subject);
 	public FYPIntervention saveMark(int markValue, long idIntervention);
+	public List<FYPIntervention> getInterventionsOfFYPSheet(long idFYPS);
 }

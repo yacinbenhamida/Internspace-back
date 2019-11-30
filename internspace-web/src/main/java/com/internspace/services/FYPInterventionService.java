@@ -1,5 +1,7 @@
 package com.internspace.services;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -40,8 +42,8 @@ public class FYPInterventionService {
 	@Path("assign/{idt}/{idfile}/{role}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response assignTeacherToFYPSheetWithRole(@PathParam("idt")long idTeacher,@PathParam("idfile")long idFYPS,@PathParam("role")String role) {
-		System.out.println(service == null );
 		FYPIntervention intervention = service.assignTeacherToFYPSheetWithRole(idTeacher, idFYPS, role);
+		System.out.println(role);
 		if(intervention!=null) {
 			return Response.status(Response.Status.OK).entity(intervention).build(); 
 		}
@@ -80,6 +82,18 @@ public class FYPInterventionService {
 			return Response.status(Response.Status.OK).entity("deleted").build();
 		}
 		return Response.status(Response.Status.NOT_FOUND).entity("could not find record").build();
+	}
+	
+	
+	@GET
+	@Path("getInterventions/{idFYPS}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFypInterventionsOfSheet(@PathParam("idFYPS")long idFYPS) {
+		List<FYPIntervention> list = service.getInterventionsOfFYPSheet(idFYPS);
+		if(list!=null) {
+			return Response.status(Response.Status.OK).entity(list).build(); 
+		}
+		return Response.status(Response.Status.NOT_FOUND).entity("no records").build(); 
 	}
 	
 }
