@@ -134,6 +134,7 @@ public class TeacherService {
 	@Path("/prevalidate/{id}")
 	public Response updateArchive(@PathParam (value="id") long file ){
 		FYPFile f=service.PrevalidateFYPFile(file);
+		System.out.println(f);
 		return Response.status(Response.Status.OK).entity("done").build();
 
 	}
