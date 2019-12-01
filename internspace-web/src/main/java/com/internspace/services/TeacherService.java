@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import com.internspace.ejb.abstraction.TeacherEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.university.CompanyCoordinates;
 
@@ -122,6 +123,18 @@ public class TeacherService {
 	public Response getallcategories()
 	{
 		List<FYPCategory> fypfiles=service.getAllCategories();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	@GET
+	@Path("/allfypMod")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getallfypmodifi()
+	{
+		List<FYPFileModification> fypfiles=service.getAllFypmodification();
 		 return Response.ok(fypfiles).status(200)
 			        .header("Access-Control-Allow-Origin", "*")
 			        .header("Access-Control-Max-Age", "1209600")
