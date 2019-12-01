@@ -60,6 +60,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 	em.merge(ff);	
 	em.flush();
 	}
+
 @Override
 	public void ProposeFYPCategory(FYPCategory F) {
 em.persist(F);		
@@ -81,6 +82,11 @@ public List<FYPCategory> getAllCategories() {
 
 }
 
+@Override
+public List<FYPFileModification> getAllFypmodification() {
+	
+	return em.createQuery("FROM " + FYPFileModification.class.getName()).getResultList();
 
+}
 
 }
