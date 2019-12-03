@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.UserEJBLocal;
 import com.internspace.entities.users.Employee;
+import com.internspace.entities.users.Student;
 import com.internspace.entities.users.User;
 @Stateless
 public class UserEJB implements UserEJBLocal{
@@ -38,6 +39,10 @@ public class UserEJB implements UserEJBLocal{
 		Query query = em.createQuery("select e from Employee e where e.department.id = :id")
 				.setParameter("id",idDept);
 		return query.getResultList();
+	}
+	@Override
+	public Student getStudentOfFypSheet(long id) {
+		return (Student) em.createQuery("select s from Student s where s.fypFile.id = :id").setParameter("id", id).getResultList().get(0);
 	}
 
 }
