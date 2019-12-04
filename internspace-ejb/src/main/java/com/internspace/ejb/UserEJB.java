@@ -44,5 +44,8 @@ public class UserEJB implements UserEJBLocal{
 	public Student getStudentOfFypSheet(long id) {
 		return (Student) em.createQuery("select s from Student s where s.fypFile.id = :id").setParameter("id", id).getResultList().get(0);
 	}
-
+	@Override
+	public User getUserById(long id) {
+		return (User) em.createQuery("select u from User u where u.id=:us").setParameter("us", id).getResultList().get(0);
+	}
 }

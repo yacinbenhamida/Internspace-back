@@ -14,4 +14,5 @@ public interface UserEJBLocal {
 	public User getUserByUsername(String username);
 	public List<Employee> getTeachersOFdept(long idDept);
 	public Student getStudentOfFypSheet(long id);
+	public User getUserById(long id);
 }
