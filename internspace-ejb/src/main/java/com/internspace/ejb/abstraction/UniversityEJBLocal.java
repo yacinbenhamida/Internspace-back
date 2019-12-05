@@ -15,5 +15,6 @@ public interface UniversityEJBLocal {
 	public List<University> getAllUniversities();
 	int updateUniversity(University university);
 	int deleteUniversity(long id);
+	University searchUniversity(long id);
 	
 }

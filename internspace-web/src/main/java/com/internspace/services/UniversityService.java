@@ -62,4 +62,13 @@ public class UniversityService {
 		
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public Response searchUniversity(@PathParam(value="id") long id) {
+		return Response.status(Response.Status.OK)
+				.entity(universityServices.searchUniversity(id)).build();
+		
+	}
+	
 }
