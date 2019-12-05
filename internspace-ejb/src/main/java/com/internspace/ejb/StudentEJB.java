@@ -17,12 +17,14 @@ import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPSheetHistory;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
@@ -428,6 +430,21 @@ public class StudentEJB implements StudentEJBLocal {
 		return 0;
 	}
 
+	
+	// fypfile
+
+	@Override
+	public List<FYPSubject> getAllCategory(long id) {
+		return em.createQuery("SELECT c.subjects from FYPCategory c  where c.id=:id ")
+				.setParameter("id", id).getResultList();
+
+	}
+
+	@Override
+	public List<FYPSubject> getAllCategorys() {
+		return em.createQuery("SELECT  DISTINCT(c.subjects)  from FYPCategory c ")
+				.getResultList();
+	}
 
 
 	/*

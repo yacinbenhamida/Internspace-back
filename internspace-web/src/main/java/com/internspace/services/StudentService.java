@@ -18,9 +18,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
@@ -219,5 +221,21 @@ public class StudentService {
 	@Path("Studentfypfile")
 	public List<FYPFile> getAllStudentFileByFil(@QueryParam(value = "id") long id){
 		 return Studentservice.getAllStudentFileByFil(id);
+	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cat")
+	public List<FYPSubject> getAllCategory(@QueryParam(value = "id") long id){
+		 return Studentservice.getAllCategory(id);
+	};
+	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("categorys")
+	public List<FYPSubject> getAllCategory(){
+		 return Studentservice.getAllCategorys();
 	};
 }
