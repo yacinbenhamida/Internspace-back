@@ -31,7 +31,7 @@ public class FYPInterventionService {
 		return Response.status(Response.Status.NOT_FOUND).entity("norecords").build();
 	}
 	@GET
-	@Path("ranked")
+	@Path("ranked/{depId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTeachersByNumberOfSupervisions() {		
 		if(service.getAllTeachersRankedByNumberOfSupervisions() != null )
@@ -60,11 +60,11 @@ public class FYPInterventionService {
 		return Response.status(Response.Status.NOT_FOUND).entity("no records").build(); 
 	}
 	@GET
-	@Path("edit/{idInt}/{role}")
+	@Path("edit/{idInt}/{role}/{idTeacher}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editInterventionActorRole(@PathParam("role")String newRole,@PathParam("idInt")long idInt) {
-		FYPIntervention intervention2 = service.editInterventionActorRole(idInt, newRole);
+	public Response editInterventionActorRole(@PathParam("role")String newRole,@PathParam("idInt")long idInt,@PathParam("idTeacher")long idTeacher) {
+		FYPIntervention intervention2 = service.editInterventionActorRole(idInt, newRole,idTeacher);
 		if(intervention2 != null) {
 			return Response.status(Response.Status.OK).entity(intervention2).build();
 		}
@@ -90,6 +90,16 @@ public class FYPInterventionService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFypInterventionsOfSheet(@PathParam("idFYPS")long idFYPS) {
 		List<FYPIntervention> list = service.getInterventionsOfFYPSheet(idFYPS);
+		if(list!=null) {
+			return Response.status(Response.Status.OK).entity(list).build(); 
+		}
+		return Response.status(Response.Status.NOT_FOUND).entity("no records").build(); 
+	}
+	@GET
+	@Path("getInterventionsOfTeacher/{idTeacher}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFypInterventionsOfTeacher(@PathParam("idTeacher")long idTeacher) {
+		List<FYPIntervention> list = service.getInterventionsOfTeacher(idTeacher);
 		if(list!=null) {
 			return Response.status(Response.Status.OK).entity(list).build(); 
 		}
