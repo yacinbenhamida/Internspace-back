@@ -2,6 +2,8 @@ package com.internspace.entities.users;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,6 +14,7 @@ import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
+import com.internspace.entities.users.Employee.Role;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -25,9 +28,18 @@ import javax.persistence.OneToOne;
 public class Student extends User {
 
 	private static final long serialVersionUID = 1L;
+	
+	public enum Role {
+		Student
+
+	}
 
 	@Column(name = "birth_date")
 	LocalDate birthDate;
+	
+	@Enumerated(EnumType.STRING)
+	Role role;
+
 
 	// The student isn't allowed to have a reporter without initially submitting a
 	// paper report to the administration
@@ -90,7 +102,15 @@ public class Student extends User {
 	 */
 	  public String getPassword() { return password; }
 	  
-	  public void setPassword(String password) { this.password = password; }
+	  public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public void setPassword(String password) { this.password = password; }
 	  
 	  public String getUsername() { return username; }
 	  

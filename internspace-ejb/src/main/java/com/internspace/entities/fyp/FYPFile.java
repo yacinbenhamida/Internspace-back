@@ -84,7 +84,7 @@ public class FYPFile implements Serializable {
 	@OneToOne(mappedBy = "fypFile")
 	Student student;
 	
-	@OneToOne(mappedBy = "fyp")
+	@OneToOne(mappedBy = "fyp",cascade = CascadeType.ALL)
 	FYPFileModification fypm;
 
 

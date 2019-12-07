@@ -37,7 +37,7 @@ public class FYPFileModification {
 	Boolean isConfirmed;
 	
 	@Column(name = "changed", columnDefinition = "boolean default false")
-	Boolean isChanged;
+	boolean isChanged;
 	
 	@OneToMany(mappedBy = "fypMod", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	Set<FYPFeature> features;

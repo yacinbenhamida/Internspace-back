@@ -8,6 +8,7 @@ import javax.ejb.Local;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.users.Student;
 //rchm
 @Local
 public interface FYPSheetEJBLocal {
@@ -34,8 +35,11 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getAll();
 	public List<FYPFile> getAllSheetsPending();
 	public FYPFileStatus etatChanged(long id);
-	public Boolean modificationMajeur(FYPFile file);
+	public boolean modificationMajeur(long id);
 	public FYPFile editFYPSheett(FYPFile file);
+	public FYPFile editFYPSheetStudent(FYPFile file,long id );
+	public FYPFile editFYPSheetStudentMaj(FYPFile file,long id );
+	public FYPFile acceptPFE(long id);
 
 
 	

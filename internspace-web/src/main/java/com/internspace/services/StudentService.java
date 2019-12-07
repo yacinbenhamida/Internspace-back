@@ -146,6 +146,13 @@ public class StudentService {
 		Studentservice.sendMail(text,cin);
 	};
 
+	//mail de rec
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("mailRec")
+	public void sendMailRec(@QueryParam(value = "text") String text,@QueryParam(value = "id") long id){
+		Studentservice.sendMailRec(text,id);
+	};
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -185,8 +192,8 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("directeur")
-	public List<Employee> getDirector(@QueryParam(value = "cin") String cin){
-		 return Studentservice.getDirector(cin);
+	public List<Employee> getDirector(@QueryParam(value = "id") long id){
+		 return Studentservice.getDirector(id);
 	};
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -237,5 +244,11 @@ public class StudentService {
 	@Path("categorys")
 	public List<FYPSubject> getAllCategory(){
 		 return Studentservice.getAllCategorys();
+	};
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("categoryssub")
+	public List<FYPCategory> getAllCategorysSubject(){
+		 return Studentservice.getAllCategorysSubject();
 	};
 }
