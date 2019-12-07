@@ -272,7 +272,7 @@ public class CompanyService {
 	}
 
 	@GET
-	@Path("subjects/sfs/bysubject")
+	@Path("/subjects/sfs/bysubject")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStudentFypSubjectsOfSubjectByStatus(@QueryParam(value = "subject") long subjectId,
 			@QueryParam(value = "status") ApplianceStatus status, @QueryParam(value = "fetch-all") boolean fetchAll) {
@@ -282,8 +282,8 @@ public class CompanyService {
 
 		List<StudentFYPSubject> SFSs = service.getStudentFypSubjectsOfSubjectByStatus(subjectId, status, fetchAll);
 
-		if (SFSs == null || SFSs.size() == 0)
-			return Response.status(Response.Status.BAD_REQUEST).entity("No matching").build();
+		// if (SFSs == null || SFSs.size() == 0)
+			// return Response.status(Response.Status.OK).entity("No matching").build();
 
 		return Response.status(Response.Status.OK).entity(SFSs).build();
 	}

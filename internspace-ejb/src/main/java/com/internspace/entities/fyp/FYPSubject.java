@@ -111,6 +111,11 @@ public class FYPSubject implements Serializable {
 		return maxApplicants;
 	}
 
+	public String getCountry()
+	{
+		return country;
+	}
+	
 	public void setMaxApplicants(int maxApplicants) {
 		this.maxApplicants = maxApplicants;
 	}
