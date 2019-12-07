@@ -79,11 +79,11 @@ public class Student extends User {
 	FYPFile fypFile;
 	
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
 	// Many to Many to Categories using custom association table.
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
 	Set<StudentCategoryPreference> preferedCategories;
 
 	// Many to Many to Subjects using custom association table.
@@ -161,11 +161,11 @@ public class Student extends User {
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
-	/*
+	
 	public StudyClass getStudyClass() {
 		return studyClass;
 	}
-	*/
+	
 	public void setStudyClass(StudyClass studyClass) {
 		this.studyClass = studyClass;
 	}
@@ -191,7 +191,14 @@ public class Student extends User {
 	 * 
 	 * /*public Set<StudentCategoryPreference> getPreferedCategories() { return
 	 * preferedCategories; }
+	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
+		this.preferedCategories = preferedCategories;
+	}
 	 */
+	
+	public Set<StudentCategoryPreference> getPreferedCategories() {
+		return this.preferedCategories;
+	}
 
 	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
 		this.preferedCategories = preferedCategories;
