@@ -90,8 +90,10 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public List<FYPFile> getAllAcceptedFYPSheets() {
-		Query q =  service.createQuery("SELECT f from FYPFile f where f.fileStatus = :status").setParameter("status", FYPFileStatus.confirmed);
+	public List<FYPFile> getAllAcceptedFYPSheets(long idDep) {
+		Query q =  service.createQuery("SELECT f from FYPFile f where f.fileStatus = :status "
+				+ "AND f.student.studyClass.classOption.departement.id = :id")
+				.setParameter("id",idDep).setParameter("status", FYPFileStatus.confirmed);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -110,9 +112,10 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public List<FYPFile> getFYPSheetsWithNoSupervisors() {
-		Query q = service.createQuery("SELECT f from FYPFile f group by f.id "
-				+ "HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.fypFile.id = f.id AND i.teacherRole = 'supervisor' ) = 0");
+	public List<FYPFile> getFYPSheetsWithNoSupervisors(long idDep) {
+		Query q = service.createQuery("SELECT f from FYPFile f WHERE f.student.studyClass.classOption.departement.id = :id group by f.id "
+				+ "HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.fypFile.id = f.id AND i.teacherRole = 'supervisor' ) = 0")
+				.setParameter("id", idDep);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}

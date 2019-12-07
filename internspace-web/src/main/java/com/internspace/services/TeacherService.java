@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import com.internspace.ejb.abstraction.TeacherEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.university.CompanyCoordinates;
 
@@ -128,22 +129,28 @@ public class TeacherService {
 			        .build();
 				
 }
+	@GET
+	@Path("/allfypMod")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getallfypmodifi()
+	{
+		List<FYPFileModification> fypfiles=service.getAllFypmodification();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/prevalidate/{id}")
 	public Response updateArchive(@PathParam (value="id") long file ){
 		FYPFile f=service.PrevalidateFYPFile(file);
+		System.out.println(f);
 		return Response.status(Response.Status.OK).entity("done").build();
 
 	}
 	
-		
-	
-	
-	
-	
-	
-	
-	
+
 }

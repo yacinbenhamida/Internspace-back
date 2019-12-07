@@ -33,6 +33,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 	FYPFile f = em.find(FYPFile.class, id);
 	f.setIsPrevalidated(Boolean.TRUE);
 	em.persist(f);
+	System.out.println(f);
 	return f;
 	
 	}
@@ -59,6 +60,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 	em.merge(ff);	
 	em.flush();
 	}
+
 @Override
 	public void ProposeFYPCategory(FYPCategory F) {
 em.persist(F);		
@@ -66,8 +68,11 @@ em.persist(F);
 
 @Override
 public List<FYPFile> getPrevalidatedFiles(long id) {
+	
 	return em.createQuery("FROM " + FYPFile.class.getName() 
-			+ " f where f.isPrevalidated=:state  and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole=:preValidator)").setParameter("state",Boolean.TRUE).setParameter("id",id).setParameter("preValidator",TeacherRole.preValidator).getResultList();
+			+ " f where f.isPrevalidated=:state and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole=:preValidator)").setParameter("state",Boolean.FALSE).setParameter("id",id).setParameter("preValidator",TeacherRole.preValidator).getResultList();
+
+
 }
 
 @Override
@@ -77,6 +82,11 @@ public List<FYPCategory> getAllCategories() {
 
 }
 
+@Override
+public List<FYPFileModification> getAllFypmodification() {
+	
+	return em.createQuery("FROM " + FYPFileModification.class.getName()).getResultList();
 
+}
 
 }

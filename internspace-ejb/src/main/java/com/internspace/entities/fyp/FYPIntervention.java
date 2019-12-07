@@ -116,4 +116,11 @@ public class FYPIntervention implements Serializable {
 		this.actionsRemaining = actionsRemaining;
 	}
 
+	@Override
+	public String toString() {
+		return "FYPIntervention [id=" + id + ", assignmentDate=" + assignmentDate + ", teacherRole=" + teacherRole
+				+ ", givenMark=" + givenMark + ", actionsRemaining=" + actionsRemaining + ", teacher=" + teacher
+				+ ", fypFile=" + fypFile + "]";
+	}
+
 }

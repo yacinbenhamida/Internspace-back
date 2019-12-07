@@ -24,10 +24,10 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getFYPSheetsOfTeacher(long idTeacher);
 	// custom methods
 	// returns the fyp sheets that got accepted by the internships director
-	public List<FYPFile> getAllAcceptedFYPSheets();
+	public List<FYPFile> getAllAcceptedFYPSheets(long idDep);
 	// no marks from reporter or supervisor
 	public List<FYPFile> getAllSheetsWithNoMarks();
-	public List<FYPFile> getFYPSheetsWithNoSupervisors();
+	public List<FYPFile> getFYPSheetsWithNoSupervisors(long idDep);
 	public List<FYPFile> getAllSheets();
 	
 	//my work

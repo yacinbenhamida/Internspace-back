@@ -92,7 +92,7 @@ public class FYPFile implements Serializable {
 	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
 
-	@OneToOne(optional = true, cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "subject", nullable = true)
 	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
