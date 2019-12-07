@@ -75,7 +75,7 @@ public class FYPSubject implements Serializable {
 	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
 	Set<StudentFYPSubject> studentSubjects;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "subjects_categories", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	Set<FYPCategory> categories;
 
@@ -136,6 +136,11 @@ public class FYPSubject implements Serializable {
 		this.content = content;
 	}
 
+	public Set<FYPCategory> getCategories()
+	{
+		return this.categories;
+	}
+	
 	/*
 	 * public FYPFile getFypFile() { return fypFile; }
 	 */

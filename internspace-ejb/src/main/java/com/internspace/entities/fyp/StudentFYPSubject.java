@@ -76,6 +76,11 @@ public class StudentFYPSubject implements Serializable{
 	 * Getters & Setters
 	 */
 	
+	public Student getStudent()
+	{
+		return this.student;
+	}
+	
 	public long getId() {
 		return id;
 	}
