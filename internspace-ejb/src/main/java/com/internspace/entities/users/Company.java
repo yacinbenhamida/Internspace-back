@@ -37,7 +37,10 @@ public class Company extends User {
 	String supervisorEmail; 
 	@Column(name = "phone_number")
 	String phoneNumber;
-
+	
+	String slogan;
+	String description;
+	
 	/*
 	 * Associations
 	 */
@@ -90,6 +93,16 @@ public class Company extends User {
 		this.address = address;
 	}
 
+	public String getSlogan()
+	{
+		return slogan;
+	}
+	
+	public String getDescription()
+	{
+		return description;
+	}
+	
 	public String getCountry() {
 		return country;
 	}
