@@ -189,7 +189,7 @@ public class CompanyService {
 
 		service.createSubject(newSubject);
 
-		return Response.status(Response.Status.OK).entity("Successfully Inserted a new Subject.").build();
+		return Response.status(Response.Status.OK).build();
 	}
 	
 	@GET
