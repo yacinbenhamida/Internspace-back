@@ -35,6 +35,9 @@ public class Quiz implements Serializable {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "icon_url")
+	private String iconUrl;
+	
 	@ManyToOne(cascade = CascadeType.PERSIST, optional = false)
 	@JoinColumn(name = "category", insertable = true, updatable = true)
 	private FYPCategory category;
@@ -64,6 +67,11 @@ public class Quiz implements Serializable {
 		this.title = title;
 	}
 
+	public String getIconUrl()
+	{
+		return this.iconUrl;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
