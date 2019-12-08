@@ -194,5 +194,14 @@ public class QuizService {
 		return Response.status(Response.Status.OK).entity("Quiz finished with a score of: " + score).build();
 	}
 	
+	// User Quiz Related Category Preference Services
+	
+	@GET
+	@Path("/student/categories/preferences/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOrCreateStudentCategoryPreference(@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "category") long categoryId) {
+		return Response.status(Response.Status.OK).entity(this.service.getOrCreateStudentCategoryPreference(studentId, categoryId)).build();
+	}
 	
 }

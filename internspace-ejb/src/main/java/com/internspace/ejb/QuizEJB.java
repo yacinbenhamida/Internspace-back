@@ -214,7 +214,7 @@ public class QuizEJB implements QuizEJBLocal {
 	@Override
 	public List<Quiz> getAllByCategory(long categoryId)
 	{
-		List<Quiz> quizzes = em.createQuery("SELECT Q FROM " + Quiz.class.getName() + " Q"
+		List<Quiz> quizzes = em.createQuery("SELECT DISTINCT Q FROM " + Quiz.class.getName() + " Q"
 				+ " JOIN FETCH Q.questions QQ"
 				+ " WHERE Q.category.id = :categoryId",
 				Quiz.class)
