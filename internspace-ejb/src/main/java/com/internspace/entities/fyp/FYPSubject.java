@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Table;
 
+import org.json.JSONPropertyIgnore;
+
 import com.internspace.entities.users.Company;
 
 import javax.persistence.Entity;
@@ -114,6 +116,12 @@ public class FYPSubject implements Serializable {
 	public String getCountry()
 	{
 		return country;
+	}
+	
+	@JSONPropertyIgnore
+	public void setStudentSubjects(Set<StudentFYPSubject> studentSubjects)
+	{
+		this.studentSubjects = studentSubjects;
 	}
 	
 	public void setMaxApplicants(int maxApplicants) {

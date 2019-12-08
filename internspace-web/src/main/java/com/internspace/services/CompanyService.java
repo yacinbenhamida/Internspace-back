@@ -170,6 +170,28 @@ public class CompanyService {
 		return Response.status(Response.Status.OK).entity("Successfully Inserted a new Subject.").build();
 	}
 
+	@POST
+	@Path("/subjects/addobj")
+	// @Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addSubjectObject(FYPSubject newSubject) {
+		// Defaulted to null in case this subject
+		// Is inserted with conjunction to a fyp_file
+		Company company = null;
+		FYPFile fypFile = null;
+
+		// Find relevant company if any
+		if (newSubject.getCompany().getId() <= 0) // Valid input
+		{
+			if (company == null)
+				System.out.println("Please provide a valid company id, got: " + newSubject.getCompany().getId());
+		}
+
+		service.createSubject(newSubject);
+
+		return Response.status(Response.Status.OK).entity("Successfully Inserted a new Subject.").build();
+	}
+	
 	@GET
 	@Path("/subjects/all")
 	@Produces(MediaType.APPLICATION_JSON)
