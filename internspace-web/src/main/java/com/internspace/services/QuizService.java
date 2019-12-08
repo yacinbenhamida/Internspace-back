@@ -1,6 +1,8 @@
 package com.internspace.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.ws.rs.Path;
@@ -154,7 +156,8 @@ public class QuizService {
 		return Response.status(Response.Status.OK).entity(studentQuiz).build();
 	}
 	
-	@POST
+	@GET
+	//@POST
 	@Path("/student/answer")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateUserQuestionResponse(
@@ -164,6 +167,10 @@ public class QuizService {
 	{
 		StudentQuizResponse userQuizResponse = service.getOrCreateStudentQuestionResponse(studentId, responseId);
 
+		System.out.println("updateUserQuestionResponse: studentId: " + studentId);
+		System.out.println("updateUserQuestionResponse: responseId: " + responseId);
+		System.out.println("updateUserQuestionResponse: toChecked: " + toChecked);
+		
 		if (userQuizResponse == null) {
 			
 			return Response.status(Response.Status.BAD_REQUEST)
@@ -178,7 +185,8 @@ public class QuizService {
 		return Response.status(Response.Status.OK).entity("userQuizResponse with id: " + userQuizResponse.getId() + " is now with checked=" + userQuizResponse.getIsChecked()).build();
 	}
 	
-	@POST
+	@GET
+	//@POST
 	@Path("/student/finish-quiz")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response studentFinishQuiz(
@@ -191,7 +199,7 @@ public class QuizService {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("Make sure to finish your quiz before finishing: " + quizId).build();
 		
-		return Response.status(Response.Status.OK).entity("Quiz finished with a score of: " + score).build();
+		return Response.status(Response.Status.OK).build();
 	}
 	
 	// User Quiz Related Category Preference Services
@@ -202,6 +210,21 @@ public class QuizService {
 	public Response getOrCreateStudentCategoryPreference(@QueryParam(value = "student") long studentId,
 			@QueryParam(value = "category") long categoryId) {
 		return Response.status(Response.Status.OK).entity(this.service.getOrCreateStudentCategoryPreference(studentId, categoryId)).build();
+	}
+	
+	@GET
+	@Path("/student/quiz/responses-map/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStudentQuizQuestionResponseMap(@QueryParam(value = "student") long studentId,
+			@QueryParam(value = "quiz") long quizId)
+	{
+		Map<QuizQuestion, List<StudentQuizResponse>> res = this.service.getStudentQuizQuestionResponseMap(studentId, quizId);
+		
+		// Index to out
+		Map<Integer, List<StudentQuizResponse>> map = new HashMap<Integer, List<StudentQuizResponse>>();
+		res.forEach((k,v)->map.put(k.getId(), v));
+		
+		return Response.status(Response.Status.OK).entity(map).build();
 	}
 	
 }

@@ -108,7 +108,7 @@ public class QuizEJB implements QuizEJBLocal {
 		if (studentQuizs == null || studentQuizs.size() == 0) {
 			// Then create one
 
-			studentQuiz = new StudentQuiz(student, quiz, 1);
+			studentQuiz = new StudentQuiz(student, quiz, 0);
 
 			em.persist(studentQuiz);
 
