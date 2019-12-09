@@ -40,7 +40,9 @@ public interface FYPSheetEJBLocal {
 	public FYPFile editFYPSheetStudent(FYPFile file,long id );
 	public FYPFile editFYPSheetStudentMaj(FYPFile file,long id );
 	public FYPFile acceptPFE(long id);
-
+	public FYPFile accept(long id);
+	
+	public FYPFile cancel(long id);
 
 	
 

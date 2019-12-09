@@ -56,7 +56,8 @@ public interface InternshipDirectorEJBLocal {
 	public Employee getInternshipDirectorById(long id);
 	//acept modification majeure
 	boolean acceptModification(long id);
-	
+	public FYPFile acceptPFEFyp(long id);
+	public FYPFile cancelPFEFyp(long id);
 	
 	
 	

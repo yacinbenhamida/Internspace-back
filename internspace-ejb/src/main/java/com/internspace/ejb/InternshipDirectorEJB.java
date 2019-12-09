@@ -732,10 +732,44 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	}
 
 
+	@Override
+	public FYPFile acceptPFEFyp(long id) {
+		FYPFile s= em.find(FYPFile.class, id);
+		
+		if(s == null)
+			return null;
+		
+		
+		s.setFileStatus(FYPFileStatus.confirmed);
+		em.persist(s);
+		em.flush();
+		return s;
+	
+
+
 
 		
 	}
+	
+	
+	public FYPFile cancelPFEFyp(long id) {
+		FYPFile s= em.find(FYPFile.class, id);
+		
+		if(s == null)
+			return null;
+		
+		
+		s.setFileStatus(FYPFileStatus.declined);
+		em.persist(s);
+		em.flush();
+		return s;
+	
 
+
+
+		
+	}
+}
 
 
 
