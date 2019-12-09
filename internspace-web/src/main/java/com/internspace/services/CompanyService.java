@@ -407,7 +407,7 @@ public class CompanyService {
 		if (!success)
 			outputMsg = "Failed to apply, you might be already applied, accepted or rejected. also check if given student and subject ids are valid...";
 
-		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).build();
 	}
 
 	@GET
@@ -425,7 +425,7 @@ public class CompanyService {
 		if (!success)
 			outputMsg = "Failed to unapply, you might be already unapplied, accepted or rejected. also check if given student and subject ids are valid... ";
 
-		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).entity(outputMsg).build();
+		return Response.status(success ? Response.Status.OK : Response.Status.BAD_REQUEST).build();
 	}
 
 	@GET
