@@ -89,6 +89,8 @@ public class TeacherService {
 	public void editFYPSheet(@PathParam(value="id")long id,@PathParam(value="id2")long id2) {
 		service.ValidateMajorModification(id,id2);
 		
+		System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"+id+"."+id2+"hhhhhhhhhhhhhhhhhhh");
+		
 		
 	}
 	@GET
@@ -151,6 +153,43 @@ public class TeacherService {
 		return Response.status(Response.Status.OK).entity("done").build();
 
 	}
+	@GET
+	@Path("/allfyps/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getallfyps(@PathParam (value="id") long id)
+	{
+		List<FYPFile> fypfiles=service.getteacherfyp(id);
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	@GET
+	@Path("/size/{type}/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getfypssize(@PathParam (value="type") String type,@PathParam (value="id") long id)
+	{
+		int fypfiles=service.getfypsize(type, id);
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	@GET
+	@Path("/Mmsize")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getmajormodificationsize()
+	{
+		int fypfiles=service.getmajormmodificationsize();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	
 	
 
 }

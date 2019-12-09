@@ -20,6 +20,9 @@ public interface TeacherEJBLocal {
 	void ValidateMajorModification(long  f,long dd);
 	void ProposeFYPCategory(FYPCategory F);
 	List<FYPFile> getPrevalidatedFiles(long id);
+	List<FYPFile> getteacherfyp(long id);
+	int getfypsize(String x,long id);
+	public int getmajormmodificationsize();
 	
 	
 	

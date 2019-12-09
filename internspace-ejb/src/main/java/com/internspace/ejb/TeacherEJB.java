@@ -59,6 +59,7 @@ public class TeacherEJB implements TeacherEJBLocal {
 	em.merge(f);
 	em.merge(ff);	
 	em.flush();
+	System.out.println("ahahhahahahhahahahhhahah"+id+"000"+id2);
 	}
 
 @Override
@@ -84,9 +85,52 @@ public List<FYPCategory> getAllCategories() {
 
 @Override
 public List<FYPFileModification> getAllFypmodification() {
+	System.out.println("ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 	
 	return em.createQuery("FROM " + FYPFileModification.class.getName()).getResultList();
 
 }
+
+@Override
+public List<FYPFile> getteacherfyp(long id) {
+	
+	return em.createQuery("FROM " + FYPFile.class.getName() 
+			+ " f where  f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id)").setParameter("id",id).getResultList();
+
+}
+
+@Override
+public int getfypsize(String x,long id) {
+	if (x.equals("pendig"))
+	{
+		return em.createQuery("FROM " + FYPFile.class.getName()  + " f where f.fileStatus =:status and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id )").setParameter("id",id).getResultList().size();
+
+	}
+	else if(x.equals("prevalidated"))
+	{
+		return em.createQuery("FROM " + FYPFile.class.getName() + " f where f.isPrevalidated=:state and f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole=:preValidator)").setParameter("state",Boolean.TRUE).setParameter("id",id).setParameter("preValidator",TeacherRole.preValidator).getResultList().size();
+
+	}
+	else if (x.equals("supervised"))
+	{
+		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like :supervisor)").setParameter("id",id).setParameter("supervisor",TeacherRole.supervisor).getResultList().size();
+	}
+	
+	else if (x.equals("protractored"))
+	{
+		return em.createQuery("FROM "+FYPFile.class.getName()+" f WHERE f.id IN (SELECT n.fypFile.id FROM "+FYPIntervention.class.getName()+" n WHERE n.teacher.id=:id and n.teacherRole like :reporter)").setParameter("id",id).setParameter("reporter",TeacherRole.reporter).getResultList().size();
+
+	}
+	else 
+		return 0;
+}
+@Override
+public int getmajormmodificationsize()
+{	return em.createQuery("FROM " + FYPFileModification.class.getName()).getResultList().size();
+
+
+}
+
+
 
 }

@@ -38,6 +38,7 @@ public class Company extends User {
 	@Column(name = "phone_number")
 	String phoneNumber;
 	
+	String logoUrl;
 	String slogan;
 	String description;
 	
@@ -93,6 +94,11 @@ public class Company extends User {
 		this.address = address;
 	}
 
+	public String getLogoUrl()
+	{
+		return logoUrl;
+	}
+	
 	public String getSlogan()
 	{
 		return slogan;
