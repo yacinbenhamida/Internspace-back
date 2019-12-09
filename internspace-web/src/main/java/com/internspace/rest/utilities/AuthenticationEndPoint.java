@@ -78,7 +78,7 @@ public class AuthenticationEndPoint {
 			System.out.println(connectedUser);
 			if(connectedUser.getUserType().equals(UserType.student)) {
 				Student stud = studentService.getStudentById(connectedUser.getId());
-				if(stud.getIsAutorised() == true || stud.getIsDisabled() == true ) {
+				if(stud.getIsAutorised() == false || stud.getIsDisabled() == true ) {
 					System.out.println("student isnt allowed to login (disabled or unauthorized)");
 					return 0;
 				}	

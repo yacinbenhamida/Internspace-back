@@ -40,7 +40,7 @@ public interface StudentEJBLocal {
 
 	void sendMail(String text,String cin);
 	void mailEtat(String text,String cin);
-	public List<Employee> getDirector(String cin);
+	public List<Employee> getDirector(long id);
 	public List<FYPFile> getAllSheetsPendingStudent();
 	public List<FYPFile> getAllSheetsPendingByStudent(String cin);
 	public List<Student> getAllStudentFile(long id);
@@ -48,8 +48,11 @@ public interface StudentEJBLocal {
 	
 	public List<FYPSubject> getAllCategory(long id);
 	public List<FYPSubject> getAllCategorys();
+	public List<FYPCategory> getAllCategorysSubject();
 	
 	public Student getStudentById(long id);
 	
-
+	//
+	void sendMailRec(String text,long  id);
+	public List<Employee> getDirectorStd(String cin);
 }

@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Table;
 
+import org.json.JSONPropertyIgnore;
+
 import com.internspace.entities.users.Company;
 
 import javax.persistence.Entity;
@@ -75,7 +77,7 @@ public class FYPSubject implements Serializable {
 	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
 	Set<StudentFYPSubject> studentSubjects;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "subjects_categories", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	Set<FYPCategory> categories;
 
@@ -111,6 +113,17 @@ public class FYPSubject implements Serializable {
 		return maxApplicants;
 	}
 
+	public String getCountry()
+	{
+		return country;
+	}
+	
+	@JSONPropertyIgnore
+	public void setStudentSubjects(Set<StudentFYPSubject> studentSubjects)
+	{
+		this.studentSubjects = studentSubjects;
+	}
+	
 	public void setMaxApplicants(int maxApplicants) {
 		this.maxApplicants = maxApplicants;
 	}
@@ -131,6 +144,11 @@ public class FYPSubject implements Serializable {
 		this.content = content;
 	}
 
+	public Set<FYPCategory> getCategories()
+	{
+		return this.categories;
+	}
+	
 	/*
 	 * public FYPFile getFypFile() { return fypFile; }
 	 */

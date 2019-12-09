@@ -170,6 +170,28 @@ public class CompanyService {
 		return Response.status(Response.Status.OK).entity("Successfully Inserted a new Subject.").build();
 	}
 
+	@POST
+	@Path("/subjects/addobj")
+	// @Secured
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addSubjectObject(FYPSubject newSubject) {
+		// Defaulted to null in case this subject
+		// Is inserted with conjunction to a fyp_file
+		Company company = null;
+		FYPFile fypFile = null;
+
+		// Find relevant company if any
+		if (newSubject.getCompany().getId() <= 0) // Valid input
+		{
+			if (company == null)
+				System.out.println("Please provide a valid company id, got: " + newSubject.getCompany().getId());
+		}
+
+		service.createSubject(newSubject);
+
+		return Response.status(Response.Status.OK).build();
+	}
+	
 	@GET
 	@Path("/subjects/all")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -272,7 +294,7 @@ public class CompanyService {
 	}
 
 	@GET
-	@Path("subjects/sfs/bysubject")
+	@Path("/subjects/sfs/bysubject")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStudentFypSubjectsOfSubjectByStatus(@QueryParam(value = "subject") long subjectId,
 			@QueryParam(value = "status") ApplianceStatus status, @QueryParam(value = "fetch-all") boolean fetchAll) {
@@ -282,8 +304,8 @@ public class CompanyService {
 
 		List<StudentFYPSubject> SFSs = service.getStudentFypSubjectsOfSubjectByStatus(subjectId, status, fetchAll);
 
-		if (SFSs == null || SFSs.size() == 0)
-			return Response.status(Response.Status.BAD_REQUEST).entity("No matching").build();
+		// if (SFSs == null || SFSs.size() == 0)
+			// return Response.status(Response.Status.OK).entity("No matching").build();
 
 		return Response.status(Response.Status.OK).entity(SFSs).build();
 	}

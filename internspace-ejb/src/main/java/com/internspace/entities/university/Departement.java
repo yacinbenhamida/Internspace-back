@@ -132,6 +132,27 @@ public class Departement implements Serializable {
 	public void setDepartementHead(Employee departementHead) {
 		this.departementHead = departementHead;
 	}
+	@Override
+	public String toString() {
+		return "Departement [id=" + id + ", name=" + name + ", yearOfCreation=" + yearOfCreation + ", description="
+				+ description + ", numberOfActionsAllowedForProtractors=" + numberOfActionsAllowedForProtractors
+				+ ", numberOfActionsAllowedForSupervisors=" + numberOfActionsAllowedForSupervisors
+				+ ", numberOfActionsAllowedForPreValidators=" + numberOfActionsAllowedForPreValidators
+				+ ", numberOfActionsAllowedForPresidents=" + numberOfActionsAllowedForPresidents + ", site=" + site
+				+ "]";
+	}
+	public Date getYearOfCreation() {
+		return yearOfCreation;
+	}
+	public void setYearOfCreation(Date yearOfCreation) {
+		this.yearOfCreation = yearOfCreation;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	
 	

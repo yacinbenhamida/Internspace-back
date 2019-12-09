@@ -285,10 +285,13 @@ public class StudentEJB implements StudentEJBLocal {
 	}
 
 	@Override
-	public List<Employee> getDirector(String cin) {
+	public List<Employee> getDirector(long id) {
 		// List <String> list = new ArrayList();
-		List<FYPFile> ls = getAllStudentFileCin(cin);
 
+		
+		Student std = em.find(Student.class, id);
+		String cin = std.getCin();
+		List<FYPFile> ls = getAllStudentFileCin(cin);
 		for (int i = 0; i < ls.size(); i++) {
 			if (ls.get(i).getIsArchived()) {
 
@@ -308,8 +311,8 @@ public class StudentEJB implements StudentEJBLocal {
 					 * 
 					 * list.add(name); list.add(email);
 					 */
-					return em.createQuery("SELECT c.teacher.firstName,c.teacher.email from "
-							+ FYPIntervention.class.getName() + " c  ").getResultList();
+					return em.createQuery("SELECT  c.teacher.id,c.teacher.role,c.teacher.firstName,c.teacher.email from "
+							+ FYPIntervention.class.getName() + " c where c.fypFile.student.cin=:cin ").setParameter("cin", cin).getResultList();
 
 					// return list;
 
@@ -446,7 +449,42 @@ public class StudentEJB implements StudentEJBLocal {
 				.getResultList();
 	}
 
+	@Override
+	public List<FYPCategory> getAllCategorysSubject() {
+		return em.createQuery("SELECT  DISTINCT(c.subjects)  from FYPCategory c Join FYPSubject f  ")
+				.getResultList();
+	}
 
+	@Override
+	public void sendMailRec(String text, long  id) {
+		// TODO Auto-generated method stub
+		
+		Student std = em.find(Student.class, id);
+		
+		Mail_API mail = new Mail_API();
+		List<Student> ls = getAllStudentAutorised();
+		List<Student> ls1 = getAllStudentNodisabled();
+		List<Student> ls2 = getAllStudentSaved();
+		List<Student> ls3 = new ArrayList();
+		List<Student> ls4 = new ArrayList();
+
+		String subject1 = "Nouvelle Reclamation de Etudiant num " + std.getCin();
+		
+
+		for (int j = 0; j < ls.size(); j++) {
+			if (ls.get(j).equals(std)) {
+				
+				try {
+					mail.sendMail(std.getEmail(), text, subject1);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+	}
+	
+		}
+	}
 	/*
 	 * @Override public void enregistrer(long cin) {
 	 * 
@@ -469,4 +507,12 @@ public class StudentEJB implements StudentEJBLocal {
 	 * }
 	 */
 
+	@Override
+	public List<Employee> getDirectorStd(String cin) {
+		List<FYPFile> ls = getAllStudentFileCin(cin);
+		
+		return null;
+	}
+
 }
+	

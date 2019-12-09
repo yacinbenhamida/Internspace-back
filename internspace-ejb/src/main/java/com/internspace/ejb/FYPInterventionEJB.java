@@ -133,7 +133,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 		return null;
 	}
 	@Override
-	public FYPIntervention editInterventionActorRole(long fypinterventionId, String newRole) {
+	public FYPIntervention editInterventionActorRole(long fypinterventionId, String newRole, long idTeacher) {
 		FYPIntervention intervention = manager.find(FYPIntervention.class, fypinterventionId);
 		if(intervention != null ) {
 				if(intervention.getGivenMark()>0) {
@@ -141,6 +141,7 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 				}
 			intervention.setTeacherRole(convertRole(newRole));
 			intervention.setAssignmentDate(LocalDate.now());
+			intervention.setTeacher(manager.find(Employee.class, idTeacher));
 			switch (newRole.toString()) {
 				case "juryPresident": intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForPresidents());break;
 				case "preValidator " : 	intervention.setActionsRemaining(intervention.getTeacher().getDepartment().getNumberOfActionsAllowedForPreValidators());break;
@@ -157,6 +158,11 @@ public class FYPInterventionEJB implements FYPInterventionEJBLocal{
 	@Override
 	public List<FYPIntervention> getInterventionsOfFYPSheet(long idFYPS) {
 		Query q = manager.createQuery("SELECT i from fyp_intervention i where i.fypFile.id = :id").setParameter("id", idFYPS);
+		return q.getResultList();
+	}
+	@Override
+	public List<FYPIntervention> getInterventionsOfTeacher(long idTeacher) {
+		Query q = manager.createQuery("SELECT i from fyp_intervention i where i.teacher.id = :id").setParameter("id", idTeacher);
 		return q.getResultList();
 	}
 }
