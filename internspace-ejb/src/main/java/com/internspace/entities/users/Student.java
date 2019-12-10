@@ -12,6 +12,7 @@ import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
+import com.internspace.entities.university.University;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -57,6 +58,7 @@ public class Student extends User {
 	@Column(name = "is_disabled", columnDefinition = "boolean default false")
 	Boolean isDisabled;
 	
+
 	/*
 	 * Associations
 	 */
@@ -211,6 +213,14 @@ public class Student extends User {
 		this.fypFile = fypFile;
 	}
 
+	public StudyClass getStudyClass() {
+		return studyClass;
+	}
+
+
+
+	
+	
 
 	
 	

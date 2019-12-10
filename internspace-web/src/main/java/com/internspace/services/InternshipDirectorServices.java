@@ -22,7 +22,8 @@ import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FileTemplate;
-
+import com.internspace.entities.university.CompanyCoordinates;
+import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.users.Company;
 import com.internspace.entities.users.Student;
@@ -40,15 +41,15 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("listLate")
-	public List<Student> getLastStudent(@QueryParam(value = "year") int year){
-		return service.getLateStudentsList(year);
+	public List<Student> getLastStudent(@QueryParam(value = "year") int year,@QueryParam(value = "id") long id){
+		return service.getLateStudentsList(year,id);
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("listmailing")
-	public void sendMail(@QueryParam(value = "year") int year, @QueryParam(value = "text") String text){
-		 service.sendMail(year,text);
+	public void sendMail(@QueryParam(value = "year") int year, @QueryParam(value = "text") String text,@QueryParam(value = "id") long id){
+		 service.sendMail(year,text,id);
 	};
 	
 	@GET
@@ -154,15 +155,15 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allStudents")
-	public List<Student> AllStudents(){
-		return service.getAllStudentsList();
+	public List<Student> AllStudents(@QueryParam(value = "id") long id){
+		return service.getAllStudentsList(id);
 	};
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("FindStudent")
-	public  Student findStudent ( @QueryParam(value = "cin")String cin){
-		return service.FindStudent(cin);
+	public  Student findStudent ( @QueryParam(value = "cin")String cin, @QueryParam(value = "id") long id){
+		return service.FindStudent(cin,id);
 	};
 	
 	@PUT
@@ -214,6 +215,21 @@ public class InternshipDirectorServices {
 		service.FixActionNumberAsJuryPresident(nb, id);
 	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("listDepartement")
+	public List<Departement> DepartementList( @QueryParam(value = "id") long id){
+		return service.getDepartements(id);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("departementInfo")
+	public Departement DepartementInfo( @QueryParam(value = "id") long id){
+		return service.getDepartementInfo(id);
+	};
+	
+	
 	/*@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("AdrCompany")
@@ -224,8 +240,8 @@ public class InternshipDirectorServices {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("FullInfoOfStudent")
-	public List<FYPSubject> myList(){
-		return service.FullStudentInfoWithVerifiedCompanys();
+	public List<FYPSubject> myList( @QueryParam(value = "id") long id){
+		return service.FullStudentInfoWithVerifiedCompanys(id);
 	};
 	
 	
@@ -243,9 +259,20 @@ public class InternshipDirectorServices {
 		 return service.GetLinksOfCompany(id);
 	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getCompanyCord")
+	public  CompanyCoordinates getCompanyCord ( @QueryParam(value = "id") long id){
+		return service.getCompanyCoordinates(id);
+	};
 	
 	
-	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("departmentLists")
+	public List<Departement> DepList( @QueryParam(value = "id") long id){
+		return service.getDepartements(id);
+	};
 	/*******************************
 	* Not the work of Mahmoud !!!! *
 	********************************/
