@@ -22,6 +22,7 @@ import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FileTemplate;
 import com.internspace.entities.university.CompanyCoordinates;
+import com.internspace.entities.university.UniversitaryYear;
 
 @Stateless
 @Path("teachers")
@@ -192,5 +193,17 @@ public class TeacherService {
 }
 	
 	
+	@GET
+	@Path("/FypYears")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFypYears()
+	{
+		List<UniversitaryYear> fypfiles=service.getUniverstaryYears();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
 
 }
