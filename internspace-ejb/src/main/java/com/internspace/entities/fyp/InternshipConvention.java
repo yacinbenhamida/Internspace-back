@@ -36,6 +36,8 @@ public class InternshipConvention implements Serializable {
 	Date startDate;
 	@Column(name = "end_date")
 	Date endDate;
+	@Column(name = "canceled", columnDefinition = "boolean default false")
+	boolean isCanceled;
 
 	/*
 	 * (Date début, Date fin, entreprise) Entreprise : siteweb, adresse, pays, nom
@@ -107,5 +109,15 @@ public class InternshipConvention implements Serializable {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
+
+	public boolean isCanceled() {
+		return isCanceled;
+	}
+
+	public void setCanceled(boolean isCanceled) {
+		this.isCanceled = isCanceled;
+	}
+	
+	
 
 }

@@ -151,7 +151,7 @@ public class FYPSheetService {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheets()).build();
 	}
 	@GET
-	@Path("{depId}")
+	@Path("ofdepartment/{depId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheetsOfDepartment(@PathParam("depId")int depId) {
 			List<FYPFile> res = fypSheetService.getFYPfilesOfDepartment(depId);
@@ -252,4 +252,26 @@ public class FYPSheetService {
 		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
 	};
 	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptModif")
+	public Response accept(@QueryParam(value = "id") long id){
+		FYPFile res = fypSheetService.accept(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cancelModif")
+	public Response cancel(@QueryParam(value = "id") long id){
+		FYPFile res = fypSheetService.cancel(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
+	};
 }

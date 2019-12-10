@@ -514,5 +514,24 @@ public class StudentEJB implements StudentEJBLocal {
 		return null;
 	}
 
+	@Override
+	public List<Student>  getStudentByIdAt(long id) {
+		Student std = em.find(Student.class, id);
+		 List<Student> ls = em.createQuery("SELECT  studyClass.name from Student c  where c.id=:id ").setParameter("id", id).getResultList();
+
+		 return ls;
+	}
+
+	@Override
+	public InternshipConvention AnnulerInter(long id) {
+		InternshipConvention inter = em.find(InternshipConvention.class, id);
+		inter.setCanceled(true);
+		em.persist(inter);
+		em.flush();
+		
+		
+		return inter;
+	}
+
 }
 	

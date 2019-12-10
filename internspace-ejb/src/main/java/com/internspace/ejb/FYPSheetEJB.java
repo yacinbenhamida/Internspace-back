@@ -383,6 +383,38 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 		}
 		return null;
 	}
+
+	@Override
+	public FYPFile accept(long id) {
+		List<FYPFileModification> fmm= service.createQuery("SELECT f from FYPFileModification f where f.id =:id").setParameter("id", id).getResultList();
+		for(int i=0;i<fmm.size();i++) {
+			
+			fmm.get(i).setIsConfirmed(true);
+			fmm.get(i).getFyp().setUp(true);
+			service.persist(fmm.get(i));
+			service.persist(fmm.get(i).getFyp());
+			service.flush();
+			if(fmm.get(i).getId() == id) {
+			return fmm.get(i).getFyp();}
+		}
+		return null;
+	}
+
+	@Override
+	public FYPFile cancel(long id) {
+		List<FYPFileModification> fmm= service.createQuery("SELECT f from FYPFileModification f where f.id =:id").setParameter("id", id).getResultList();
+		for(int i=0;i<fmm.size();i++) {
+			
+			fmm.get(i).setCanceled(true);
+			fmm.get(i).getFyp().setDown(true);;
+			service.persist(fmm.get(i));
+			service.persist(fmm.get(i).getFyp());
+			service.flush();
+			if(fmm.get(i).getId() == id) {
+			return fmm.get(i).getFyp();}
+		}
+		return null;
+	}
 	
 	
 	

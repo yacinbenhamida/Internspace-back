@@ -23,6 +23,7 @@ import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPSubject;
+import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
@@ -251,4 +252,28 @@ public class StudentService {
 	public List<FYPCategory> getAllCategorysSubject(){
 		 return Studentservice.getAllCategorysSubject();
 	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("profile")
+	public Student Profile(@QueryParam(value = "id") long id){
+		 return Studentservice.getStudentById(id);
+	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("profile/At")
+	public List<Student> ProfileAt(@QueryParam(value = "id") long id){
+		 return Studentservice.getStudentByIdAt(id);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cancelInter")
+	public InternshipConvention cancelInter(@QueryParam(value = "id") long id){
+		 return Studentservice.AnnulerInter(id);
+	};
+	
 }

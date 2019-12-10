@@ -51,8 +51,9 @@ public interface StudentEJBLocal {
 	public List<FYPCategory> getAllCategorysSubject();
 	
 	public Student getStudentById(long id);
-	
+	public  List<Student> getStudentByIdAt(long id);
 	//
 	void sendMailRec(String text,long  id);
 	public List<Employee> getDirectorStd(String cin);
+	public InternshipConvention AnnulerInter(long id);
 }
