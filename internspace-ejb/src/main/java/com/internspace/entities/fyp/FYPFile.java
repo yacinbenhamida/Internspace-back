@@ -77,7 +77,12 @@ public class FYPFile implements Serializable {
 
 	@Column(name = "is_confirmed", columnDefinition = "boolean default false")
 	Boolean isConfirmed;
+	
+	@Column(name = "is_up", columnDefinition = "boolean default false")
+	Boolean up;
 
+	@Column(name = "is_down", columnDefinition = "boolean default false")
+	boolean down;
 	/*
 	 * Associations
 	 */
@@ -85,7 +90,7 @@ public class FYPFile implements Serializable {
 	@OneToOne(mappedBy = "fypFile")
 	Student student;
 	
-	@OneToOne(mappedBy = "fyp")
+	@OneToOne(mappedBy = "fyp",cascade = CascadeType.ALL)
 	FYPFileModification fypm;
 	
 	
@@ -94,7 +99,7 @@ public class FYPFile implements Serializable {
 	@JoinColumn(name = "uni_year")
 	UniversitaryYear universitaryYear;
 
-	@OneToOne(optional = true, cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "subject", nullable = true)
 	FYPSubject subject; // NULL ? mazel famech chkon 9a3d yaaml f PFE mte3o lehné
 
@@ -158,7 +163,10 @@ public class FYPFile implements Serializable {
 	public void setProblematic(String problematic) {
 		this.problematic = problematic;
 	}
-
+	public UniversitaryYear getUniversitaryYear()
+	{
+		return universitaryYear;
+	}
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
 	}
@@ -236,10 +244,24 @@ public class FYPFile implements Serializable {
 		return fileStatus;
 	}
 
-	/*public UniversitaryYear getUniversitaryYear() {
-		return universitaryYear;
-	}*/
-	
+
+
+	public Boolean getUp() {
+		return up;
+	}
+
+	public void setUp(Boolean up) {
+		this.up = up;
+	}
+
+	public boolean isDown() {
+		return down;
+	}
+
+	public void setDown(boolean down) {
+		this.down = down;
+	}
+
 	
 	
 

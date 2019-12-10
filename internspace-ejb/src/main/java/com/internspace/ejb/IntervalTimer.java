@@ -32,10 +32,10 @@ public class IntervalTimer {
     @Timeout
     public void execute(Timer timer) {
         //System.out.println("Timer Service : " + ((javax.ejb.Timer) timer).getInfo());
-        System.out.println("Sending Notification Current Time : " + new Date());
+        //System.out.println("Sending Notification Current Time : " + new Date());
         //System.out.println("Next Timeout : " + ((javax.ejb.Timer) timer).getNextTimeout());
         //System.out.println("Time Remaining : " + ((javax.ejb.Timer) timer).getTimeRemaining());
-        System.out.println("____________________________________________");
+        //System.out.println("____________________________________________");
         //timer.cancel();
     }
     

@@ -2,6 +2,8 @@ package com.internspace.entities.users;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,7 +14,11 @@ import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.fyp.StudentCategoryPreference;
 import com.internspace.entities.fyp.StudentFYPSubject;
 import com.internspace.entities.university.StudyClass;
+
 import com.internspace.entities.university.University;
+
+import com.internspace.entities.users.Employee.Role;
+
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -26,9 +32,18 @@ import javax.persistence.OneToOne;
 public class Student extends User {
 
 	private static final long serialVersionUID = 1L;
+	
+	public enum Role {
+		Student
+
+	}
 
 	@Column(name = "birth_date")
 	LocalDate birthDate;
+	
+	@Enumerated(EnumType.STRING)
+	Role role;
+
 
 	// The student isn't allowed to have a reporter without initially submitting a
 	// paper report to the administration
@@ -69,11 +84,11 @@ public class Student extends User {
 	FYPFile fypFile;
 	
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "study_class_id")
 	StudyClass studyClass;
 	// Many to Many to Categories using custom association table.
-	@OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
 	Set<StudentCategoryPreference> preferedCategories;
 
 	// Many to Many to Subjects using custom association table.
@@ -92,7 +107,15 @@ public class Student extends User {
 	 */
 	  public String getPassword() { return password; }
 	  
-	  public void setPassword(String password) { this.password = password; }
+	  public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public void setPassword(String password) { this.password = password; }
 	  
 	  public String getUsername() { return username; }
 	  
@@ -143,11 +166,11 @@ public class Student extends User {
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
-	/*
+	
 	public StudyClass getStudyClass() {
 		return studyClass;
 	}
-	*/
+	
 	public void setStudyClass(StudyClass studyClass) {
 		this.studyClass = studyClass;
 	}
@@ -173,7 +196,14 @@ public class Student extends User {
 	 * 
 	 * /*public Set<StudentCategoryPreference> getPreferedCategories() { return
 	 * preferedCategories; }
+	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
+		this.preferedCategories = preferedCategories;
+	}
 	 */
+	
+	public Set<StudentCategoryPreference> getPreferedCategories() {
+		return this.preferedCategories;
+	}
 
 	public void setPreferedCategories(Set<StudentCategoryPreference> preferedCategories) {
 		this.preferedCategories = preferedCategories;
@@ -213,9 +243,7 @@ public class Student extends User {
 		this.fypFile = fypFile;
 	}
 
-	public StudyClass getStudyClass() {
-		return studyClass;
-	}
+	
 
 
 

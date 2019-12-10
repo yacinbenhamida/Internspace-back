@@ -18,9 +18,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPSubject;
+import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
@@ -144,6 +147,13 @@ public class StudentService {
 		Studentservice.sendMail(text,cin);
 	};
 
+	//mail de rec
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("mailRec")
+	public void sendMailRec(@QueryParam(value = "text") String text,@QueryParam(value = "id") long id){
+		Studentservice.sendMailRec(text,id);
+	};
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -183,8 +193,8 @@ public class StudentService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("directeur")
-	public List<Employee> getDirector(@QueryParam(value = "cin") String cin){
-		 return Studentservice.getDirector(cin);
+	public List<Employee> getDirector(@QueryParam(value = "id") long id){
+		 return Studentservice.getDirector(id);
 	};
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -220,4 +230,50 @@ public class StudentService {
 	public List<FYPFile> getAllStudentFileByFil(@QueryParam(value = "id") long id){
 		 return Studentservice.getAllStudentFileByFil(id);
 	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cat")
+	public List<FYPSubject> getAllCategory(@QueryParam(value = "id") long id){
+		 return Studentservice.getAllCategory(id);
+	};
+	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("categorys")
+	public List<FYPSubject> getAllCategory(){
+		 return Studentservice.getAllCategorys();
+	};
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("categoryssub")
+	public List<FYPCategory> getAllCategorysSubject(){
+		 return Studentservice.getAllCategorysSubject();
+	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("profile")
+	public Student Profile(@QueryParam(value = "id") long id){
+		 return Studentservice.getStudentById(id);
+	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("profile/At")
+	public List<Student> ProfileAt(@QueryParam(value = "id") long id){
+		 return Studentservice.getStudentByIdAt(id);
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cancelInter")
+	public InternshipConvention cancelInter(@QueryParam(value = "id") long id){
+		 return Studentservice.AnnulerInter(id);
+	};
+	
 }

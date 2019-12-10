@@ -300,4 +300,27 @@ public class InternshipDirectorServices {
 		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("FypFile not exist or already confirmed").build();
 	};
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptPFEe")
+	public Response acceptPFEe(@QueryParam(value = "id") long id){
+		FYPFile res = service.acceptPFEFyp(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cancelPFEe")
+	public Response cancelPFEe(@QueryParam(value = "id") long id){
+		FYPFile res = service.cancelPFEFyp(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
+	};
+	
+	
 }

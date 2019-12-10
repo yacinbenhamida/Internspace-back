@@ -43,6 +43,10 @@ public class UniversityEJB implements UniversityEJBLocal{
 		return em.createQuery("SELECT u from University u").getResultList();
 	}
 	
+	@Override
+	public University searchUniversity(long id) {
+		return em.find(University.class, id);
+	}
 	
 		
 		

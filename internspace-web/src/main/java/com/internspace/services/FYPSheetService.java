@@ -22,6 +22,7 @@ import com.internspace.ejb.abstraction.FYPSheetEJBLocal;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.users.Student;
 
 @Path("fypsheet")
 public class FYPSheetService {
@@ -115,10 +116,10 @@ public class FYPSheetService {
 		return Response.status(Response.Status.NOT_IMPLEMENTED).build();
 	}
 	@GET 
-	@Path("accepted")
+	@Path("accepted/{idDep}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllAcceptedFYPSheets() {
-		List<FYPFile> res = fypSheetService.getAllAcceptedFYPSheets();
+	public Response getAllAcceptedFYPSheets(@PathParam("idDep")long idDep) {
+		List<FYPFile> res = fypSheetService.getAllAcceptedFYPSheets(idDep);
 		if(res!=null) {
 			return Response.status(Response.Status.OK).entity(res).build();
 		}
@@ -135,10 +136,10 @@ public class FYPSheetService {
 		return Response.status(Response.Status.NOT_FOUND).entity("norecords").build();
 	}
 	@GET 
-	@Path("nosupervisors")
+	@Path("nosupervisors/{idDep}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFYPSheetsWithNoSupervisors() {
-		List<FYPFile> res = fypSheetService.getFYPSheetsWithNoSupervisors();
+	public Response getFYPSheetsWithNoSupervisors(@PathParam("idDep")long idDep) {
+		List<FYPFile> res = fypSheetService.getFYPSheetsWithNoSupervisors(idDep);
 		if(res!=null) {
 			return Response.status(Response.Status.OK).entity(res).build();
 		}
@@ -150,11 +151,11 @@ public class FYPSheetService {
 			return Response.status(Response.Status.OK).entity(fypSheetService.getAllSheets()).build();
 	}
 	@GET
-	@Path("{depId}")
+	@Path("ofdepartment/{depId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllSheetsOfDepartment(@PathParam("depId")int depId) {
 			List<FYPFile> res = fypSheetService.getFYPfilesOfDepartment(depId);
-			return Response.status(Response.Status.OK).entity(res).build();
+			return Response.status(Response.Status.OK).entity(res.toArray()).build();
 	}
 	
 	@GET
@@ -184,6 +185,7 @@ public class FYPSheetService {
 		return Response.status(Response.Status.OK).entity(fypSheetService.allFYPfilesWatingForMarkFrom()).build();
 	}
 	
+	
 	// consulter l'etat de sa fichePFE et l'envoi d'un mail
 	@GET
 	@Path("etat")
@@ -199,9 +201,8 @@ public class FYPSheetService {
 	@Path("major")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-
-	public Response modificationMajeur(FYPFile file) {
-		 Boolean res = fypSheetService.modificationMajeur(file);
+	public Response modificationMajeur(@QueryParam(value = "id") long id) {
+		 boolean res = fypSheetService.modificationMajeur(id);
 		return 	Response.status(Response.Status.OK).entity("Modification major"+ res).build();
 	}
 
@@ -210,11 +211,67 @@ public class FYPSheetService {
 	@Path("editt")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response editFYPSheett(FYPFile file) {
-		FYPFile res = fypSheetService.editFYPSheett(file);
- 
-			return Response.status(Response.Status.OK).entity("Modification Major").build();
+	public FYPFile editFYPSheett(FYPFile file) {
+		 FYPFile res = fypSheetService.editFYPSheett(file);
+		 return res;
+		//	return Response.status(Response.Status.OK).entity("Modification Major").build();
 		
 		
 	}
+	@PUT
+	@Path("edittstd")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public FYPFile editFYPSheetStudent(FYPFile file,@QueryParam(value = "id") long id) {
+		 FYPFile res = fypSheetService.editFYPSheetStudent(file,id);
+		 return res;
+		//	return Response.status(Response.Status.OK).entity("Modification Major").build();
+		
+		
+	}
+	
+	@PUT
+	@Path("edittstdd")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public FYPFile editFYPSheetStudentMaj(FYPFile file,@QueryParam(value = "id") long id) {
+		 
+		 return fypSheetService.editFYPSheetStudentMaj(file,id);
+		//	return Response.status(Response.Status.OK).entity("Modification Major").build();
+		
+		
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptPFE")
+	public Response acceptPFE(@QueryParam(value = "id") long id){
+		FYPFile res = fypSheetService.acceptPFE(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
+	};
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("acceptModif")
+	public Response accept(@QueryParam(value = "id") long id){
+		FYPFile res = fypSheetService.accept(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
+	};
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cancelModif")
+	public Response cancel(@QueryParam(value = "id") long id){
+		FYPFile res = fypSheetService.cancel(id);
+		if(res!= null) {
+		return Response.status(Response.Status.OK).entity("Student is Accepted").build();
+		}
+		return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Student is not Saved").build();
+	};
 }

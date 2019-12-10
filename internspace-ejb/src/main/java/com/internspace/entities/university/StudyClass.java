@@ -40,7 +40,7 @@ public class StudyClass implements Serializable {
 	@Column(name = "class_year")
 	int classYear; // Values like (1, 2, 3, 4, 5, ...), 5 means 5ème année...
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "universitary_year_id")
 	UniversitaryYear universitaryYear;
 	
@@ -84,9 +84,9 @@ public class StudyClass implements Serializable {
 	}
 
 
-	/*public UniversitaryYear getUniversitaryYear() {
+	public UniversitaryYear getUniversitaryYear() {
 		return universitaryYear;
-	}*/
+	}
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
 	}

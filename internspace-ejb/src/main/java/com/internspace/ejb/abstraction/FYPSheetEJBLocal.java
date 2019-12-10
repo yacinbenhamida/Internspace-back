@@ -8,6 +8,7 @@ import javax.ejb.Local;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
+import com.internspace.entities.users.Student;
 //rchm
 @Local
 public interface FYPSheetEJBLocal {
@@ -24,19 +25,24 @@ public interface FYPSheetEJBLocal {
 	public List<FYPFile> getFYPSheetsOfTeacher(long idTeacher);
 	// custom methods
 	// returns the fyp sheets that got accepted by the internships director
-	public List<FYPFile> getAllAcceptedFYPSheets();
+	public List<FYPFile> getAllAcceptedFYPSheets(long idDep);
 	// no marks from reporter or supervisor
 	public List<FYPFile> getAllSheetsWithNoMarks();
-	public List<FYPFile> getFYPSheetsWithNoSupervisors();
+	public List<FYPFile> getFYPSheetsWithNoSupervisors(long idDep);
 	public List<FYPFile> getAllSheets();
 	
 	//my work
 	public List<FYPFile> getAll();
 	public List<FYPFile> getAllSheetsPending();
 	public FYPFileStatus etatChanged(long id);
-	public Boolean modificationMajeur(FYPFile file);
+	public boolean modificationMajeur(long id);
 	public FYPFile editFYPSheett(FYPFile file);
-
+	public FYPFile editFYPSheetStudent(FYPFile file,long id );
+	public FYPFile editFYPSheetStudentMaj(FYPFile file,long id );
+	public FYPFile acceptPFE(long id);
+	public FYPFile accept(long id);
+	
+	public FYPFile cancel(long id);
 
 	
 

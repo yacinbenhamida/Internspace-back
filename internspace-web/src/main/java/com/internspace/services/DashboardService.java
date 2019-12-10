@@ -153,7 +153,7 @@ public class DashboardService {
 				.header("Access-Control-Max-Age", "1209600").build();
 	}
 	
-	// CURRENT
+	// DONE
 	@GET
 	@Path("/company/category/evolution")
 	@Produces(MediaType.APPLICATION_JSON)

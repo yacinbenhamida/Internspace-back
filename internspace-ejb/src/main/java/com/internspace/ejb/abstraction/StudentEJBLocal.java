@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
@@ -38,15 +40,20 @@ public interface StudentEJBLocal {
 
 	void sendMail(String text,String cin);
 	void mailEtat(String text,String cin);
-	public List<Employee> getDirector(String cin);
+	public List<Employee> getDirector(long id);
 	public List<FYPFile> getAllSheetsPendingStudent();
 	public List<FYPFile> getAllSheetsPendingByStudent(String cin);
 	public List<Student> getAllStudentFile(long id);
 	public List<FYPFile> getAllStudentFileByFil(long id);
 	
-	
+	public List<FYPSubject> getAllCategory(long id);
+	public List<FYPSubject> getAllCategorys();
+	public List<FYPCategory> getAllCategorysSubject();
 	
 	public Student getStudentById(long id);
-	
-
+	public  List<Student> getStudentByIdAt(long id);
+	//
+	void sendMailRec(String text,long  id);
+	public List<Employee> getDirectorStd(String cin);
+	public InternshipConvention AnnulerInter(long id);
 }

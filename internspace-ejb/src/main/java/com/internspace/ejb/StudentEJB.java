@@ -17,12 +17,14 @@ import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
+import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPSheetHistory;
+import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.InternshipConvention;
 import com.internspace.entities.users.Employee;
 import com.internspace.entities.users.Student;
@@ -283,10 +285,13 @@ public class StudentEJB implements StudentEJBLocal {
 	}
 
 	@Override
-	public List<Employee> getDirector(String cin) {
+	public List<Employee> getDirector(long id) {
 		// List <String> list = new ArrayList();
-		List<FYPFile> ls = getAllStudentFileCin(cin);
 
+		
+		Student std = em.find(Student.class, id);
+		String cin = std.getCin();
+		List<FYPFile> ls = getAllStudentFileCin(cin);
 		for (int i = 0; i < ls.size(); i++) {
 			if (ls.get(i).getIsArchived()) {
 
@@ -306,8 +311,8 @@ public class StudentEJB implements StudentEJBLocal {
 					 * 
 					 * list.add(name); list.add(email);
 					 */
-					return em.createQuery("SELECT c.teacher.firstName,c.teacher.email from "
-							+ FYPIntervention.class.getName() + " c  ").getResultList();
+					return em.createQuery("SELECT  c.teacher.id,c.teacher.role,c.teacher.firstName,c.teacher.email from "
+							+ FYPIntervention.class.getName() + " c where c.fypFile.student.cin=:cin ").setParameter("cin", cin).getResultList();
 
 					// return list;
 
@@ -428,8 +433,58 @@ public class StudentEJB implements StudentEJBLocal {
 		return 0;
 	}
 
+	
+	// fypfile
 
+	@Override
+	public List<FYPSubject> getAllCategory(long id) {
+		return em.createQuery("SELECT c.subjects from FYPCategory c  where c.id=:id ")
+				.setParameter("id", id).getResultList();
 
+	}
+
+	@Override
+	public List<FYPSubject> getAllCategorys() {
+		return em.createQuery("SELECT  DISTINCT(c.subjects)  from FYPCategory c ")
+				.getResultList();
+	}
+
+	@Override
+	public List<FYPCategory> getAllCategorysSubject() {
+		return em.createQuery("SELECT  DISTINCT(c.subjects)  from FYPCategory c Join FYPSubject f  ")
+				.getResultList();
+	}
+
+	@Override
+	public void sendMailRec(String text, long  id) {
+		// TODO Auto-generated method stub
+		
+		Student std = em.find(Student.class, id);
+		
+		Mail_API mail = new Mail_API();
+		List<Student> ls = getAllStudentAutorised();
+		List<Student> ls1 = getAllStudentNodisabled();
+		List<Student> ls2 = getAllStudentSaved();
+		List<Student> ls3 = new ArrayList();
+		List<Student> ls4 = new ArrayList();
+
+		String subject1 = "Nouvelle Reclamation de Etudiant num " + std.getCin();
+		
+
+		for (int j = 0; j < ls.size(); j++) {
+			if (ls.get(j).equals(std)) {
+				
+				try {
+					mail.sendMail(std.getEmail(), text, subject1);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+	}
+	
+		}
+	}
 	/*
 	 * @Override public void enregistrer(long cin) {
 	 * 
@@ -452,4 +507,31 @@ public class StudentEJB implements StudentEJBLocal {
 	 * }
 	 */
 
+	@Override
+	public List<Employee> getDirectorStd(String cin) {
+		List<FYPFile> ls = getAllStudentFileCin(cin);
+		
+		return null;
+	}
+
+	@Override
+	public List<Student>  getStudentByIdAt(long id) {
+		Student std = em.find(Student.class, id);
+		 List<Student> ls = em.createQuery("SELECT  studyClass.name from Student c  where c.id=:id ").setParameter("id", id).getResultList();
+
+		 return ls;
+	}
+
+	@Override
+	public InternshipConvention AnnulerInter(long id) {
+		InternshipConvention inter = em.find(InternshipConvention.class, id);
+		inter.setCanceled(true);
+		em.persist(inter);
+		em.flush();
+		
+		
+		return inter;
+	}
+
 }
+	

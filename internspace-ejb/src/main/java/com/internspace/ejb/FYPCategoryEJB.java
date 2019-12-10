@@ -1,10 +1,12 @@
 package com.internspace.ejb;
 
+import java.util.List;
 import java.util.Locale.Category;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.internspace.ejb.abstraction.FYPCategoryEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
@@ -47,6 +49,18 @@ public class FYPCategoryEJB implements FYPCategoryEJBLocal{
 	public FYPCategory editCategory(FYPCategory category) {
 		em.merge(category);
 		return em.find(FYPCategory.class, category.getId()) ;
+	}
+
+	@Override
+	public List<FYPCategory> getSuggestedCategories(long idDep) {
+		Query query = em.createQuery("SELECT c from FYPCategory c where c.department.id = :id AND c.isApproved=0").setParameter("id", idDep);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<FYPCategory> getAllCategories(long idDep) {
+		return em.createQuery("SELECT c from FYPCategory c where c.department.id = :id")
+				.setParameter("id", idDep).getResultList();
 	}
 
 }

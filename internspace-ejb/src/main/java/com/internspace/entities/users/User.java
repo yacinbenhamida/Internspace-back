@@ -45,6 +45,7 @@ public class User implements Serializable {
 	protected String email;
 	protected String username;
 	protected String password;
+	protected String pictureUrl; // You can use this for profile picture or school/company logo
 	@Column(name="user_type")
 	@Enumerated(EnumType.STRING)
 	protected UserType userType; 
@@ -88,7 +89,7 @@ public class User implements Serializable {
 	public String getFirstName() {
 		return firstName;
 	}
-
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -125,6 +126,10 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+	
 	public UserType getUserType() {
 		return userType;
 	}

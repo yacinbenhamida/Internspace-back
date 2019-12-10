@@ -44,7 +44,7 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
 
 	@Override
 	public List<FYPFile> getAllFilesModification() {
-		return em.createQuery("SELECT f.fyp from FYPFileModification f").getResultList();
+		return em.createQuery("SELECT f.fyp from FYPFileModification f ").getResultList();
 		
 	}
 
@@ -56,7 +56,18 @@ public class FYPFileModificationEJB implements FYPFileModificationEJBLocal{
 
 	@Override
 	public List<FYPFileModification> getAll() {
-		return em.createQuery("SELECT f from FYPFileModification f").getResultList();
+		return em.createQuery("SELECT f from FYPFileModification f where f.isChanged =:id").setParameter("id", true).getResultList();
+	}
+
+	@Override
+	public boolean acceptModification(long id) {
+		
+		FYPFileModification fm = em.find(FYPFileModification.class, id);
+		fm.setIsConfirmed(true);
+		em.persist(fm);
+		em.flush();
+
+		return true;
 	}
 
 	

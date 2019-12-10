@@ -17,6 +17,7 @@ import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
 import com.internspace.entities.exchanges.Mail_API;
+import com.internspace.entities.fyp.FYPFeature;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
@@ -90,8 +91,10 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public List<FYPFile> getAllAcceptedFYPSheets() {
-		Query q =  service.createQuery("SELECT f from FYPFile f where f.fileStatus = :status").setParameter("status", FYPFileStatus.confirmed);
+	public List<FYPFile> getAllAcceptedFYPSheets(long idDep) {
+		Query q =  service.createQuery("SELECT f from FYPFile f where f.fileStatus = :status "
+				+ "AND f.student.studyClass.classOption.departement.id = :id")
+				.setParameter("id",idDep).setParameter("status", FYPFileStatus.confirmed);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -110,9 +113,10 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public List<FYPFile> getFYPSheetsWithNoSupervisors() {
-		Query q = service.createQuery("SELECT f from FYPFile f group by f.id "
-				+ "HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.fypFile.id = f.id AND i.teacherRole = 'supervisor' ) = 0");
+	public List<FYPFile> getFYPSheetsWithNoSupervisors(long idDep) {
+		Query q = service.createQuery("SELECT f from FYPFile f WHERE f.student.studyClass.classOption.departement.id = :id group by f.id "
+				+ "HAVING (SELECT COUNT(i.id) from fyp_intervention i where i.fypFile.id = f.id AND i.teacherRole = 'supervisor' ) = 0")
+				.setParameter("id", idDep);
 		if(!q.getResultList().isEmpty()) {
 			return  q.getResultList();
 		}
@@ -224,51 +228,55 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 	}
 
 	@Override
-	public Boolean modificationMajeur(FYPFile file) {
+	public boolean modificationMajeur(long id) {
 
-		boolean res = false;
-		editFYPSheet(file);
-		file.getProblematic();
-		List<FYPFile> fm = serviceModif.getAllFilesModification();
 		
-		for(int i=0;i<fm.size();i++) {
-			if(file.equals(fm.get(i))) {
-				if(file.getProblematic().equals(fm.get(i).getProblematic())) {
-					
-					return res;
-					
-				}
-				else
-				{
-					res= true;
-				return res;
-					
-				}
-			}
-		}
-		return res;
-	
-		//if(file.setFeatures(features);)
+		FYPFile f = service.find(FYPFile.class, id);
 		
+		
+		
+		List<FYPFile> fm =  service.createQuery("SELECT f.fyp from FYPFileModification f").getResultList();
+		List<FYPFileModification> fmm= service.createQuery("SELECT f from FYPFileModification f").getResultList();
+
+		
+			for(int j=0;j<fmm.size();j++) {
+				for(int i=0;i<fm.size();i++) {
+					
+				    if(!f.getProblematic().equals(fmm.get(j).getProblematic())) {
+					
+					
+							fmm.get(j).setIsChanged(true);
+							service.merge(fmm.get(j));
+							return true;
+						
+				      }
+			
+			
+		            }
+	                }
+		          
+		
+		return false;
 	}
 	@Override
 	public FYPFile editFYPSheett(FYPFile file) {
 		List<FYPFileModification> fm= service.createQuery("SELECT f from FYPFileModification f").getResultList();
+		List<FYPFile> fmm= service.createQuery("SELECT f.fypFile from FYPFeature f where f.fypFile =:fypFile ").setParameter("fypFile", file).getResultList();
 		 service.merge(file);
 		for(int i =0 ;i<fm.size();i++){
 			
 			if(file.getId()==fm.get(i).getFyp().getId()) {
-				
-				if((file.getProblematic().equals(fm.get(i).getProblematic())) && file.getFeatures().equals(fm.get(i).getFeatures())) {
+				for(int j =0 ;i<fmm.size();i++){
+				if((file.getProblematic().equals(fm.get(i).getProblematic())) && fmm.get(j).equals(fm.get(i).getFeatures())) {
 					return fm.get(i).getFyp();
 				}
 				else
 				{
 					
 					fm.get(i).setProblematic(file.getProblematic());
-					fm.get(i).setFeatures(file.getFeatures());
+					//fm.get(i).setFeatures();
 					fm.get(i).setIsChanged(true);
-					features.addFYPFeatures(file.getFeatures());
+					//features.addFYPFeatures(file.getFeatures());
 					//file.getFeatures().iterator().next().setFypFile(file);
 					//features.addFYPFeature(file.getFeatures().iterator().next());
 					return fm.get(i).getFyp();
@@ -278,6 +286,8 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 			
 		}
 		
+	
+	}
 		return file;
 	}
 
@@ -288,6 +298,131 @@ public class FYPSheetEJB implements FYPSheetEJBLocal{
 			return query.getResultList();
 	}
 
+	@Override
+	public FYPFile editFYPSheetStudent(FYPFile file, long id) {
+		Student std = service.find(Student.class, id);
+		file.setId(id);
+		return service.merge(file);}
 	
 
+	@Override
+	public FYPFile editFYPSheetStudentMaj(FYPFile file, long id) {
+		// TODO Auto-generated method stub
+		Student std = service.find(Student.class, id);
+		file.setId(id);
+		if(std.getFypFile().getId() == file.getId())
+		{
+			file.setId(id);
+		service.merge(file);
+		
+		
+		List<FYPFileModification> fm= service.createQuery("SELECT f from FYPFileModification f").getResultList();
+		List<FYPFile> fmm= service.createQuery("SELECT f.fypFile from FYPFeature f where f.fypFile.id =:fypFile ").setParameter("fypFile", file.getId()).getResultList();
+        for(int i =0 ;i<fm.size();i++){
+			
+		
+				for(int j =0 ;i<fmm.size();i++){
+				if((file.getProblematic().equals(fm.get(i).getProblematic()))){
+					return file;
+				}
+				else
+				{
+					
+					fm.get(i).setProblematic(file.getProblematic());
+					//fm.get(i).setFeatures();
+					fm.get(i).setIsChanged(true);
+					//features.addFYPFeatures(file.getFeatures());
+					//file.getFeatures().iterator().next().setFypFile(file);
+					//features.addFYPFeature(file.getFeatures().iterator().next());
+					return file;
+			
+				}
+			}
+			
+		
+		 
+		 
+		
+	           }
+		}
+	
+		
+
+        return null;
+
+}
+
+	@Override
+	public FYPFile acceptPFE(long id) {
+		FYPFile s= service.find(FYPFile.class, id);
+		if(s == null) {
+			return null;}
+		else {
+		
+		List<FYPFile> fm =  service.createQuery("SELECT f.fyp from FYPFileModification f").getResultList();
+		List<FYPFileModification> fmm= service.createQuery("SELECT f from FYPFileModification f where f.fyp.id =:id").setParameter("id", id).getResultList();
+		for(int j=0;j<fmm.size();j++) {
+			for(int i=0;i<fm.size();i++) {
+				if(fm.get(i).getId() == id) {
+
+			    if(!s.getProblematic().equals(fmm.get(j).getProblematic())) {
+				
+				
+						fmm.get(j).setIsChanged(true);
+						
+						service.persist(fmm.get(j));
+						service.flush();
+					
+			      }
+		
+					
+	            }
+                }
+		}
+		
+		}
+		return null;
+	}
+
+	@Override
+	public FYPFile accept(long id) {
+		List<FYPFileModification> fmm= service.createQuery("SELECT f from FYPFileModification f where f.id =:id").setParameter("id", id).getResultList();
+		for(int i=0;i<fmm.size();i++) {
+			
+			fmm.get(i).setIsConfirmed(true);
+			fmm.get(i).getFyp().setUp(true);
+			service.persist(fmm.get(i));
+			service.persist(fmm.get(i).getFyp());
+			service.flush();
+			if(fmm.get(i).getId() == id) {
+			return fmm.get(i).getFyp();}
+		}
+		return null;
+	}
+
+	@Override
+	public FYPFile cancel(long id) {
+		List<FYPFileModification> fmm= service.createQuery("SELECT f from FYPFileModification f where f.id =:id").setParameter("id", id).getResultList();
+		for(int i=0;i<fmm.size();i++) {
+			
+			fmm.get(i).setCanceled(true);
+			fmm.get(i).getFyp().setDown(true);;
+			service.persist(fmm.get(i));
+			service.persist(fmm.get(i).getFyp());
+			service.flush();
+			if(fmm.get(i).getId() == id) {
+			return fmm.get(i).getFyp();}
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

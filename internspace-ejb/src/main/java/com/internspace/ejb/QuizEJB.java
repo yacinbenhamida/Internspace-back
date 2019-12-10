@@ -108,7 +108,7 @@ public class QuizEJB implements QuizEJBLocal {
 		if (studentQuizs == null || studentQuizs.size() == 0) {
 			// Then create one
 
-			studentQuiz = new StudentQuiz(student, quiz, 1);
+			studentQuiz = new StudentQuiz(student, quiz, 0);
 
 			em.persist(studentQuiz);
 
@@ -214,7 +214,7 @@ public class QuizEJB implements QuizEJBLocal {
 	@Override
 	public List<Quiz> getAllByCategory(long categoryId)
 	{
-		List<Quiz> quizzes = em.createQuery("SELECT Q FROM " + Quiz.class.getName() + " Q"
+		List<Quiz> quizzes = em.createQuery("SELECT DISTINCT Q FROM " + Quiz.class.getName() + " Q"
 				+ " JOIN FETCH Q.questions QQ"
 				+ " WHERE Q.category.id = :categoryId",
 				Quiz.class)
@@ -422,7 +422,10 @@ public class QuizEJB implements QuizEJBLocal {
 		
 		// Check if this percentage is enough to pass the quiz.
 		if (correctAnswersPercentage >= studentQuiz.getQuiz().getMinCorrectQuestionsPercentage()) {
-			scp.setSkillScore(Math.max(scp.getSkillScore(), studentQuiz.getQuiz().getRequiredMinLevel() + 1));
+			int res = Math.max(scp.getSkillScore(), studentQuiz.getQuiz().getRequiredMinLevel() + 1);
+			res = Math.min(res, 10);
+			
+			scp.setSkillScore(res);
 			updateStudentCategoryPreference(scp);
 		}
 

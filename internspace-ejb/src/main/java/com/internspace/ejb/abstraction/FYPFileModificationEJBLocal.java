@@ -15,6 +15,7 @@ public interface FYPFileModificationEJBLocal {
 	public  List<FYPFile> getAllFilesModification();
 	public  List<FYPFileModification> getAll();
 	public FYPFile editFYPSheet(FYPFile file);
+	public boolean acceptModification(long id);
 	
 	
 

@@ -18,12 +18,15 @@ public class DepartementEJB implements DepartementEJBLocal {
 	EntityManager em;
 
 	@Override
-	public int addDepartment(Departement departement) {
+	public long addDepartment(Departement departement) {
 		System.out.println("addDepartment: " + departement);
 		em.persist(departement);
-		return 1;
+		return departement.getId();
 	}
-
+	@Override
+	public List<Departement> getAllDepartmentsOfSite(long siteId) {
+		return em.createQuery("select d from Departement d where d.site.id = :id").setParameter("id", siteId).getResultList();
+	}
 
 	@Override
 	public List<Departement> getAllDepartments() {
@@ -46,6 +49,9 @@ public class DepartementEJB implements DepartementEJBLocal {
 		return 0;
 	}
 	
-
+	@Override
+	public Departement getDeptById(long id) {
+		return em.find(Departement.class, id);
+	}
 
 }

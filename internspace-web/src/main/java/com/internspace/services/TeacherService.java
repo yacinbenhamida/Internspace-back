@@ -19,7 +19,10 @@ import javax.ws.rs.core.Response.Status;
 import com.internspace.ejb.abstraction.TeacherEJBLocal;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
+import com.internspace.entities.fyp.FYPFileModification;
 import com.internspace.entities.fyp.FileTemplate;
+import com.internspace.entities.university.CompanyCoordinates;
+import com.internspace.entities.university.UniversitaryYear;
 
 @Stateless
 @Path("teachers")
@@ -71,11 +74,12 @@ public class TeacherService {
 	@Produces(MediaType.APPLICATION_JSON)
 	
 	public Response addCategory(
-			@QueryParam(value="name")String Name)
+			@QueryParam(value="name")String Name,@QueryParam(value="desc")String desc)
 			
 	{
 		FYPCategory category = new FYPCategory();
 		category.setName(Name);
+		category.setDescription(desc);
 		
 		service.ProposeFYPCategory(category);
 		return Response.status(Status.OK).entity(category).build();
@@ -86,6 +90,8 @@ public class TeacherService {
 	
 	public void editFYPSheet(@PathParam(value="id")long id,@PathParam(value="id2")long id2) {
 		service.ValidateMajorModification(id,id2);
+		
+		System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"+id+"."+id2+"hhhhhhhhhhhhhhhhhhh");
 		
 		
 	}
@@ -114,13 +120,90 @@ public class TeacherService {
 				
 }
 	
+
+	@GET
+	@Path("/allCat")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getallcategories()
+	{
+		List<FYPCategory> fypfiles=service.getAllCategories();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	@GET
+	@Path("/allfypMod")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getallfypmodifi()
+	{
+		List<FYPFileModification> fypfiles=service.getAllFypmodification();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/prevalidate/{id}")
+	public Response updateArchive(@PathParam (value="id") long file ){
+		FYPFile f=service.PrevalidateFYPFile(file);
+		System.out.println(f);
+		return Response.status(Response.Status.OK).entity("done").build();
+
+	}
+	@GET
+	@Path("/allfyps/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getallfyps(@PathParam (value="id") long id)
+	{
+		List<FYPFile> fypfiles=service.getteacherfyp(id);
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	@GET
+	@Path("/size/{type}/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getfypssize(@PathParam (value="type") String type,@PathParam (value="id") long id)
+	{
+		int fypfiles=service.getfypsize(type, id);
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+	@GET
+	@Path("/Mmsize")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getmajormodificationsize()
+	{
+		int fypfiles=service.getmajormmodificationsize();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
 	
 	
-	
-	
-	
-	
-	
-	
-	
+	@GET
+	@Path("/FypYears")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFypYears()
+	{
+		List<UniversitaryYear> fypfiles=service.getUniverstaryYears();
+		 return Response.ok(fypfiles).status(200)
+			        .header("Access-Control-Allow-Origin", "*")
+			        .header("Access-Control-Max-Age", "1209600")
+			        .build();
+				
+}
+
 }
