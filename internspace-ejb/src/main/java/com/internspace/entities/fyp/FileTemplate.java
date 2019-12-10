@@ -80,7 +80,8 @@ public class FileTemplate implements Serializable {
 					ElementType.keywords,
 					ElementType.company,
 					ElementType.supervisor,
-					ElementType.rapporteur
+					ElementType.rapporteur,
+					ElementType.universityIcon
 					// ...
 					);
 		} else {

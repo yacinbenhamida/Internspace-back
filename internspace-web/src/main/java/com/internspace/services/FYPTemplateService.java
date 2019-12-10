@@ -37,7 +37,8 @@ public class FYPTemplateService {
 	 * that are relevant to the template's type.
 	 * @param templateName
 	 */
-	@POST
+	//@POST
+	@GET
 	@Path("create")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response createTemplate(

@@ -21,7 +21,7 @@ import javax.persistence.FetchType;
 public class FileTemplateElement implements Serializable {
 
 	public enum ElementType {
-		title, description, problematic, categories, features, keywords, company, supervisor, rapporteur,
+		title, description, problematic, categories, features, keywords, company, supervisor, rapporteur, universityIcon,
 		// Below are InternshipConvention related...
 		dateInfo,
 		// company
