@@ -73,11 +73,12 @@ public class TeacherService {
 	@Produces(MediaType.APPLICATION_JSON)
 	
 	public Response addCategory(
-			@QueryParam(value="name")String Name)
+			@QueryParam(value="name")String Name,@QueryParam(value="desc")String desc)
 			
 	{
 		FYPCategory category = new FYPCategory();
 		category.setName(Name);
+		category.setDescription(desc);
 		
 		service.ProposeFYPCategory(category);
 		return Response.status(Status.OK).entity(category).build();
