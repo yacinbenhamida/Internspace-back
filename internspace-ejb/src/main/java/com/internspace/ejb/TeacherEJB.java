@@ -12,6 +12,7 @@ import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
+import com.internspace.entities.university.UniversitaryYear;
 import com.internspace.entities.fyp.FYPFile.FYPFileStatus;
 import com.internspace.entities.fyp.FYPFileModification;
 
@@ -127,6 +128,13 @@ public int getfypsize(String x,long id) {
 @Override
 public int getmajormmodificationsize()
 {	return em.createQuery("FROM " + FYPFileModification.class.getName()).getResultList().size();
+
+
+}
+
+@Override
+public List<UniversitaryYear> getUniverstaryYears() {
+	return em.createQuery("FROM " + UniversitaryYear.class.getName()).getResultList();
 
 
 }

@@ -161,7 +161,10 @@ public class FYPFile implements Serializable {
 	public void setProblematic(String problematic) {
 		this.problematic = problematic;
 	}
-
+	public UniversitaryYear getUniversitaryYear()
+	{
+		return universitaryYear;
+	}
 	public void setUniversitaryYear(UniversitaryYear universitaryYear) {
 		this.universitaryYear = universitaryYear;
 	}
@@ -254,6 +257,7 @@ public class FYPFile implements Serializable {
 	public void setDown(boolean down) {
 		this.down = down;
 	}
+	
 	
 
 	

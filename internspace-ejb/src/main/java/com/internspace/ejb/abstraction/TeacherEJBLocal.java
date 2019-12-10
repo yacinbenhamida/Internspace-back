@@ -7,6 +7,7 @@ import javax.ejb.Local;
 import com.internspace.entities.fyp.FYPCategory;
 import com.internspace.entities.fyp.FYPFile;
 import com.internspace.entities.fyp.FYPFileModification;
+import com.internspace.entities.university.UniversitaryYear;
 
 @Local
 public interface TeacherEJBLocal {
@@ -23,6 +24,7 @@ public interface TeacherEJBLocal {
 	List<FYPFile> getteacherfyp(long id);
 	int getfypsize(String x,long id);
 	public int getmajormmodificationsize();
+	List<UniversitaryYear> getUniverstaryYears();
 	
 	
 	
