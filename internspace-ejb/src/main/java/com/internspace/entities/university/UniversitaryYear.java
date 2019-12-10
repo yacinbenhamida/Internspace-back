@@ -45,7 +45,7 @@ public class UniversitaryYear implements Serializable {
 	@OneToMany(mappedBy = "universitaryYear", fetch = FetchType.LAZY)
 	Set<FYPFile> fypFiles = new HashSet<>();
 
-	@OneToMany(mappedBy = "universitaryYear", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "universitaryYear")
 	Set<StudyClass> studyClasses = new HashSet<>();
 
 	@OneToMany(mappedBy = "currentUniversitaryYear", fetch = FetchType.LAZY)

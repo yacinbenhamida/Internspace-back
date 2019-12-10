@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.internspace.entities.fyp.FYPFile;
+
 @Entity
 @Table(name = "university")
 public class University implements Serializable {
@@ -54,6 +56,8 @@ public class University implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "university")
 	private Set<Site> sites;
+	
+
 
 	/*
 	 * Getters & Setters
@@ -151,6 +155,10 @@ public class University implements Serializable {
 				+ ", id=" + id + ", location=" + location + ", logoUrl=" + logoUrl + ", name=" + name + ", openingYear="
 				+ openingYear + ", owner=" + owner + ", sites=" + sites + "]";
 	}
+
+	
+
+	
 
 	
 }

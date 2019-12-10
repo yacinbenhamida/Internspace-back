@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import com.internspace.entities.university.UniversitaryYear;
+import com.internspace.entities.university.University;
 import com.internspace.entities.users.Student;
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -91,7 +92,8 @@ public class FYPFile implements Serializable {
 	
 	@OneToOne(mappedBy = "fyp",cascade = CascadeType.ALL)
 	FYPFileModification fypm;
-
+	
+	
 
 	@ManyToOne
 	@JoinColumn(name = "uni_year")
@@ -242,6 +244,8 @@ public class FYPFile implements Serializable {
 		return fileStatus;
 	}
 
+
+
 	public Boolean getUp() {
 		return up;
 	}
@@ -257,6 +261,7 @@ public class FYPFile implements Serializable {
 	public void setDown(boolean down) {
 		this.down = down;
 	}
+
 	
 	
 

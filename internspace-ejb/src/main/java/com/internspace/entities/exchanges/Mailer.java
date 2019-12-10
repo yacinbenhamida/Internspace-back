@@ -30,7 +30,7 @@ public class Mailer {
     public void send(String mail,String msgt, String sub){
         
           String myEmail = "omranimahmoud@gmail.com";
-            String password = "passs";
+            String password = "facecheck1995";
   String opponentEmail = mail;
   Properties pro = new Properties();
   pro.put("mail.smtp.host", "smtp.gmail.com");

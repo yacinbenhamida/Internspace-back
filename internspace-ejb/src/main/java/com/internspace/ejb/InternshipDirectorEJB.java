@@ -41,7 +41,7 @@ import com.internspace.entities.fyp.FYPIntervention;
 import com.internspace.entities.fyp.FYPIntervention.TeacherRole;
 import com.internspace.entities.fyp.FYPSubject;
 import com.internspace.entities.fyp.FileTemplate;
-
+import com.internspace.entities.university.CompanyCoordinates;
 import com.internspace.entities.university.Departement;
 import com.internspace.entities.university.StudyClass;
 import com.internspace.entities.university.UniversitaryYear;
@@ -55,7 +55,6 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	
 	@PersistenceContext
 	EntityManager em;
-	
 	Process mProcess;
 	@Inject
 	FYPFileArchiveEJBLocal serviceArchive;
@@ -65,31 +64,31 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	StudentEJBLocal studentserv;
 
 	@Override
-	public List<Student> getLateStudentsList(int year) {
+	public List<Student> getLateStudentsList(int year, long id) {
 		String sql;
 		//return em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.classYear =:year AND s.isCreated =false").setParameter("year", year).getResultList();
 		List<StudyClass> ls = em.createQuery("FROM StudyClass").getResultList();
 		if(year==0) {
 			sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
-					+ " WHERE S.isCreated = :mybool";
+					+ " WHERE S.isCreated = :mybool AND SC.classOption.departement.site.university.id =:id";
 			return em.createQuery(sql, Student.class)
-					.setParameter("mybool", false).getResultList();
+					.setParameter("mybool", false).setParameter("id", id).getResultList();
 		}
 		else {
 			sql = "SELECT S FROM " + Student.class.getName() + " S JOIN FETCH S.studyClass SC JOIN FETCH SC.universitaryYear Y"
 				+ " WHERE Y.startDate = :year"
-				+ " AND S.isCreated = :mybool";
+				+ " AND S.isCreated = :mybool AND SC.classOption.departement.site.university.id =:id" ;
 		
 		return em.createQuery(sql, Student.class)
-		.setParameter("year", year).setParameter("mybool", false).getResultList();
+		.setParameter("year", year).setParameter("mybool", false).setParameter("id", id).getResultList();
 	}}
 
 	
 	@Override
-	public void sendMail(int year, String text) {
+	public void sendMail(int year, String text, long id) {
 		String subject = "rappel pour saisir votre fiche PFE " ;
 		Mailer mail = new Mailer();
-		List<Student> ls = getLateStudentsList(year);
+		List<Student> ls = getLateStudentsList(year,id);
 		ls.forEach(x->mail.send(x.getEmail(),text,subject));
 	}
 
@@ -394,13 +393,13 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 		return false;
 	}
 	
-	public List<Student> getAllStudentsList() {
-		return em.createQuery("FROM " + Student.class.getName()  + " s").getResultList();
+	public List<Student> getAllStudentsList(long id) {
+		return em.createQuery("FROM " + Student.class.getName()  + " s WHERE s.studyClass.classOption.departement.site.university.id =:id").setParameter("id",id).getResultList();
 		
 	}
 	
-	public Student FindStudent(String cin) {
-		return (Student) em.createQuery("FROM Student s WHERE s.cin =:cin ").setParameter("cin", cin).getSingleResult();	
+	public Student FindStudent(String cin, long id) {
+		return (Student) em.createQuery("FROM Student s WHERE s.cin =:cin AND s.studyClass.classOption.departement.site.university.id =:id ").setParameter("cin", cin).setParameter("id",id).getSingleResult();	
 	}
 
 	@Override
@@ -457,6 +456,16 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 
 
 	@Override
+	public List<Departement> getDepartements(long id) {
+		return em.createQuery("from Departement d WHERE d.site.university.id =:id").setParameter("id",id).getResultList();
+	
+	}
+	@Override
+	public Departement getDepartementInfo(long id) {
+		return em.find(Departement.class, id);
+	
+	}
+	@Override
 	public void FixActionNumberAsSupervisor(int nb,long id) {
 		Departement d =em.find(Departement.class, id);
 		d.setNumberOfActionsAllowedForSupervisors(nb);
@@ -490,8 +499,9 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 	
 	//pour la localisation sur la map
 	@Override
-	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys() {
-		return em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='confirmed'").getResultList();
+	public List<FYPSubject> FullStudentInfoWithVerifiedCompanys(long id) {
+		return em.createQuery("SELECT f.fypFile, f.company, f.fypFile.student FROM FYPSubject f WHERE f.fypFile.fileStatus ='confirmed' "
+				+ "AND f.fypFile.student.studyClass.classOption.departement.site.university.id =:id").setParameter("id", id) .getResultList();
 	}
 	
 
@@ -578,6 +588,14 @@ public class InternshipDirectorEJB implements InternshipDirectorEJBLocal{
 			
 			return list;
 		}
+		
+		@Override
+		public CompanyCoordinates getCompanyCoordinates(long id) {
+			return (CompanyCoordinates) em.createQuery("FROM CompanyCoordinates f WHERE f.company.id =:id").setParameter("id", id).getSingleResult();
+			 
+			
+		}
+	
 	
 
 	
