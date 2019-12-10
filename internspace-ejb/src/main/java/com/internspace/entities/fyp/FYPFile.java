@@ -76,7 +76,12 @@ public class FYPFile implements Serializable {
 
 	@Column(name = "is_confirmed", columnDefinition = "boolean default false")
 	Boolean isConfirmed;
+	
+	@Column(name = "is_up", columnDefinition = "boolean default false")
+	Boolean up;
 
+	@Column(name = "is_down", columnDefinition = "boolean default false")
+	boolean down;
 	/*
 	 * Associations
 	 */
@@ -232,6 +237,22 @@ public class FYPFile implements Serializable {
 
 	public FYPFileStatus getFileStatus() {
 		return fileStatus;
+	}
+
+	public Boolean getUp() {
+		return up;
+	}
+
+	public void setUp(Boolean up) {
+		this.up = up;
+	}
+
+	public boolean isDown() {
+		return down;
+	}
+
+	public void setDown(boolean down) {
+		this.down = down;
 	}
 	
 

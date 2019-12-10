@@ -34,11 +34,13 @@ public class FYPFileModification {
 
 	String problematic;
 	@Column(name = "confirmed", columnDefinition = "boolean default false")
-	Boolean isConfirmed;
+	boolean isConfirmed;
 	
 	@Column(name = "changed", columnDefinition = "boolean default false")
 	boolean isChanged;
 	
+	@Column(name = "canceled", columnDefinition = "boolean default false")
+	boolean isCanceled;
 	@OneToMany(mappedBy = "fypMod", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	Set<FYPFeature> features;
 	
@@ -93,6 +95,14 @@ public class FYPFileModification {
 
 	public Set<FYPFeature> getFeatures() {
 		return features;
+	}
+
+	public boolean isCanceled() {
+		return isCanceled;
+	}
+
+	public void setCanceled(boolean isCanceled) {
+		this.isCanceled = isCanceled;
 	}
 	
 	

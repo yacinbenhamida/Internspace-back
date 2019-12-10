@@ -422,7 +422,7 @@ public class QuizEJB implements QuizEJBLocal {
 		
 		// Check if this percentage is enough to pass the quiz.
 		if (correctAnswersPercentage >= studentQuiz.getQuiz().getMinCorrectQuestionsPercentage()) {
-			scp.setSkillScore(Math.max(scp.getSkillScore(), studentQuiz.getQuiz().getRequiredMinLevel() + 1));
+			scp.setSkillScore(Math.max(scp.getSkillScore() + 1, studentQuiz.getQuiz().getRequiredMinLevel() + 1));
 			updateStudentCategoryPreference(scp);
 		}
 
