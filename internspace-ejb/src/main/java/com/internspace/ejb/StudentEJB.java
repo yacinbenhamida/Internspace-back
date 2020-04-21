@@ -14,6 +14,7 @@ import com.internspace.ejb.abstraction.FYPFileModificationEJBLocal;
 import com.internspace.ejb.abstraction.FYPSheetHistoryEJBLocal;
 import com.internspace.ejb.abstraction.InternshipDirectorEJBLocal;
 import com.internspace.ejb.abstraction.StudentEJBLocal;
+import com.internspace.ejb.abstraction.StudyClassesEJBLocal;
 import com.internspace.entities.exchanges.Mail_API;
 import com.internspace.entities.exchanges.Mailer;
 import com.internspace.entities.exchanges.MailerStudent;
@@ -42,13 +43,14 @@ public class StudentEJB implements StudentEJBLocal {
 	FYPSheetHistoryEJBLocal hist;
 	@Inject
 	FYPFileModificationEJBLocal modifFyle;
-
+	@Inject
+	StudyClassesEJBLocal classe;
 	@Override
 	public void addStudent(Student std) {
-
 		System.out.println("Adding: " + std);
+		std.setIsAutorised(false);
+		std.setStudyClass(classe.getClassById(new Random().nextInt(10)));
 		em.persist(std);
-
 	}
 
 	@Override
@@ -531,6 +533,11 @@ public class StudentEJB implements StudentEJBLocal {
 		
 		
 		return inter;
+	}
+
+	@Override
+	public Student updateStudent(Student st) {
+		return em.merge(st);
 	}
 
 }

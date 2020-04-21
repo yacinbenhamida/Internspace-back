@@ -56,4 +56,5 @@ public interface StudentEJBLocal {
 	void sendMailRec(String text,long  id);
 	public List<Employee> getDirectorStd(String cin);
 	public InternshipConvention AnnulerInter(long id);
+	public Student updateStudent(Student st);
 }

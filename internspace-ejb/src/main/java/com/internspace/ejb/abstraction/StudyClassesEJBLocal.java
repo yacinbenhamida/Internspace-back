@@ -14,4 +14,5 @@ public interface StudyClassesEJBLocal {
 	public List<StudyClass> getClassesOfDepartment(long depId,int endYear);
 	public List<ClassOption> getAllClassOptionsOfDept(long depId);
 	public List<UniversitaryYear> getRegisteredUniYears();
+	public StudyClass getClassById(int id);
 }

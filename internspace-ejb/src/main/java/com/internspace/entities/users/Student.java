@@ -39,7 +39,7 @@ public class Student extends User {
 	}
 
 	@Column(name = "birth_date")
-	LocalDate birthDate;
+	String birthDate;
 	
 	@Enumerated(EnumType.STRING)
 	Role role;
@@ -160,10 +160,10 @@ public class Student extends User {
 		this.hasSubmittedAReport = hasSubmittedAreport;
 	}
 
-	public LocalDate getBirthDate() {
+	public String getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(LocalDate birthDate) {
+	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
 	

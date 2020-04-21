@@ -40,4 +40,9 @@ public class StudyClassesEJB implements StudyClassesEJBLocal {
 		return em.createQuery("SELECT c from UniversitaryYear c ")
 				.getResultList();
 	}
+
+	@Override
+	public StudyClass getClassById(int id) {
+		return em.find(StudyClass.class,(long) id);
+	}
 }

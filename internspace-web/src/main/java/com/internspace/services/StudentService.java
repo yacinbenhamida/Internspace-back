@@ -1,5 +1,7 @@
 package com.internspace.services;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -50,8 +52,6 @@ public class StudentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response  addStudent(Student std) {
-		
-		
 		Studentservice.addStudent(std);
 		return Response.status(Status.OK).entity(std).build();
 	}
@@ -275,5 +275,13 @@ public class StudentService {
 	public InternshipConvention cancelInter(@QueryParam(value = "id") long id){
 		 return Studentservice.AnnulerInter(id);
 	};
-	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("authorize")
+	public Response autoriser(@QueryParam(value = "id") long id){
+		Student st = Studentservice.getStudentById(id);
+		st.setIsAutorised(true);
+		Studentservice.updateStudent(st);
+		return Response.status(Response.Status.OK).entity("{res : updated}").build();
+	};
 }
